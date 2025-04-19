@@ -12,8 +12,8 @@ public enum Brand {
     HADA_LABO,
     ETUDE_HOUSE,
     COSRX,
-    LANEIGE,
-    SKIN1004;
+    LANEIGE;
+
 
     @Override
     public String toString() {
