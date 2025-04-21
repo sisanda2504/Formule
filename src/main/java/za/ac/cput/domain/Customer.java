@@ -64,7 +64,8 @@ public class Customer {
                "phoneNumber = '"+ phoneNumber+'\''+
                "emailAddress = '"+ emailAddress+'\''+
                "password = '" +password+'\''+
-               "Address = '" +addressId +'\'';
+               "Address = '" +addressId +'\''+
+               '}';
     }
 
     public static class Builder{
