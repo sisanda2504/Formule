@@ -53,6 +53,18 @@ public class Shipping {
         return trackingNumber;
     }
 
+    @Override
+    public String toString() {
+        return "Shipping{" +
+                "id=" + id +
+                ", orderId=" + orderId +
+                ", address='" + address + '\'' +
+                ", status='" + status + '\'' +
+                ", estimatedDeliveryDate=" + estimatedDeliveryDate +
+                ", trackingNumber='" + trackingNumber + '\'' +
+                '}';
+    }
+
     public static class Builder {
         private int id;
         private int orderId;
