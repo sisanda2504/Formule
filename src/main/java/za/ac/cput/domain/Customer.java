@@ -59,12 +59,12 @@ public class Customer {
     public String toString(){
        return "Customer{"+
                "id = '"+ id + '\''+
-               "firstname = '"+ firstName+'\''+
-               "lastname = '"+ lastName +'\''+
-               "phoneNumber = '"+ phoneNumber+'\''+
-               "emailAddress = '"+ emailAddress+'\''+
-               "password = '" +password+'\''+
-               "Address = '" +addressId +'\''+
+               ", firstName = '"+ firstName+'\''+
+               ", lastName = '"+ lastName +'\''+
+               ", phoneNumber = '"+ phoneNumber+'\''+
+               ", emailAddress = '"+ emailAddress+'\''+
+               ", password = '" +password+'\''+
+               ", address = '" +addressId +'\''+
                '}';
     }
 
