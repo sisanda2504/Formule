@@ -70,7 +70,7 @@ public class Admin {
             return this;
         }
 
-        public Builder setFirstName(String firstname){
+        public Builder setFirstName(String firstName){
             this.firstName = firstName;
             return this;
         }
