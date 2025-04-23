@@ -41,6 +41,16 @@ public class Order {
         return totalAmount;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", customerId=" + customerId +
+                ", date=" + date +
+                ", totalAmount=" + totalAmount +
+                '}';
+    }
+
     public static class Builder {
         private int id;
         private int customerId;
