@@ -46,6 +46,17 @@ public class Admin {
         return password;
     }
 
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public static class Builder{
 
         private int id;

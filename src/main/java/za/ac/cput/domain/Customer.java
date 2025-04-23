@@ -55,6 +55,19 @@ public class Customer {
         return addressId;
     }
 
+    @Override
+    public String toString(){
+       return "Customer{"+
+               "id = '"+ id + '\''+
+               ", firstName = '"+ firstName+'\''+
+               ", lastName = '"+ lastName +'\''+
+               ", phoneNumber = '"+ phoneNumber+'\''+
+               ", emailAddress = '"+ emailAddress+'\''+
+               ", password = '" +password+'\''+
+               ", address = '" +addressId +'\''+
+               '}';
+    }
+
     public static class Builder{
 
         private int id;
