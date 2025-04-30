@@ -88,7 +88,7 @@ public class Shipping {
             return this;
         }
 
-        public Builder setShippingStatus(String status) {
+        public Builder setStatus(String status) {
             this.status = status;
             return this;
         }
