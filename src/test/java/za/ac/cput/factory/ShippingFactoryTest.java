@@ -1,3 +1,8 @@
+/*ShippingFactoryTest.java
+Shipping model class
+Author: Tsholofelo Mabidikane (230018165)
+Date: 17 May 2025
+ */
 package za.ac.cput.factory;
 
 import org.junit.jupiter.api.Test;
