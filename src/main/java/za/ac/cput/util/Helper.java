@@ -1,12 +1,15 @@
 package za.ac.cput.util;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Helper {
 
-    public static boolean isNullOrEmpty( String s){
-        if(s == null || s.isEmpty() )
+    public static boolean isNullOrEmpty(String s) {
+        if (s == null || s.isEmpty())
             return true;
         return false;
     }
@@ -23,18 +26,18 @@ public class Helper {
         return matcher.matches();
     }
 
-    public static boolean isValidEmail(String email){
-        if(isNullOrEmpty(email)) {
+    public static boolean isValidEmail(String email) {
+        if (isNullOrEmpty(email)) {
             return false;
         }
-        String regex ="^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
 
-    public static boolean isValidPassword(String password){
-        if(isNullOrEmpty(password)){
+    public static boolean isValidPassword(String password) {
+        if (isNullOrEmpty(password)) {
             return false;
         }
         //Checks if Password has at least one digit, one letter and is more than 8 characters long and No Special Characters.
@@ -44,5 +47,15 @@ public class Helper {
         return matcher.matches();
     }
 
+    public static boolean isValidDate(LocalDateTime dateTime) {
+        return dateTime != null;
+    }
 
+    public static boolean isValidTotalAmount(Double totalAmount) {
+        if (totalAmount <= 0) {
+            return false;
+        }
+        return true;
+    }
 }
+
