@@ -17,15 +17,15 @@ public class CustomerFactory {
                 return null;
             }
 
-            if(!(Helper.isValidPhoneNumber(phoneNumber))){
+            if(!Helper.isValidPhoneNumber(phoneNumber)){
                 return null;
             }
 
-            if(!(Helper.isValidEmail(emailAddress))){
+            if(!Helper.isValidEmail(emailAddress)){
                 return null;
             }
 
-            if(!(Helper.isValidPassword(password))){
+            if(!Helper.isValidPassword(password)){
                 return null;
             }
 
