@@ -1,13 +1,18 @@
 package za.ac.cput.domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 /*
 Customer.java
 Customer model class
 Author: Agnes Mabusela (230020690)
 Date: 13/04/2025
  */
+@Entity
 public class Customer {
-
-    private int id;
+    @Id
+    private Integer id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -15,7 +20,7 @@ public class Customer {
     private String password;
     private int addressId;
 
-    private Customer(){}
+    protected Customer(){}
 
     private Customer(Builder builder){
         this.id = builder.id;
@@ -70,7 +75,7 @@ public class Customer {
 
     public static class Builder{
 
-        private int id;
+        private Integer id;
         private String firstName;
         private String lastName;
         private String phoneNumber;
