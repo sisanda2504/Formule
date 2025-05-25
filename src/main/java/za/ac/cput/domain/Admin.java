@@ -1,13 +1,17 @@
 package za.ac.cput.domain;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 /*
 Admin.java
 Admin model class
 Author: Agnes Mabusela (230020690)
 Date: 14/04/2025
  */
-
+@Entity
 public class Admin {
-
+    @Id
     private int id;
     private String firstName;
     private String lastName;
@@ -15,7 +19,7 @@ public class Admin {
     private String password;
 
 
-    private Admin(){}
+    protected Admin(){}
 
     private Admin (Builder builder){
 

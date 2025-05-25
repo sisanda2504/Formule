@@ -1,18 +1,18 @@
-package za.ac.cput.domain;
 /*
 Order.java
 Order model class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 15 March 2025
  */
+package za.ac.cput.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Order {
 
     private int id;
     private int customerId;
-    private Date date;
+    private LocalDateTime orderDate;
     private Double totalAmount;
 
     private Order() {
@@ -21,7 +21,7 @@ public class Order {
     private Order(Builder builder) {
         this.id = builder.id;
         this.customerId = builder.customerId;
-        this.date = builder.date;
+        this.orderDate = builder.orderDate;
         this.totalAmount = builder.totalAmount;
     }
 
@@ -33,8 +33,8 @@ public class Order {
         return customerId;
     }
 
-    public Date getDate() {
-        return date;
+    public LocalDateTime getOrderDate() {
+        return orderDate;
     }
 
     public Double getTotalAmount() {
@@ -46,7 +46,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", customerId=" + customerId +
-                ", date=" + date +
+                ", date=" + orderDate +
                 ", totalAmount=" + totalAmount +
                 '}';
     }
@@ -54,7 +54,7 @@ public class Order {
     public static class Builder {
         private int id;
         private int customerId;
-        private Date date;
+        private LocalDateTime orderDate;
         private Double totalAmount;
 
         public Builder setId(int id) {
@@ -67,8 +67,8 @@ public class Order {
             return this;
         }
 
-        public Builder setDate(Date date) {
-            this.date = date;
+        public Builder setOrderDate(LocalDateTime orderDate) {
+            this.orderDate = orderDate;
             return this;
         }
 
@@ -80,7 +80,7 @@ public class Order {
         public Builder copy(Order order) {
             this.id = order.id;
             this.customerId = order.customerId;
-            this.date = order.date;
+            this.orderDate = order.orderDate;
             this.totalAmount = order.totalAmount;
             return this;
         }

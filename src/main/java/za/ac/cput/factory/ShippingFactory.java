@@ -8,11 +8,11 @@ package za.ac.cput.factory;
 import za.ac.cput.domain.Shipping;
 import za.ac.cput.util.Helper;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ShippingFactory {
 
-    public static Shipping createShipping(int id, int orderId, String address, String status, Date estimatedDeliveryDate, String trackingNumber) {
+    public static Shipping createShipping(int id, int orderId, String address, String status, LocalDateTime estimatedDeliveryDate, String trackingNumber) {
 
         if(Helper.isNullOrEmpty(address) || Helper.isNullOrEmpty(status))
             return null;

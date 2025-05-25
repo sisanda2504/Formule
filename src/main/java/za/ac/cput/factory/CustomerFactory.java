@@ -11,25 +11,25 @@ import za.ac.cput.util.Helper;
 
 public class CustomerFactory {
 
-    public static Customer createCustomer(int id, String firstName, String lastName, String phoneNumber, String emailAddress, String password, int addressId){
+    public static Customer createCustomer( String firstName, String lastName, String phoneNumber, String emailAddress, String password, int addressId){
 
             if(Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName)){
                 return null;
             }
 
-            if(!(Helper.isValidPhoneNumber(phoneNumber))){
+            if(!Helper.isValidPhoneNumber(phoneNumber)){
                 return null;
             }
 
-            if(!(Helper.isValidEmail(emailAddress))){
+            if(!Helper.isValidEmail(emailAddress)){
                 return null;
             }
 
-            if(!(Helper.isValidPassword(password))){
+            if(!Helper.isValidPassword(password)){
                 return null;
             }
 
-            return new Customer.Builder().setId(id)
+            return new Customer.Builder()
                     .setFirstName(firstName)
                     .setLastName(lastName)
                     .setPhoneNumber(phoneNumber)
