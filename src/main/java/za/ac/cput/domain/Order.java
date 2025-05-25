@@ -1,13 +1,12 @@
-package za.ac.cput.domain;
 /*
 Order.java
 Order model class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 15 March 2025
  */
+package za.ac.cput.domain;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Order {
 
