@@ -11,14 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class AdminFactoryTest {
 
     private static Admin admin1 = AdminFactory.createAdmin(
-            12,
             "Admin",
             "Admin12",
             "admin12a@gmail.com",
              "admin120");
 
     private static Admin admin2 = AdminFactory.createAdmin(
-            12,
             "Admin",
             "",
             "admin13a@gmail.com",

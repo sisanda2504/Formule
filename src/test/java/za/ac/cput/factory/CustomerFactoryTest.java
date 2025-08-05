@@ -12,22 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerFactoryTest {
 
     private static Customer customer1  = CustomerFactory.createCustomer(
-            91,
             "Agnes",
             "Mabusela",
-            "0726736282",
+            "0746374634",
             "agnes@gmail.com",
             "pass2025d",
             109);
 
     private static Customer customer2  = CustomerFactory.createCustomer(
-            93,
             "Agnes",
             "Mabusela",
-            "0822838292",
+            "0746374635",
             "agnesgmail.com",
-            "pass2025b",
-            100);
+            "pass2025d",
+            109);
 
 
     @Test

@@ -5,7 +5,7 @@ import za.ac.cput.util.Helper;
 
 public class AdminFactory {
 
-    public static Admin createAdmin(int id , String firstName, String lastName, String emailAddress, String password){
+    public static Admin createAdmin( String firstName, String lastName, String emailAddress, String password){
 
         if (Helper.isNullOrEmpty(firstName)  || Helper.isNullOrEmpty(lastName)){
             return null;
@@ -19,7 +19,7 @@ public class AdminFactory {
             return null;
         }
 
-        return new Admin.Builder().setId(id)
+        return new Admin.Builder()
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setEmailAddress(emailAddress)

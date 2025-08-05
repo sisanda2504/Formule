@@ -12,7 +12,7 @@ Date: 14/04/2025
 @Entity
 public class Admin {
     @Id
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String emailAddress;

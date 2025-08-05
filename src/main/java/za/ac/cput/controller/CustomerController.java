@@ -33,7 +33,7 @@ public class CustomerController {
         return service.update(customer);
     }
 
-    @DeleteMapping("/delete/{AddressId}")
+    @DeleteMapping("/delete/{customerId}")
     public boolean delete(@PathVariable Integer customerId) {
         return service.deleteCustomer(customerId);
     }
