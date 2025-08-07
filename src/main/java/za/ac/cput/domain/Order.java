@@ -6,13 +6,13 @@ Date: 15 March 2025
  */
 package za.ac.cput.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Order {
 
     private int id;
     private int customerId;
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
     private Double totalAmount;
 
     private Order() {
@@ -33,7 +33,7 @@ public class Order {
         return customerId;
     }
 
-    public LocalDateTime getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
@@ -54,7 +54,7 @@ public class Order {
     public static class Builder {
         private int id;
         private int customerId;
-        private LocalDateTime orderDate;
+        private LocalDate orderDate;
         private Double totalAmount;
 
         public Builder setId(int id) {
@@ -67,7 +67,7 @@ public class Order {
             return this;
         }
 
-        public Builder setOrderDate(LocalDateTime orderDate) {
+        public Builder setOrderDate(LocalDate orderDate) {
             this.orderDate = orderDate;
             return this;
         }
