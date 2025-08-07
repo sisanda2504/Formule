@@ -8,11 +8,11 @@ package za.ac.cput.factory;
 import za.ac.cput.domain.Order;
 import za.ac.cput.util.Helper;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class OrderFactory {
 
-    public static Order createOrder(int id, int customerId, LocalDateTime orderDate, Double totalAmount) {
+    public static Order createOrder(int id, int customerId, LocalDate orderDate, Double totalAmount) {
 
         if(orderDate == null || totalAmount == null)
             return null;
