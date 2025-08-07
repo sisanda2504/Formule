@@ -6,7 +6,7 @@ Author: Tsholofelo Mabidikane (230018165)
 Date: 15 March 2025
  */
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Shipping {
 
@@ -14,7 +14,7 @@ public class Shipping {
     private int orderId;
     private String address;
     private String status;
-    private LocalDateTime estimatedDeliveryDate;
+    private LocalDate estimatedDeliveryDate;
     private String trackingNumber;
 
     private Shipping () {
@@ -45,7 +45,7 @@ public class Shipping {
         return status;
     }
 
-    public LocalDateTime getEstimatedDeliveryDate() {
+    public LocalDate getEstimatedDeliveryDate() {
         return estimatedDeliveryDate;
     }
 
@@ -70,7 +70,7 @@ public class Shipping {
         private int orderId;
         private String address;
         private String status;
-        private LocalDateTime estimatedDeliveryDate;
+        private LocalDate estimatedDeliveryDate;
         private String trackingNumber;
 
         public Builder setId(int id) {
@@ -93,7 +93,7 @@ public class Shipping {
             return this;
         }
 
-        public Builder setEstimatedDeliveryDate(LocalDateTime estimatedDeliveryDate) {
+        public Builder setEstimatedDeliveryDate(LocalDate estimatedDeliveryDate) {
             this.estimatedDeliveryDate = estimatedDeliveryDate;
             return this;
         }
