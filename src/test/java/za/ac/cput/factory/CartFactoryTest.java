@@ -2,13 +2,12 @@
  * CartFactoryTest.java
  * Test class for CartFactory
  * Author: Sisanda Madikizela (230601774)
- * Date: 18/05/2025
+ * Date: 05/08/2025
  */
 package za.ac.cput.factory;
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Brands;
 import za.ac.cput.domain.Cart;
 import za.ac.cput.domain.CartItems;
 import za.ac.cput.domain.Customer;
@@ -17,80 +16,71 @@ import za.ac.cput.domain.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CartFactoryTest {
+class CartFactoryTest {
 
-    @Test
-    void createCart() {
-        // Arrange
-        Customer customer = CustomerFactory.createCustomer(
-                1, "John", "Doe", "+27123456789", "john.doe@company.com", "P@ssw0rd123!", 1
+    private Customer customer;
+    private List<CartItems> validItems;
+    private Product product;
+    private Cart cart1;
+    private Cart cart2;
+    private Cart cart3;
+
+    @BeforeEach
+    void setUp() {
+
+        product = new Product.Builder()
+                .setId(1)
+                .setName("Test Product")
+                .setPrice(50.0)
+                .build();
+
+
+        customer = CustomerFactory.createCustomer(
+                "John", "Doe", "0781234567", "john.doe@example.com", "SecurePass123", 12
         );
-        Product product = ProductFactory.createProduct(
-                1001, "Innisfree Green Tea Serum", "Hydrating serum", 250.00, 10, 101, Brands.INNISFREE
-        );
-        CartItems cartItem = CartItemsFactory.createCartItems(product, 2, 250.00 * 2);
-        List<CartItems> items = new ArrayList<>();
-        items.add(cartItem);
-        Double totalPrice = 500.00; // Sum of cartItem.totalItems
 
-        // Act
-        Cart cart = CartFactory.createCart(1, customer, items, totalPrice);
 
-        // Assert
-        assertNotNull(cart);
-        System.out.println(cart);
+        validItems = new ArrayList<>();
+        CartItems cartItem = new CartItems.Builder()
+                .setProduct(product)
+                .setQuantity(2)
+                .setTotalItems(100.0)
+                .build();
+        validItems.add(cartItem);
+
+
+        cart1 = CartFactory.createCart(1, customer, validItems, 250.00);
+        cart2 = CartFactory.createCart(-2, customer, validItems, 350.00);
+        cart3 = CartFactory.createCart(4, customer, validItems, -500.00);
     }
 
     @Test
-    void createCartWithInvalidData() {
-        // Arrange
-        Customer customer = CustomerFactory.createCustomer(
-                1, "John", "Doe", "+27123456789", "john.doe@company.com", "P@ssw0rd123!", 1
-        );
-        Product product = ProductFactory.createProduct(
-                1001, "Innisfree Green Tea Serum", "Hydrating serum", 250.00, 10, 101, Brands.INNISFREE
-        );
-        CartItems cartItem = CartItemsFactory.createCartItems(product, 2, 250.00 * 2);
-        List<CartItems> items = new ArrayList<>();
-        items.add(cartItem);
-        Double totalPrice = 0.0; // Invalid totalPrice
-
-        // Act
-        Cart cart = CartFactory.createCart(2, customer, items, totalPrice);
-
-        // Assert
-        assertNull(cart);
-        System.out.println(cart);
+    void testCreateCartSuccess() {
+        assertNotNull(cart1);
+        System.out.println(cart1);
     }
 
     @Test
-    void createCartWithAllAttributes() {
-        // Arrange
-        Customer customer = CustomerFactory.createCustomer(
-                2, "Jane", "Smith", "+27987654321", "jane.smith@company.com", "P@ssw0rd456!", 2
-        );
-        Product product = ProductFactory.createProduct(
-                1002, "Missha Time Revolution Essence", "Anti-aging essence", 350.00, 5, 102, Brands.MISSHA
-        );
-        CartItems cartItem = CartItemsFactory.createCartItems(product, 3, 350.00 * 3);
-        List<CartItems> items = new ArrayList<>();
-        items.add(cartItem);
-        Double totalPrice = 1050.00; // Sum of cartItem.totalItems
-
-        // Act
-        Cart cart = CartFactory.createCart(3, customer, items, totalPrice);
-
-        // Assert
-        assertNotNull(cart);
-        System.out.println(cart);
+    void testCreateCartWithInvalidId() {
+        assertNull(cart2);
+        System.out.println(" Cart creation failed due to invalid ID:"+ cart2 );
     }
 
     @Test
-    @Disabled
-    void testNotImplementedYet() {
-        // Not implemented yet
+    void testCreateCartWithInvalidPrice() {
+        assertNull(cart3);
+        System.out.println(" Cart with invalid price cannot be created:" +cart3);
+    }
+
+    @Test
+    void testCreateCartWithAllValidData() {
+        Cart validCart = CartFactory.createCart(5, customer, validItems, 300.00);
+        assertNotNull(validCart);
+        System.out.println("Cart ID: " + validCart.getId());
+        System.out.println("Customer: " + validCart.getCustomer());
+        System.out.println("Items: " + validCart.getItems());
+        System.out.println("Total Price: " + validCart.getTotalPrice());
     }
 }
