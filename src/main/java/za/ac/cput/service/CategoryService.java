@@ -1,0 +1,60 @@
+package za.ac.cput.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import za.ac.cput.domain.Category;
+import za.ac.cput.repository.CategoryRepository;
+import za.ac.cput.service.ICategoryService;
+
+import java.util.List;
+
+@Service
+public class CategoryService implements ICategoryService {
+
+    private final CategoryRepository repository;
+
+    @Autowired
+    public CategoryService(CategoryRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public Category create(Category category) {
+        return repository.save(category);
+    }
+
+    @Override
+    public Category read(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Category update(Category category) {
+        if (repository.existsById(category.getId())) {
+            return repository.save(category);
+        }
+        return null;
+    }
+    @Override
+    public boolean delete(int id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public List<Category> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public List<Category> findByName(String name) {
+        return repository.findByName(name);
+    }
+
+    @Override
+    public List<Category> searchByDescription(String keyword) {
+        return repository.findByDescriptionContaining(keyword);
+    }
+}
