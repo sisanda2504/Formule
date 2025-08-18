@@ -1,8 +1,6 @@
 package za.ac.cput.util;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,10 +50,18 @@ public class Helper {
     }
 
     public static boolean isValidTotalAmount(Double totalAmount) {
-        if (totalAmount <= 0) {
-            return false;
-        }
-        return true;
+        return totalAmount != null && totalAmount > 0;
+    }
+
+    public static boolean isValidPrice(double totalPrice) {
+        return totalPrice > 0;}
+
+    public static boolean isValidQuantity(int quantity) {
+        return quantity > 0;
+    }
+
+    public static boolean isValidAmount(double amount) {
+        return amount > 0;
     }
 }
 
