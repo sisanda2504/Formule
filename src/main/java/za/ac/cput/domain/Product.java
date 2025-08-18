@@ -6,17 +6,21 @@ Product class;
 Date: 15/04/2025
  */
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Product {
+    @Id
     private int id;
     private String name;
     private String description;
     private double price;
     private int quantity;
     private int categoryId;
-    private Brand brand;
+    private Brands brand;
 
-    private Product(){
+    protected Product(){
 
     }
     private Product(Builder builder){
@@ -53,7 +57,7 @@ public class Product {
     public int getCategoryId() {
         return categoryId;
     }
-    public Brand getBrand() {
+    public Brands getBrand() {
         return brand;
     }
 
@@ -77,7 +81,7 @@ public class Product {
         private double price;
         private int quantity;
         private int categoryId;
-        private Brand brand;
+        private Brands brand;
 
         public Builder setId(int id){
             this.id = id;
@@ -103,7 +107,7 @@ public class Product {
             this.categoryId = categoryId;
             return this;
         }
-        public Builder setBrand(Brand brand){
+        public Builder setBrand(Brands brand){
             this.brand = brand;
             return this;
         }
@@ -114,12 +118,18 @@ public class Product {
             this.price = product.getPrice();
             this.quantity = product.getQuantity();
             this.categoryId = product.getCategoryId();
-            this.brand = product.getBrand();
+            this.brand = product.getBrands();
 
             return this;
         }
         public Product build(){
             return new Product(this);
         }
+
     }
+
+    private Brands getBrands() {
+        return brand;
+    }
+
 }
