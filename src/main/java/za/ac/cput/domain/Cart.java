@@ -1,14 +1,30 @@
 package za.ac.cput.domain;
 
+
+
+import jakarta.persistence.*;
+
 import java.util.List;
 
+@Entity
 public class Cart {
-    private int id;
-    private Customer customer;
-    private List<CartItems> items;
-    private Double totalPrice;
 
-    private Cart(Cart cart) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(optional = false)  // A cart must have a customer
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CartItems> items;
+
+    @Column(name = "total_price")
+    private double totalPrice;
+
+    // Empty constructor required by JPA
+    protected Cart() {
     }
 
     private Cart(Builder builder) {
@@ -59,7 +75,7 @@ public class Cart {
 
         public Builder setCustomer(Customer customer) {
             this.customer = customer;
-            return null;
+            return this;
         }
 
         public Builder setItems(List<CartItems> items) {
