@@ -1,10 +1,11 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import za.ac.cput.domain.Customer;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.factory.users.CustomerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
