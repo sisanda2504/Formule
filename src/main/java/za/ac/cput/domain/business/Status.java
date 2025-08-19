@@ -1,4 +1,4 @@
-package za.ac.cput.domain;
+package za.ac.cput.domain.business;
 /*
 Status.java
 Status enumeration class
