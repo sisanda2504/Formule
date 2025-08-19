@@ -1,7 +1,7 @@
-package za.ac.cput.domain;
+package za.ac.cput.domain.users;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import za.ac.cput.domain.generic.Address;
 
 /*
 Customer.java
@@ -11,14 +11,18 @@ Date: 13/04/2025
  */
 @Entity
 public class Customer {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String emailAddress;
     private String password;
-    private int addressId;
+
+    @OneToOne
+    private Address address;
 
     protected Customer(){}
 
@@ -29,10 +33,10 @@ public class Customer {
         this.phoneNumber = builder.phoneNumber;
         this.emailAddress = builder.emailAddress;
         this.password = builder.password;
-        this.addressId = builder.addressId;
+        this.address = builder.address;
     }
 
-    public int getId(){
+    public Integer getId(){
         return id;
     }
 
@@ -56,8 +60,8 @@ public class Customer {
         return password;
     }
 
-    public int getAddressId(){
-        return addressId;
+    public Address getAddress(){
+        return address;
     }
 
     @Override
@@ -69,7 +73,7 @@ public class Customer {
                ", phoneNumber = '"+ phoneNumber+'\''+
                ", emailAddress = '"+ emailAddress+'\''+
                ", password = '" +password+'\''+
-               ", address = '" +addressId +'\''+
+               ", address = '" +address +'\''+
                '}';
     }
 
@@ -81,9 +85,9 @@ public class Customer {
         private String phoneNumber;
         private String emailAddress;
         private String password;
-        private int addressId;
+        private Address address;
 
-        public Builder setId(int id){
+        public Builder setId(Integer id){
             this.id = id;
             return this;
         }
@@ -113,8 +117,8 @@ public class Customer {
             return this;
         }
 
-        public Builder setAddressId(int addressId){
-            this.addressId = addressId;
+        public Builder setAddress(Address address){
+            this.address = address;
             return this;
         }
 
@@ -125,7 +129,7 @@ public class Customer {
             this.phoneNumber = customer.getPhoneNumber();
             this.emailAddress = customer.getEmailAddress();
             this.password = customer.getPassword();
-            this.addressId = customer.getAddressId();
+            this.address = customer.getAddress();
             return this;
         }
 
