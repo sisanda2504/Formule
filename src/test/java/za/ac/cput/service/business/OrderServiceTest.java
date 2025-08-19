@@ -2,13 +2,13 @@
 Author: Tsholofelo Mabidikane (230018165)
 Date: 07 August 2025
  */
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import za.ac.cput.domain.Order;
-import za.ac.cput.factory.OrderFactory;
+import za.ac.cput.domain.business.Order;
+import za.ac.cput.factory.business.OrderFactory;
 
 import java.time.LocalDate;
 
