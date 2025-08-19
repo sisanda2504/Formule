@@ -1,6 +1,6 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.users;
 
-import za.ac.cput.domain.Admin;
+import za.ac.cput.domain.users.Admin;
 import za.ac.cput.util.Helper;
 
 public class AdminFactory {
