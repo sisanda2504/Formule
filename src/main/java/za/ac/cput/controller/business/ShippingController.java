@@ -2,12 +2,12 @@
 Author: Tsholofelo Mabidikane (230018165)
 Date: 07 August 2025
  */
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.service.ShippingService;
-import za.ac.cput.domain.Shipping;
+import za.ac.cput.service.business.ShippingService;
+import za.ac.cput.domain.business.Shipping;
 
 import java.util.List;
 
