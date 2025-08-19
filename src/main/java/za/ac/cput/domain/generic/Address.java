@@ -1,4 +1,4 @@
-package za.ac.cput.domain;
+package za.ac.cput.domain.generic;
 /*
 Address.java
 Address model class
@@ -6,21 +6,29 @@ Author: Agnes Mabusela (230020690)
 Date: 14/04/2025
  */
 
+import jakarta.persistence.*;
+import za.ac.cput.domain.users.Customer;
+
+@Entity
 public class Address {
 
-    private int id;
-    private int customerId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @OneToOne
+    private Customer customer;
     private String street;
     private String city;
     private String province;
     private String postalCode;
     private String country;
 
-    private Address (){}
+
+    protected Address (){}
 
     private Address(Builder builder){
         this.id = builder.id;
-        this.customerId = builder.customerId;
+        this.customer = builder.customer;
         this.street = builder.street;
         this.city = builder.city;
         this.province = builder.province;
@@ -28,12 +36,12 @@ public class Address {
         this.country = builder.country;
     }
 
-    public int  getId(){
+    public Integer  getId(){
         return id;
     }
 
-    public int getCustomerId(){
-        return customerId;
+    public Customer getCustomer(){
+        return customer;
     }
 
     public String getStreet(){
@@ -60,7 +68,7 @@ public class Address {
     public String toString() {
         return "Address{" +
                 "id=" + id +
-                ", customerId=" + customerId +
+                ", customer=" + (customer != null? customer.getId():"null") +
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
                 ", province='" + province + '\'' +
@@ -70,21 +78,21 @@ public class Address {
     }
 
     public static class  Builder{
-        private int id;
-        private int customerId;
+        private Integer id;
+        private Customer customer;
         private String street;
         private String city;
         private String province;
         private String postalCode;
         private String country;
 
-        public Builder setId(int id){
+        public Builder setId(Integer id){
             this.id = id;
             return this;
         }
 
-        public Builder setCustomerId(int customerId){
-            this.customerId = customerId;
+        public Builder setCustomer(Customer customer){
+            this.customer = customer ;
             return this;
         }
 
@@ -115,7 +123,7 @@ public class Address {
 
         public Builder copy(Address address){
             this.id = address.getId();
-            this.customerId = address.getCustomerId();
+            this.customer = address.getCustomer();
             this.street = address.getStreet();
             this.city = address.getCity();
             this.province = address.getProvince();
