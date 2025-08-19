@@ -3,10 +3,9 @@ Order model Factory class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 23 April 2025
  */
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
-import za.ac.cput.domain.Order;
-import za.ac.cput.util.Helper;
+import za.ac.cput.domain.business.Order;
 
 import java.time.LocalDate;
 
