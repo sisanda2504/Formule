@@ -4,7 +4,7 @@ Order model class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 15 March 2025
  */
-package za.ac.cput.domain;
+package za.ac.cput.domain.business;
 
 import java.time.LocalDate;
 
