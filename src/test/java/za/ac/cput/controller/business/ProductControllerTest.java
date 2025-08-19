@@ -1,4 +1,4 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import za.ac.cput.domain.Brands;
-import za.ac.cput.domain.Product;
-import za.ac.cput.factory.ProductFactory;
+import za.ac.cput.domain.business.Brands;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.factory.business.ProductFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
