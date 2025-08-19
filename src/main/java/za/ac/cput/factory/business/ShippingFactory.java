@@ -3,9 +3,9 @@ Shipping model Factory class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 23 April 2025
  */
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
-import za.ac.cput.domain.Shipping;
+import za.ac.cput.domain.business.Shipping;
 import za.ac.cput.util.Helper;
 
 import java.time.LocalDate;
