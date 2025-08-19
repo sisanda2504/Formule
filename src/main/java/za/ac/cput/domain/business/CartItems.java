@@ -1,5 +1,4 @@
-package za.ac.cput.domain;
-
+package za.ac.cput.domain.business;
 
 
 class CartItems {
