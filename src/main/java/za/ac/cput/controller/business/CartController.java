@@ -1,9 +1,9 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Cart;
-import za.ac.cput.service.CartService;
+import za.ac.cput.domain.business.Cart;
+import za.ac.cput.service.business.CartService;
 
 @RestController
 @RequestMapping("/cart")
