@@ -3,7 +3,9 @@ Author: Annah Gaula Manda (230164250)
 Date: 20/04/2025
  */
 
-package za.ac.cput.domain;
+package za.ac.cput.domain.business;
+import za.ac.cput.domain.users.Customer;
+
 import java.util.Date;
 
 public class Payment {
