@@ -1,6 +1,8 @@
-package za.ac.cput.domain;
+package za.ac.cput.domain.users;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /*
@@ -12,12 +14,12 @@ Date: 14/04/2025
 @Entity
 public class Admin {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String password;
-
 
     protected Admin(){}
 
@@ -30,7 +32,7 @@ public class Admin {
         this.password = builder.password;
     }
 
-    public int getId(){
+    public Integer getId(){
         return id;
     }
 
@@ -63,13 +65,13 @@ public class Admin {
 
     public static class Builder{
 
-        private int id;
+        private Integer id;
         private String firstName;
         private String lastName;
         private String emailAddress;
         private String password;
 
-        public Builder setId(int id) {
+        public Builder setId(Integer id) {
             this.id = id;
             return this;
         }
