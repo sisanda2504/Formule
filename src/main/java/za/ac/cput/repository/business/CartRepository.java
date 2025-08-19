@@ -1,8 +1,8 @@
-package za.ac.cput.repository;
+package za.ac.cput.repository.business;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import za.ac.cput.domain.Cart;
+import za.ac.cput.domain.business.Cart;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {

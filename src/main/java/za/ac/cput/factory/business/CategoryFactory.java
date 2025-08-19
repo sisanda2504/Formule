@@ -1,11 +1,11 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 /*
 CategoryFactory.java
 Factory class for Category
 Author: Samkelisiwe Sithabile Khanyile (222843152)
 Date: 02/05/2025
 */
-import za.ac.cput.domain.Category;
+import za.ac.cput.domain.business.Category;
 import za.ac.cput.util.Helper;
 
 

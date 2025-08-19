@@ -1,4 +1,4 @@
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import za.ac.cput.domain.Brands;
-import za.ac.cput.domain.Cart;
+import za.ac.cput.domain.business.Brands;
+import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.CartItems;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.domain.Product;
-import za.ac.cput.factory.CartFactory;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.factory.business.CartFactory;
 import za.ac.cput.factory.CartItemsFactory;
-import za.ac.cput.factory.CustomerFactory;
-import za.ac.cput.factory.ProductFactory;
+import za.ac.cput.factory.users.CustomerFactory;
+import za.ac.cput.factory.business.ProductFactory;
 
 import java.util.Collections;
 import java.util.List;

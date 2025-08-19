@@ -1,6 +1,6 @@
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
-import za.ac.cput.domain.Category;
+import za.ac.cput.domain.business.Category;
 
 import java.util.List;
 

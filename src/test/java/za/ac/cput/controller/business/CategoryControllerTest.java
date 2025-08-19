@@ -1,9 +1,9 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
-import za.ac.cput.domain.Category;
-import za.ac.cput.service.ICategoryService;
+import za.ac.cput.domain.business.Category;
+import za.ac.cput.service.business.ICategoryService;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;

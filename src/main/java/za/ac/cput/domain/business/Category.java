@@ -1,4 +1,4 @@
-package za.ac.cput.domain;
+package za.ac.cput.domain.business;
 /*
 Category.java
 Category model class

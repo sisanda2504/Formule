@@ -1,9 +1,9 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Category;
-import za.ac.cput.service.ICategoryService;
+import za.ac.cput.domain.business.Category;
+import za.ac.cput.service.business.ICategoryService;
 
 import java.util.List;
 
