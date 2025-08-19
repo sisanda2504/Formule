@@ -1,4 +1,4 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.users;
 /*
 CustomerFactory.java
 Customer model class
@@ -6,12 +6,19 @@ Author: Agnes Mabusela (230020690)
 Date: 23/04/2025
  */
 
-import za.ac.cput.domain.Customer;
+import za.ac.cput.domain.generic.Address;
+import za.ac.cput.domain.users.Customer;
 import za.ac.cput.util.Helper;
 
 public class CustomerFactory {
 
-    public static Customer createCustomer( String firstName, String lastName, String phoneNumber, String emailAddress, String password, int addressId){
+    public static Customer createCustomer(
+            String firstName,
+            String lastName,
+            String phoneNumber,
+            String emailAddress,
+            String password,
+            Address address){
 
             if(Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName)){
                 return null;
@@ -35,7 +42,7 @@ public class CustomerFactory {
                     .setPhoneNumber(phoneNumber)
                     .setEmailAddress(emailAddress)
                     .setPassword(password)
-                    .setAddressId(addressId)
+                    .setAddress(address)
                     .build();
     }
 }
