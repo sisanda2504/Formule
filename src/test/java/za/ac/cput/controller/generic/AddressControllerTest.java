@@ -1,9 +1,9 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.generic;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
-import za.ac.cput.domain.Address;
-import za.ac.cput.service.IAddressService;
+import za.ac.cput.domain.generic.Address;
+import za.ac.cput.service.generic.IAddressService;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;

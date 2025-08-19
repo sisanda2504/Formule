@@ -1,10 +1,10 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.generic;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import za.ac.cput.domain.Address;
+import za.ac.cput.domain.generic.Address;
 
 import static org.junit.jupiter.api.Assertions.*;
 

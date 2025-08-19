@@ -1,19 +1,19 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.generic;
 /*
 AddressFactory.java
 Factory class for Address
 Author: Samkelisiwe Sithabile Khanyile (222843152)
 Date: 02/05/2025
 */
-import za.ac.cput.domain.Address;
+import za.ac.cput.domain.generic.Address;
+import za.ac.cput.domain.users.Customer;
 import za.ac.cput.util.Helper;
 
 
 public class AddressFactory {
 
     public static Address createAddress(
-            int id,
-            int customerId,
+            Customer customer,
             String street,
             String city,
             String province,
@@ -31,9 +31,10 @@ public class AddressFactory {
         if (Helper.isNullOrEmpty(country))
             throw new IllegalArgumentException("Please provide a country");
 
+        if(customer == null)
+            throw new IllegalArgumentException("Please provide a valid customer");
         return new Address.Builder()
-                .setId(id)
-                .setCustomerId(customerId)
+                .setCustomer(customer)
                 .setStreet(street)
                 .setCity(city)
                 .setProvince(province)
