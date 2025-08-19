@@ -2,7 +2,7 @@
 Author: Tsholofelo Mabidikane (230018165)
 Date: 07 August 2025
  */
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
-import za.ac.cput.domain.Shipping;
-import za.ac.cput.factory.ShippingFactory;
+import za.ac.cput.domain.business.Shipping;
+import za.ac.cput.factory.business.ShippingFactory;
 
 import java.time.LocalDate;
 
