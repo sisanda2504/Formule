@@ -3,10 +3,10 @@ Shipping model class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 17 May 2025
  */
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
 import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Shipping;
+import za.ac.cput.domain.business.Shipping;
 
 import java.time.LocalDateTime;
 
