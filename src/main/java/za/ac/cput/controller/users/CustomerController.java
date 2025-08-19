@@ -1,9 +1,9 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.service.CustomerService;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.service.users.CustomerService;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class CustomerController {
         return service.read(customerId);
     }
 
-    @GetMapping("/update")
+    @PutMapping("/update")
     public Customer update(@RequestBody Customer customer) {
         return service.update(customer);
     }
