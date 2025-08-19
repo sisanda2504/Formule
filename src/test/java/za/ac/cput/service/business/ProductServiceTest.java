@@ -1,13 +1,13 @@
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import za.ac.cput.domain.Brands;
-import za.ac.cput.domain.Product;
-import za.ac.cput.factory.ProductFactory;
+import za.ac.cput.domain.business.Brands;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.factory.business.ProductFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
