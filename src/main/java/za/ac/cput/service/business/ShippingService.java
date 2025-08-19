@@ -4,12 +4,12 @@ Shipping model Service class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 07 August 2025
  */
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.ac.cput.domain.Shipping;
-import za.ac.cput.repository.ShippingRepository;
+import za.ac.cput.domain.business.Shipping;
+import za.ac.cput.repository.business.ShippingRepository;
 
 import java.util.List;
 
