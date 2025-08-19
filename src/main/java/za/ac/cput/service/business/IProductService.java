@@ -1,6 +1,7 @@
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
-import za.ac.cput.domain.Product;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.service.IService;
 
 public interface IProductService extends IService<Product, Integer> {
 
