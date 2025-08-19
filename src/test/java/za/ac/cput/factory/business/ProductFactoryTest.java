@@ -1,8 +1,8 @@
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
 import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Brands;
-import za.ac.cput.domain.Product;
+import za.ac.cput.domain.business.Brands;
+import za.ac.cput.domain.business.Product;
 
 import static org.junit.jupiter.api.Assertions.*;
 
