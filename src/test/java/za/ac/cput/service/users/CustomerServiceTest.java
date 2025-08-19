@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.users.Customer;
+import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,13 +17,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerServiceTest {
     @Autowired
     private ICustomerService service;
+
+    private static Address address = AddressFactory.createAddress(
+            null,
+            "10 Main Road",
+            "Cape Town",
+            "Western Cape",
+            "8000",
+            "South Africa"
+    );
+
     private static Customer customer = CustomerFactory.createCustomer(
             "Agnes",
             "Mabusela",
-            "0769272996",
+            "0833838288",
             "agnes@gmail.com",
             "password2025",
-            67
+             address
     );
 
     @Test
