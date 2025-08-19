@@ -1,11 +1,11 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import za.ac.cput.domain.Product;
-import za.ac.cput.service.ProductService;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.service.business.ProductService;
 
 @RestController
 public class ProductController {
