@@ -1,12 +1,10 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.users;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Admin;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.service.AdminService;
-import za.ac.cput.service.CustomerService;
+import za.ac.cput.domain.users.Admin;
+import za.ac.cput.service.users.AdminService;
 
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class AdminController {
         return service.read(adminId);
     }
 
-    @GetMapping("/update")
+    @PutMapping("/update")
     public Admin update(@RequestBody Admin admin) {
         return service.update(admin);
     }
