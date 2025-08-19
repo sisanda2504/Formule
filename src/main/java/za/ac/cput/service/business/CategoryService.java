@@ -1,10 +1,9 @@
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.ac.cput.domain.Category;
-import za.ac.cput.repository.CategoryRepository;
-import za.ac.cput.service.ICategoryService;
+import za.ac.cput.domain.business.Category;
+import za.ac.cput.repository.business.CategoryRepository;
 
 import java.util.List;
 
