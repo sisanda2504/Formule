@@ -1,12 +1,12 @@
-package za.ac.cput.service;
+package za.ac.cput.service.users;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.factory.CustomerFactory;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.factory.users.CustomerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class CustomerServiceTest {
     @Autowired
-    private static ICustomerService service;
+    private ICustomerService service;
     private static Customer customer = CustomerFactory.createCustomer(
             "Agnes",
             "Mabusela",
@@ -48,7 +48,9 @@ class CustomerServiceTest {
 
     @Test
     void e_deleteCustomer() {
-
+        boolean deleted = service.deleteCustomer(customer.getId());
+        assertTrue(deleted);
+        System.out.println("Deleted: "+deleted);
     }
 
     @Test
