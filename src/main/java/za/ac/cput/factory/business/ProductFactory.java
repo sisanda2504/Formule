@@ -4,10 +4,10 @@
  * Author: Sisanda Madikizela (230601774)
  * Date: 18/05/2025
  */
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
-import za.ac.cput.domain.Product;
-import za.ac.cput.domain.Brands;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.domain.business.Brands;
 import za.ac.cput.util.Helper;
 
 public class ProductFactory {
