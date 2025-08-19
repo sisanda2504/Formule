@@ -1,9 +1,9 @@
-package za.ac.cput.service;
+package za.ac.cput.service.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.repository.CustomerRepository;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.repository.users.CustomerRepository;
 
 import java.util.List;
 
