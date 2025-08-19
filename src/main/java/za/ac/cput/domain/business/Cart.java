@@ -1,8 +1,10 @@
-package za.ac.cput.domain;
+package za.ac.cput.domain.business;
 
 
 
 import jakarta.persistence.*;
+import za.ac.cput.domain.CartItems;
+import za.ac.cput.domain.users.Customer;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(optional = false)  // A cart must have a customer
     @JoinColumn(name = "customer_id")
@@ -62,13 +64,13 @@ public class Cart {
     }
 
     public static class Builder {
-        private int id;
+        private Integer id;
         private Customer customer;
         private List<CartItems> items;
         private Double totalPrice;
 
 
-        public Builder setId(int id) {
+        public Builder setId(Integer id) {
             this.id = id;
             return this;
         }
