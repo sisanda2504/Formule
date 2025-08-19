@@ -1,9 +1,9 @@
-package za.ac.cput.service;
+package za.ac.cput.service.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import za.ac.cput.domain.Cart;
-import za.ac.cput.repository.CartRepository;
+import za.ac.cput.domain.business.Cart;
+import za.ac.cput.repository.business.CartRepository;
 
 import java.util.List;
 
