@@ -1,9 +1,9 @@
-package za.ac.cput.service;
+package za.ac.cput.service.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import za.ac.cput.domain.Admin;
-import za.ac.cput.repository.AdminRepository;
+import za.ac.cput.domain.users.Admin;
+import za.ac.cput.repository.users.AdminRepository;
 
 import java.util.List;
 
@@ -11,7 +11,6 @@ import java.util.List;
 public class AdminService implements IAdminService {
 
     @Autowired
-    private static IAdminService service;
     private AdminRepository repository;
 
     @Override
@@ -31,8 +30,11 @@ public class AdminService implements IAdminService {
 
     @Override
     public boolean deleteAdmin(Integer id) {
-         this.repository.deleteById(id);
-         return true;
+        if(repository.existsById(id)) {
+            this.repository.deleteById(id);
+            return true;
+        }
+         return false;
     }
 
     @Override
