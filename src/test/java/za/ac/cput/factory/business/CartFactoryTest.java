@@ -4,14 +4,15 @@
  * Author: Sisanda Madikizela (230601774)
  * Date: 05/08/2025
  */
-package za.ac.cput.factory;
+package za.ac.cput.factory.business;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import za.ac.cput.domain.Cart;
+import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.CartItems;
-import za.ac.cput.domain.Customer;
-import za.ac.cput.domain.Product;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.domain.business.Product;
+import za.ac.cput.factory.users.CustomerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
