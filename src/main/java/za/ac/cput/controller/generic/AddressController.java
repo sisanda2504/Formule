@@ -1,9 +1,9 @@
-package za.ac.cput.controller;
+package za.ac.cput.controller.generic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Address;
-import za.ac.cput.service.IAddressService;
+import za.ac.cput.domain.generic.Address;
+import za.ac.cput.service.generic.IAddressService;
 
 import java.util.List;
 
