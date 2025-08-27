@@ -5,11 +5,13 @@ Shipping model class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 15 March 2025
  */
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
 public class Shipping {
-
+    @Id
     private int id;
     private int orderId;
     private String address;
@@ -17,7 +19,7 @@ public class Shipping {
     private LocalDate estimatedDeliveryDate;
     private String trackingNumber;
 
-    private Shipping () {
+    protected Shipping () {
     }
 
     private Shipping(Builder builder) {
