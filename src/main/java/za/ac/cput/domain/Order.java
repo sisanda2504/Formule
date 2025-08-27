@@ -7,15 +7,18 @@ Date: 15 March 2025
 package za.ac.cput.domain;
 
 import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 public class Order {
-
+    @Id
     private int id;
     private int customerId;
     private LocalDate orderDate;
     private Double totalAmount;
 
-    private Order() {
+    protected Order() {
     }
 
     private Order(Builder builder) {
@@ -33,9 +36,7 @@ public class Order {
         return customerId;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
-    }
+    public LocalDate getOrderDate() { return orderDate; }
 
     public Double getTotalAmount() {
         return totalAmount;
