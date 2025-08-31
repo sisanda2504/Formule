@@ -10,8 +10,12 @@ import java.util.List;
 @Service
 public class AdminService implements IAdminService {
 
-    @Autowired
+
     private AdminRepository repository;
+    @Autowired
+    public AdminService(AdminRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Admin create(Admin admin) {
@@ -19,7 +23,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public Admin read(Integer id) {
+    public Admin read(Long id) {
         return this.repository.findById(id).orElse(null);
     }
 
@@ -29,7 +33,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public boolean deleteAdmin(Integer id) {
+    public boolean delete(Long id) {
         if(repository.existsById(id)) {
             this.repository.deleteById(id);
             return true;

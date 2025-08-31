@@ -27,33 +27,38 @@ class AdminServiceTest {
     void a_create() {
         Admin created = service.create(admin);
         assertNotNull(created);
-        System.out.println(created);
+        admin = created;
+        System.out.println("Created: " + created);
     }
 
     @Test
     void b_read() {
         Admin read = service.read(admin.getId());
         assertNotNull(read);
-        System.out.println(read);
+        System.out.println("Read: " + read);
     }
 
     @Test
     void c_update() {
-        Admin newAdmin = new Admin.Builder().copy(admin).setEmailAddress("agnesmabuselaAdmin@gmail.com").build();
+        Admin newAdmin = new Admin.Builder()
+                .copy(admin)
+                .setEmailAddress("agnesmabuselaAdmin@gmail.com")
+                .build();
         Admin updated = service.update(newAdmin);
         assertNotNull(updated);
-        System.out.println(updated);
+        admin = updated;
+        System.out.println("Updated: " + updated);
     }
 
     @Test
-    void e_deleteAdmin() {
-        boolean deleted = service.deleteAdmin(admin.getId());
+    void e_delete() {
+        boolean deleted = service.delete(admin.getId());
         assertTrue(deleted);
         System.out.println("Deleted: "+ deleted);
     }
 
     @Test
     void d_getAll() {
-        System.out.println(service.getAll());
+        System.out.println("All admins: " + service.getAll());
     }
 }

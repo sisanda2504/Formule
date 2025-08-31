@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.service.users.CustomerService;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
     private CustomerService service;
@@ -24,7 +25,7 @@ public class CustomerController {
     }
 
     @GetMapping("/read/{customerId}")
-    public Customer read(@PathVariable Integer customerId) {
+    public Customer read(@PathVariable Long customerId) {
         return service.read(customerId);
     }
 
@@ -34,13 +35,14 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete/{customerId}")
-    public boolean delete(@PathVariable Integer customerId) {
-        return service.deleteCustomer(customerId);
+    public boolean delete(@PathVariable Long customerId) {
+        return service.delete(customerId);
     }
 
     @GetMapping("/getAll")
         public List<Customer> getAll() {
         return service.getAll();
         }
+
 
 }

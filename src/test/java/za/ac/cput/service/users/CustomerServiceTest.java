@@ -40,6 +40,7 @@ class CustomerServiceTest {
     void a_create() {
         Customer created = service.create(customer);
         assertNotNull(created);
+        customer = created;
         System.out.println(created);
     }
 
@@ -59,14 +60,16 @@ class CustomerServiceTest {
     }
 
     @Test
-    void e_deleteCustomer() {
-        boolean deleted = service.deleteCustomer(customer.getId());
+    void e_delete() {
+        boolean deleted = service.delete(customer.getId());
         assertTrue(deleted);
-        System.out.println("Deleted: "+deleted);
+        System.out.println("Deleted: "+ deleted);
     }
 
     @Test
     void d_getAll() {
+        assertFalse(service.getAll().isEmpty());
         System.out.println(service.getAll());
     }
+
 }

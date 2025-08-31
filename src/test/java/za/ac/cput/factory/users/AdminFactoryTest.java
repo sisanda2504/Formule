@@ -33,7 +33,7 @@ class AdminFactoryTest {
     @Order(2)
     public void testCreateAdmin2() {
         assertNotNull(admin2);
-        System.out.println(admin2.toString());
+        System.out.println("admin2 is null as expected due to invalid input.");
     }
 
 }

@@ -1,5 +1,6 @@
 package za.ac.cput.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import za.ac.cput.domain.generic.Address;
 
@@ -13,15 +14,17 @@ Date: 13/04/2025
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String emailAddress;
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JsonIgnore
     private Address address;
 
     protected Customer(){}
@@ -36,7 +39,7 @@ public class Customer {
         this.address = builder.address;
     }
 
-    public Integer getId(){
+    public Long getId(){
         return id;
     }
 
@@ -79,7 +82,7 @@ public class Customer {
 
     public static class Builder{
 
-        private Integer id;
+        private Long id;
         private String firstName;
         private String lastName;
         private String phoneNumber;
@@ -87,7 +90,7 @@ public class Customer {
         private String password;
         private Address address;
 
-        public Builder setId(Integer id){
+        public Builder setId(Long id){
             this.id = id;
             return this;
         }

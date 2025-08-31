@@ -5,14 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Admin;
 import za.ac.cput.service.users.AdminService;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "*")
 public class AdminController {
 
-    private AdminService service;
+    private final AdminService service;
 
     @Autowired
     public AdminController(AdminService service) {
@@ -25,18 +26,18 @@ public class AdminController {
     }
 
     @GetMapping("/read/{adminId}")
-    public Admin read(@PathVariable Integer adminId) {
+    public Admin read(@PathVariable Long adminId) {
         return service.read(adminId);
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public Admin update(@RequestBody Admin admin) {
         return service.update(admin);
     }
 
     @DeleteMapping("/delete/{adminId}")
-    public boolean delete(@PathVariable Integer adminId) {
-        return service.deleteAdmin(adminId);
+    public boolean delete(@PathVariable Long adminId) {
+        return service.delete(adminId);
     }
 
     @GetMapping("/getAll")

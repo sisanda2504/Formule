@@ -7,9 +7,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.users.Customer;
+import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,20 +20,31 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerControllerTest {
 
     private static Customer customer;
+    private static Address address;
 
     @Autowired
     private TestRestTemplate restTemplate;
-    private  static final String BASE_URL = "http://localhost:8080/formule/customer";
+
+    private static final String BASE_URL = "http://localhost:8080/formule/customer";
 
     @BeforeAll
-    static void setUp() throws Exception {
+    static void setUp() {
+        address = AddressFactory.createAddress(
+                null,
+                "45 Example Street",
+                "Cape Town",
+                "Western Cape",
+                "8001",
+                "South Africa"
+        );
+
         customer = CustomerFactory.createCustomer(
                 "Agnes",
                 "Mabusela",
                 "0763728303",
                 "agnes@gmail.com",
                 "password123",
-                123
+                address
         );
     }
 
@@ -41,52 +53,68 @@ class CustomerControllerTest {
         String url = BASE_URL + "/create";
         ResponseEntity<Customer> postResponse = restTemplate.postForEntity(url, customer, Customer.class);
         assertNotNull(postResponse);
-        Customer customerSaved = postResponse.getBody();
-        assertEquals(customer.getId(), customerSaved.getId());
-        System.out.println("Created: "+ customerSaved);
+        assertEquals(HttpStatus.OK, postResponse.getStatusCode());
+
+        customer = postResponse.getBody();
+        assertNotNull(customer);
+        assertNotNull(customer.getId());
+        System.out.println("Created: " + customer);
     }
 
     @Test
-    void b_read(){
-        String url = BASE_URL + "/read" + customer.getId();
-        ResponseEntity<Customer> response = this.restTemplate.getForEntity(url, Customer.class);
-        assertNotEquals(customer.getId(), response.getBody().getId());
-        System.out.println("Read: "+ response.getBody());
-    }
+    void b_read() {
+        String url = BASE_URL + "/read/" + customer.getId();
+        ResponseEntity<Customer> response = restTemplate.getForEntity(url, Customer.class);
 
-    @Test
-    void c_update(){
-        Customer updatedCustomer = new Customer.Builder().copy(customer).setPhoneNumber("073873939").build();
-        String url = BASE_URL + "/update";
-        ResponseEntity<Customer> response = this.restTemplate.postForEntity(url, updatedCustomer, Customer.class);
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(updatedCustomer.getPhoneNumber(), response.getBody().getPhoneNumber());
-        System.out.println("Updated: "+ response.getBody());
-    }
-
-    @Test
-    void d_delete(){
-        String url = BASE_URL + "/delete" + customer.getId();
-        this.restTemplate.delete(url);
-
-        ResponseEntity<Customer> response = this.restTemplate.getForEntity(BASE_URL+"/read/"+customer.getId(), Customer.class);
-        assertNull(response.getBody());
-        System.out.println("Deleted: "+ response.getBody());
-    }
-
-    @Test
-    void d_getAll(){
-        String url = BASE_URL + "/getAll";
-        ResponseEntity<Customer[]> response = this.restTemplate.getForEntity(url, Customer[].class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length>0);
-        System.out.println("GetAll: ");
-        for (Customer customer : response.getBody()) {
-            System.out.println(customer);
-        }
-
-
+        assertEquals(customer.getId(), response.getBody().getId());
+        System.out.println("Read: " + response.getBody());
     }
 
+    @Test
+    void c_update() {
+        Customer updatedCustomer = new Customer.Builder()
+                .copy(customer)
+                .setPhoneNumber("0738739399")
+                .build();
 
+        String url = BASE_URL + "/update";
+        HttpEntity<Customer> request = new HttpEntity<>(updatedCustomer);
+        ResponseEntity<Customer> response = restTemplate.exchange(url, HttpMethod.PUT, request, Customer.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("0738739399", response.getBody().getPhoneNumber());
+        System.out.println("Updated: " + response.getBody());
+
+        // Save updated version for further tests
+        customer = response.getBody();
+    }
+
+    @Test
+    void d_getAll() {
+        String url = BASE_URL + "/getAll";
+        ResponseEntity<Customer[]> response = restTemplate.getForEntity(url, Customer[].class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().length > 0);
+
+        System.out.println("All Customers:");
+        for (Customer c : response.getBody()) {
+            System.out.println(c);
+        }
+    }
+
+    @Test
+    void e_delete() {
+        String url = BASE_URL + "/delete/" + customer.getId();
+        restTemplate.delete(url);
+
+        // Try to read again
+        ResponseEntity<Customer> response = restTemplate.getForEntity(BASE_URL + "/read/" + customer.getId(), Customer.class);
+        assertTrue(response.getStatusCode().is4xxClientError());
+        System.out.println("Deleted: Customer ID " + customer.getId());
+    }
 }

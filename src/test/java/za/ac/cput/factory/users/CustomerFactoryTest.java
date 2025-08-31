@@ -36,4 +36,21 @@ class CustomerFactoryTest {
         System.out.println("Customer: " + validCustomer);
     }
 
+    @Test
+    @Order(2)
+    void testCreateCustomerWithInvalidEmail() {
+        Customer customer = CustomerFactory.createCustomer(
+                "Agnes", "Mabusela", "0712345678", "invalidEmail", "StrongPass123!", validAddress);
+        assertNull(customer);
+    }
+
+    @Test
+    @Order(3)
+    void testCreateCustomerWithEmptyFirstName() {
+        Customer customer = CustomerFactory.createCustomer(
+                "", "Mabusela", "0712345678", "agnes@example.com", "StrongPass123!", validAddress);
+        assertNull(customer);
+    }
+
+
 }
