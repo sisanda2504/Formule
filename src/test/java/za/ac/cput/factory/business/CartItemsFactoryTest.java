@@ -33,8 +33,8 @@ class CartItemsFactoryTest {
                 "Luna",
                 "Sithole",
                 "0780001122",
-                "luna@example.com",
-                "StrongPass123",
+                "luna@gmail.com",
+                "StrangerDanger123",
                 null);
 
         cart = CartFactory.createCart(customer, Collections.emptyList(), 0.0);

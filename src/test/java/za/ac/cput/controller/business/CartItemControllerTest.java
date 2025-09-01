@@ -39,8 +39,8 @@ class CartItemControllerTest {
                 "Lindiwe",
                 "Nkosi",
                 "0781234567",
-                "lindiwe@example.com",
-                "Pass1234",
+                "lindiwe@gmail.com",
+                "Pass1324",
                 null
         );
 

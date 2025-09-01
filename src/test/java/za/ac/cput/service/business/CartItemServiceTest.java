@@ -37,10 +37,10 @@ class CartItemServiceTest {
     @BeforeAll
     static void setUp(@Autowired CartService cartService) {
         Customer customer = CustomerFactory.createCustomer(
-                "Test",
-                "User",
+                "Annah",
+                "Manda",
                 "0712345678",
-                "test@example.com",
+                "mana@gmail.com",
                 "Pass1234",
                 null
         );
