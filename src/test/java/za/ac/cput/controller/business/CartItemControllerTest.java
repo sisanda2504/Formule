@@ -45,6 +45,7 @@ class CartItemControllerTest {
         );
 
         Product product = ProductFactory.createProduct(
+                1,
                 "Glow Serum",
                 "Hydrating serum",
                 199.99,
@@ -53,7 +54,7 @@ class CartItemControllerTest {
                 Brands.MISSHA
         );
 
-        cart = CartFactory.createCart(customer, Collections.emptyList(), 0.0);
+        cart = CartFactory.createCart(1, customer, Collections.emptyList(), 0.0);
 
         cartItem = CartItemsFactory.createCartItems(product, cart,2, 399.98);
     }

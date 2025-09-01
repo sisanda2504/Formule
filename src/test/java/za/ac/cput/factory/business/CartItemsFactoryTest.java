@@ -22,6 +22,7 @@ class CartItemsFactoryTest {
     @BeforeEach
     void setUp() {
         product = ProductFactory.createProduct(
+                1,
                 "Gentle Cleanser",
                 "Mild face cleanser",
                 89.99,
@@ -37,7 +38,7 @@ class CartItemsFactoryTest {
                 "StrangerDanger123",
                 null);
 
-        cart = CartFactory.createCart(customer, Collections.emptyList(), 0.0);
+        cart = CartFactory.createCart(1,customer, Collections.emptyList(), 0.0);
     }
 
     @Test
