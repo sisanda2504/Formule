@@ -29,7 +29,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order read(Integer id) {
+    public Order read(Long id) {
         return this.repository.findById(id).orElse(null);
     }
 
@@ -39,11 +39,8 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public boolean deleteOrder(Integer id) {
-        if (this.repository.existsById(id)) {
+    public boolean delete(Long id) {
         this.repository.deleteById(id);
-        return true;
-    }
         return false;
     }
 
@@ -52,3 +49,4 @@ public class OrderService implements IOrderService {
         return this.repository.findAll();
     }
 }
+

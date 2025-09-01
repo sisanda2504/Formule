@@ -1,14 +1,17 @@
-
+/*
+ShippingRepository.java
+Author: Tsholofelo Mabidikane (230018165)
+Date: 25 May 2025
+ */
 package za.ac.cput.repository.business;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import za.ac.cput.domain.business.Shipping;
 
 import java.util.List;
 
+@Repository
+public interface ShippingRepository extends JpaRepository<Shipping, Long> {
 
-public interface ShippingRepository extends JpaRepository<Shipping, Integer> {
-    List<Shipping> findByOrderId(Integer orderId);
-    List<Shipping> findByCustomerId(Integer customerId);
-    List<Shipping> findByStatus(String status);
 }

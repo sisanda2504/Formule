@@ -8,7 +8,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import za.ac.cput.domain.business.Order;
+import za.ac.cput.domain.users.Customer;
 import za.ac.cput.factory.business.OrderFactory;
+import za.ac.cput.factory.users.CustomerFactory;
 
 import java.time.LocalDate;
 
@@ -21,9 +23,17 @@ class OrderServiceTest {
     @Autowired
     private IOrderService service;
 
+    private static Customer customer = CustomerFactory.createCustomer(
+            "Palesa",
+            "Mabidikane",
+            "0712345678",
+            "palesam@icloud.com",
+            "P@mabidikane",
+            null
+    );
+
     private static Order order = OrderFactory.createOrder(
-            1,
-            105,
+            customer,
             LocalDate.of(2025, 9, 15),
             100.00
     );
@@ -55,7 +65,7 @@ class OrderServiceTest {
 
     @Test
     void d_delete() {
-        boolean deleted = service.deleteOrder(order.getId());
+        boolean deleted = service.delete(order.getId());
         assertTrue(deleted);
         System.out.println("Deleted Order with ID: " + order.getId());
     }

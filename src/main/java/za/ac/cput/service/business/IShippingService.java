@@ -9,8 +9,7 @@ import za.ac.cput.service.IService;
 
 import java.util.List;
 
-public interface IShippingService extends IService<Shipping, Integer> {
+public interface IShippingService extends IService<Shipping, Long> {
 
-    boolean deleteShipping(Integer id);
     List<Shipping> getAll();
 }

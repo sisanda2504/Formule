@@ -1,49 +1,63 @@
-package za.ac.cput.domain.business;
 /*
 Shipping.java
 Shipping model class
 Author: Tsholofelo Mabidikane (230018165)
 Date: 15 March 2025
  */
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+package za.ac.cput.domain.business;
+
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "shipping")
 public class Shipping {
+
     @Id
-    private int id;
-    private int orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
+
+    @Column(nullable = false)
     private String address;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(name = "estimated_delivery_date", nullable = false)
     private LocalDate estimatedDeliveryDate;
+
+    @Column(name = "tracking_number", unique = true)
     private String trackingNumber;
 
-    protected Shipping () {
-    }
+    protected Shipping() {}
 
     private Shipping(Builder builder) {
         this.id = builder.id;
-        this.orderId = builder.orderId;
+        this.order = builder.order;
         this.address = builder.address;
         this.status = builder.status;
         this.estimatedDeliveryDate = builder.estimatedDeliveryDate;
         this.trackingNumber = builder.trackingNumber;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -59,7 +73,7 @@ public class Shipping {
     public String toString() {
         return "Shipping{" +
                 "id=" + id +
-                ", orderId=" + orderId +
+                ", order=" + order +
                 ", address='" + address + '\'' +
                 ", status='" + status + '\'' +
                 ", estimatedDeliveryDate=" + estimatedDeliveryDate +
@@ -68,20 +82,20 @@ public class Shipping {
     }
 
     public static class Builder {
-        private int id;
-        private int orderId;
+        private Long id;
+        private Order order;
         private String address;
-        private String status;
+        private Status status;
         private LocalDate estimatedDeliveryDate;
         private String trackingNumber;
 
-        public Builder setId(int id) {
+        public Builder setId(Long id) {
             this.id = id;
             return this;
         }
 
-        public Builder setOrderId(int orderId) {
-            this.orderId = orderId;
+        public Builder setOrder(Order order) {
+            this.order = order;
             return this;
         }
 
@@ -90,7 +104,7 @@ public class Shipping {
             return this;
         }
 
-        public Builder setStatus(String status) {
+        public Builder setStatus(Status status) {
             this.status = status;
             return this;
         }
@@ -107,7 +121,7 @@ public class Shipping {
 
         public Builder copy(Shipping shipping) {
             this.id = shipping.id;
-            this.orderId = shipping.orderId;
+            this.order = shipping.order;
             this.address = shipping.address;
             this.status = shipping.status;
             this.estimatedDeliveryDate = shipping.estimatedDeliveryDate;
@@ -118,6 +132,5 @@ public class Shipping {
         public Shipping build() {
             return new Shipping(this);
         }
-
     }
 }

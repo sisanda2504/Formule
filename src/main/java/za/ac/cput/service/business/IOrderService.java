@@ -9,8 +9,7 @@ import za.ac.cput.service.IService;
 
 import java.util.List;
 
-public interface IOrderService extends IService<Order, Integer> {
+public interface IOrderService extends IService<Order, Long> {
 
-    boolean deleteOrder(Integer id);
     List<Order> getAllOrders();
 }

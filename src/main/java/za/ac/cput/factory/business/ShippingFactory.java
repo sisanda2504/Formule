@@ -5,27 +5,27 @@ Date: 23 April 2025
  */
 package za.ac.cput.factory.business;
 
+import za.ac.cput.domain.business.Order;
 import za.ac.cput.domain.business.Shipping;
+import za.ac.cput.domain.business.Status;
 import za.ac.cput.util.Helper;
 
 import java.time.LocalDate;
 
 public class ShippingFactory {
 
-    public static Shipping createShipping(int id, int orderId, String address, String status, LocalDate estimatedDeliveryDate, String trackingNumber) {
+    public static Shipping createShipping(Order order, String address, Status status, LocalDate estimatedDeliveryDate, String trackingNumber) {
 
-        if(Helper.isNullOrEmpty(address) || Helper.isNullOrEmpty(status))
+        if (order == null ||
+                Helper.isNullOrEmpty(address) ||
+                status == null ||
+                estimatedDeliveryDate == null ||
+                Helper.isNullOrEmpty(trackingNumber)) {
             return null;
-
-        if(estimatedDeliveryDate == null)
-            return null;
-
-        if(Helper.isNullOrEmpty(trackingNumber))
-            return null;
+        }
 
         return new Shipping.Builder()
-                .setId(id)
-                .setOrderId(orderId)
+                .setOrder(order)
                 .setAddress(address)
                 .setStatus(status)
                 .setEstimatedDeliveryDate(estimatedDeliveryDate)

@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.business.Order;
 import za.ac.cput.service.business.OrderService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     private OrderService service;
@@ -28,7 +30,7 @@ public class OrderController {
     }
 
     @GetMapping("/read/{orderId}")
-    public Order read(@PathVariable Integer orderId) {
+    public Order read(@PathVariable Long orderId) {
         return service.read(orderId);
     }
 
@@ -38,8 +40,8 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete/{orderId}")
-    public boolean delete(@PathVariable Integer orderId) {
-        return service.deleteOrder(orderId);
+    public boolean delete(@PathVariable Long orderId) {
+        return service.delete(orderId);
     }
 
     @GetMapping("/getall")

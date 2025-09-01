@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.service.business.ShippingService;
 import za.ac.cput.domain.business.Shipping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/shipping")
+@CrossOrigin(origins = "*")
 public class ShippingController {
 
     private ShippingService service;
@@ -28,7 +30,7 @@ public class ShippingController {
     }
 
     @GetMapping("/read/{shippingId}")
-    public Shipping read(@PathVariable Integer shippingId) {
+    public Shipping read(@PathVariable Long shippingId) {
         return service.read(shippingId);
     }
 
@@ -38,8 +40,8 @@ public class ShippingController {
     }
 
     @DeleteMapping("/delete/{shippingId}")
-    public boolean delete(@PathVariable Integer shippingId) {
-        return service.deleteShipping(shippingId);
+    public boolean delete(@PathVariable Long shippingId) {
+        return service.delete(shippingId);
     }
 
     @GetMapping("/getall")

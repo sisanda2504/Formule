@@ -5,62 +5,122 @@ Date: 17 May 2025
  */
 package za.ac.cput.factory.business;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import za.ac.cput.domain.business.Order;
 import za.ac.cput.domain.business.Shipping;
+import za.ac.cput.domain.business.Status;
+import za.ac.cput.domain.generic.Address;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.factory.generic.AddressFactory;
+import za.ac.cput.factory.users.CustomerFactory;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ShippingFactoryTest {
 
-    private static Shipping shipping = ShippingFactory.createShipping(1234567, 5678948, "123 Main Street", "Pending", LocalDateTime.of(2025, 8, 25, 14, 30), "TN47586");
+    private static Customer customer;
+    private static Address address;
+    private static Order order;
+    private static Shipping shipping;
 
-    private static Shipping invalidShippingId = ShippingFactory.createShipping(-1, 5896732, "45 Lor Street", "Pending", LocalDateTime.of(2025, 8, 25, 14, 30), "47586");
+    @BeforeAll
+    static void setup() {
+        customer = CustomerFactory.createCustomer(
+                "Jane", "Doe", "0123456789", "jane@example.com", "Password@123", null
+        );
 
-    private static Shipping invalidOrderId = ShippingFactory.createShipping(4536896, -1, "22 Tambotie Street", "Pending", LocalDateTime.of(2025, 8, 25, 14, 30), "47586");
+        address = AddressFactory.createAddress(
+                customer,
+                "10 Test Lane",
+                "Cape Town",
+                "Western Cape",
+                "8000",
+                "South Africa"
+        );
 
-    private static Shipping invalidShippingAddress = ShippingFactory.createShipping(8987654, 6578930, "", "Pending", LocalDateTime.of(2025, 8, 25, 14, 30), "47586");
+        order = OrderFactory.createOrder(
+                customer,
+                LocalDate.of(2025, 9, 1),
+                500.00
+        );
 
-    private static Shipping invalidShippingStatus = ShippingFactory.createShipping(7894565, 7564875, "123 Main St", "", LocalDateTime.of(2025, 8, 25, 14, 30), "47586");
+        shipping = ShippingFactory.createShipping(
+                order,
+                "123 Main Street",
+                Status.InTransit,
+                LocalDate.of(2025, 9, 5),
+                "TN47586"
+        );
+    }
 
     @Test
-    @Order(1)
-    public void testCreateShippingSuccess() {
-        System.out.println("Test: testCreateShippingSuccess");
-        assertNotNull(shipping, "Shipping should be created successfully with valid data");
+    @org.junit.jupiter.api.Order(1)
+    void testCreateShippingSuccess() {
+        assertNotNull(shipping, "Shipping should be created successfully");
+        assertEquals(order, shipping.getOrder(), "Order should match");
+        assertEquals("123 Main Street", shipping.getAddress(), "Address should match");
+        assertEquals(Status.InTransit, shipping.getStatus(), "Status should match");
+        assertEquals(LocalDate.of(2025, 9, 5), shipping.getEstimatedDeliveryDate(), "Estimated delivery date should match");
+        assertEquals("TN47586", shipping.getTrackingNumber(), "Tracking number should match");
         System.out.println("Created shipping: " + shipping);
     }
 
     @Test
-    @Order(2)
-    public void testCreateShippingWithInvalidShippingId() {
-        System.out.println("Test: testCreateShippingWithInvalidShippingId");
-        assertNull(invalidShippingId, "Shipping with invalid shipping ID should not be created");
-        System.out.println("Failed shipping creation with invalid shipping ID: " + invalidShippingId);
+    @org.junit.jupiter.api.Order(2)
+    void testCreateShippingWithNullOrder() {
+        Shipping invalid = ShippingFactory.createShipping(
+                null,
+                "123 Main Street",
+                Status.Delivered,
+                LocalDate.of(2025, 9, 5),
+                "TN12345"
+        );
+        assertNull(invalid, "Shipping creation should fail when order is null");
     }
 
     @Test
-    @Order(3)
-    public void testCreateShippingWithInvalidOrderId() {
-        System.out.println("Test: testCreateShippingWithInvalidOrderId");
-        assertNull(invalidOrderId, "Shipping with invalid order ID should not be created");
-        System.out.println("Failed shipping creation with invalid order ID: " + invalidOrderId);
+    @org.junit.jupiter.api.Order(3)
+    void testCreateShippingWithEmptyAddress() {
+        Shipping invalid = ShippingFactory.createShipping(
+                order,
+                "",
+                Status.Delayed,
+                LocalDate.of(2025, 9, 5),
+                "TN54321"
+        );
+        assertNull(invalid, "Shipping creation should fail when address is empty");
     }
 
     @Test
-    @Order(4)
-    public void testCreateShippingWithInvalidShippingAddress() {
-        System.out.println("Test: testCreateShippingWithInvalidShippingAddress");
-        assertNull(invalidShippingAddress, "Shipping with invalid shipping address should not be created");
-        System.out.println("Failed shipping creation with invalid shipping address: " + invalidShippingAddress);
+    @org.junit.jupiter.api.Order(4)
+    void testCreateShippingWithNullStatus() {
+        Shipping invalid = ShippingFactory.createShipping(
+                order,
+                "456 Oak Street",
+                null,
+                LocalDate.of(2025, 9, 5),
+                "TN99999"
+        );
+        assertNull(invalid, "Shipping creation should fail when status is null");
     }
 
     @Test
-    @Order(5)
-    public void testCreateShippingWithInvalidShippingStatus() {
-        System.out.println("Test: testCreateShippingWithInvalidShippingStatus");
-        assertNull(invalidShippingStatus, "Shipping with invalid shipping status should not be created");
-        System.out.println("Failed shipping creation with invalid shipping status: " + invalidShippingStatus);
+    @org.junit.jupiter.api.Order(5)
+    void testCreateShippingWithNullTrackingNumber() {
+        Shipping invalid = ShippingFactory.createShipping(
+                order,
+                "789 Elm Street",
+                Status.Returned,
+                LocalDate.of(2025, 9, 5),
+                null
+        );
+        assertNull(invalid, "Shipping creation should fail when tracking number is null");
     }
 }

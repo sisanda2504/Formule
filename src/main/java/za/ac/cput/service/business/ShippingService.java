@@ -29,7 +29,7 @@ public class ShippingService implements IShippingService {
     }
 
     @Override
-    public Shipping read(Integer id) {
+    public Shipping read(Long id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -39,7 +39,7 @@ public class ShippingService implements IShippingService {
     }
 
     @Override
-    public boolean deleteShipping(Integer id) {
+    public boolean delete(Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
             return true;
