@@ -28,9 +28,7 @@ public class Order {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
-    protected Order() {
-
-    }
+    protected Order() {}
 
     private Order(Builder builder) {
         this.id = builder.id;
