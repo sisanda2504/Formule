@@ -56,7 +56,7 @@ class ShippingServiceTest {
     void a_create() {
         Shipping created = service.create(shipping);
         assertNotNull(created);
-        shipping = created; // Save the generated ID
+        shipping = created;
         System.out.println("Created: " + created);
     }
 
