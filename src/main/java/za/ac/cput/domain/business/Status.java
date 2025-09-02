@@ -7,6 +7,10 @@ Date: 15 March 2025
  */
 
 public enum Status {
+    Pending,
+
+    Shipped,
+
     InTransit,
 
     Delivered,
