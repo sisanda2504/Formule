@@ -2,12 +2,13 @@ package za.ac.cput.service.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import za.ac.cput.domain.business.Cart;
 import za.ac.cput.repository.business.CartRepository;
 
 import java.util.List;
 
-@Repository
+@Service
 public class CartService implements ICartService {
     private final CartRepository repository;
 
@@ -22,7 +23,7 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Cart read(Integer id) {
+    public Cart read(Long id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -31,8 +32,9 @@ public class CartService implements ICartService {
         return repository.save(cart);
     }
     @Override
-    public void  delete(Integer id) {
+    public boolean  delete(Long id) {
         repository.deleteById(id);
+        return true;
     }
 
     @Override

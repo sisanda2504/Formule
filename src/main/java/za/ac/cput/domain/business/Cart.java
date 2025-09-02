@@ -3,7 +3,7 @@ package za.ac.cput.domain.business;
 
 
 import jakarta.persistence.*;
-import za.ac.cput.domain.CartItems;
+import za.ac.cput.domain.business.CartItems;
 import za.ac.cput.domain.users.Customer;
 
 import java.util.List;
@@ -13,9 +13,9 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @ManyToOne(optional = false)  // A cart must have a customer
+    @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
@@ -25,7 +25,6 @@ public class Cart {
     @Column(name = "total_price")
     private double totalPrice;
 
-    // Empty constructor required by JPA
     protected Cart() {
     }
 
@@ -37,7 +36,7 @@ public class Cart {
 
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -49,7 +48,7 @@ public class Cart {
         return items;
     }
 
-    public Double getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
@@ -64,13 +63,13 @@ public class Cart {
     }
 
     public static class Builder {
-        private Integer id;
+        private Long id;
         private Customer customer;
         private List<CartItems> items;
-        private Double totalPrice;
+        private double totalPrice;
 
 
-        public Builder setId(Integer id) {
+        public Builder setId(Long id) {
             this.id = id;
             return this;
         }

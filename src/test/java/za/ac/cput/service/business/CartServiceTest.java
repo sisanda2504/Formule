@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import za.ac.cput.domain.business.Brands;
 import za.ac.cput.domain.business.Cart;
-import za.ac.cput.domain.CartItems;
+import za.ac.cput.domain.business.CartItems;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.factory.business.CartFactory;
-import za.ac.cput.factory.CartItemsFactory;
+import za.ac.cput.factory.business.CartItemsFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 import za.ac.cput.factory.business.ProductFactory;
 
@@ -34,20 +34,17 @@ public class CartServiceTest {
 
     @BeforeAll
     static void setUp() {
-        // Create Customer
         customer = CustomerFactory.createCustomer(
-                "Agnes",
-                "Mabusela",
+                "Sisanda",
+                "Madikizela",
                 "0763728303",
-                "agnes@gmail.com",
-                "password123",
-                123
+                "Sisanda@gmail.com",
+                "securePass2025",
+                null
         );
         assertNotNull(customer);
 
-        // Create Product
         Product product = ProductFactory.createProduct(
-                1,
                 "Test Product",
                 "Test Description",
                 99.99,
@@ -57,31 +54,46 @@ public class CartServiceTest {
         );
         assertNotNull(product);
 
-        // Create CartItems
+        Cart tempCart = new Cart.Builder()
+                .setCustomer(customer)
+                .setItems(null)
+                .setTotalPrice(0.0)
+                .build();
+
         CartItems item = CartItemsFactory.createCartItems(
                 product,
+                tempCart,
                 2,
-                199.98 // 2 * 99.99
+                199.98
         );
         assertNotNull(item);
-        cartItems = Collections.singletonList(item);
-        assertNotNull(cartItems);
 
-        // Create Cart
+        cartItems = Collections.singletonList(item);
+
+
         cart = CartFactory.createCart(
-                1,
                 customer,
                 cartItems,
                 199.98
         );
-        assertNotNull(cart);
+
+
+        item = new CartItems.Builder()
+                .copy(item)
+                .setCart(cart)
+                .build();
+
+        cartItems = Collections.singletonList(item);
+        cart = new Cart.Builder()
+                .copy(cart)
+                .setItems(cartItems)
+                .build();
     }
 
     @Test
     void a_create() {
         Cart created = cartService.create(cart);
         assertNotNull(created);
-        assertEquals(cart.getId(), created.getId());
         assertEquals(cart.getCustomer().getId(), created.getCustomer().getId());
         assertEquals(cart.getItems().size(), created.getItems().size());
         assertEquals(cart.getTotalPrice(), created.getTotalPrice());
@@ -92,7 +104,6 @@ public class CartServiceTest {
     void b_read() {
         Cart read = cartService.read(cart.getId());
         assertNotNull(read);
-        assertEquals(cart.getId(), read.getId());
         assertEquals(cart.getCustomer().getId(), read.getCustomer().getId());
         System.out.println("Read: " + read);
     }
@@ -100,7 +111,6 @@ public class CartServiceTest {
     @Test
     void c_update() {
         Product updatedProduct = ProductFactory.createProduct(
-                2,
                 "Updated Product",
                 "Updated Desc",
                 149.99,
@@ -112,12 +122,14 @@ public class CartServiceTest {
 
         CartItems updatedItem = CartItemsFactory.createCartItems(
                 updatedProduct,
+                cart,
                 1,
                 149.99
         );
         assertNotNull(updatedItem);
 
         List<CartItems> updatedItems = Collections.singletonList(updatedItem);
+
         Cart updatedCart = new Cart.Builder()
                 .copy(cart)
                 .setItems(updatedItems)
@@ -126,7 +138,6 @@ public class CartServiceTest {
 
         Cart updated = cartService.update(updatedCart);
         assertNotNull(updated);
-        assertEquals(cart.getId(), updated.getId());
         assertEquals(updatedItems.size(), updated.getItems().size());
         assertEquals(149.99, updated.getTotalPrice());
         System.out.println("Updated: " + updated);
@@ -137,14 +148,14 @@ public class CartServiceTest {
         cartService.delete(cart.getId());
         Cart read = cartService.read(cart.getId());
         assertNull(read);
-        System.out.println("Deleted: " + read);
+        System.out.println("Deleted cart with ID: " + cart.getId());
     }
 
     @Test
     void e_getAll() {
         List<Cart> carts = cartService.getAll();
         assertNotNull(carts);
-        System.out.println("GetAll: ");
+        System.out.println("All Carts:");
         for (Cart c : carts) {
             System.out.println(c);
         }

@@ -8,12 +8,12 @@ package za.ac.cput.factory.business;
 
 import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.users.Customer;
-import za.ac.cput.domain.CartItems;
+import za.ac.cput.domain.business.CartItems;
 import za.ac.cput.util.Helper;
 import java.util.List;
 
 public class CartFactory {
-    public static Cart createCart(int id, Customer customer, List<CartItems> items, Double totalPrice) {
+    public static Cart createCart( Customer customer, List<CartItems> items, Double totalPrice) {
         if (customer == null) {
             return null;
         }
@@ -26,7 +26,6 @@ public class CartFactory {
         }
 
         return new Cart.Builder()
-                .setId(id)
                 .setCustomer(customer)
                 .setItems(items)
                 .setTotalPrice(totalPrice)
