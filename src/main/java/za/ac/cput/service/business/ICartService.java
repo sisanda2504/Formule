@@ -5,7 +5,7 @@ import za.ac.cput.service.IService;
 
 import java.util.List;
 
-public interface ICartService extends IService<Cart, Integer> {
+public interface ICartService extends IService<Cart, Long> {
     List<Cart> getAll();
 
 

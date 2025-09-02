@@ -46,7 +46,6 @@ class CartItemServiceTest {
         );
 
         Product product = ProductFactory.createProduct(
-                1,
                 "Cleanser",
                 "Face wash",
                 100.0,
@@ -55,7 +54,7 @@ class CartItemServiceTest {
                 Brands.INNISFREE
         );
 
-        cart = CartFactory.createCart(1,customer, Collections.emptyList(), 0.0);
+        cart = CartFactory.createCart(customer, Collections.emptyList(), 0.0);
         cart = cartService.create(cart);
 
         cartItem = CartItemsFactory.createCartItems(product, cart, 2, 200.0);
