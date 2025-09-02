@@ -6,8 +6,7 @@ import za.ac.cput.service.IService;
 import java.util.List;
 
 public interface
-ICustomerService extends IService<Customer, Integer> {
+ICustomerService extends IService<Customer, Long> {
 
-    boolean deleteCustomer(Integer id);
     List<Customer> getAll();
 }
