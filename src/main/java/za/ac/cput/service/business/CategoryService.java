@@ -23,9 +23,10 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public Category read(int id) {
+    public Category read(Long id) {
         return repository.findById(id).orElse(null);
     }
+
 
     @Override
     public Category update(Category category) {
@@ -34,17 +35,14 @@ public class CategoryService implements ICategoryService {
         }
         return null;
     }
+
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
             return true;
         }
         return false;
-    }
-    @Override
-    public List<Category> getAll() {
-        return repository.findAll();
     }
 
     @Override
@@ -55,5 +53,10 @@ public class CategoryService implements ICategoryService {
     @Override
     public List<Category> searchByDescription(String keyword) {
         return repository.findByDescriptionContaining(keyword);
+    }
+
+    @Override
+    public List<Category> getAll() {
+        return repository.findAll();
     }
 }

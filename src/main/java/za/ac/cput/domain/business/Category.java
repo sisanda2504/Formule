@@ -6,19 +6,27 @@ Author: Samkelisiwe Sithabile (222843152)
 Date: 18/04/2025
 */
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Category {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String description;
 
-    private Category() {}
+    protected Category() {}
     private Category(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.description = builder.description;
     }
-    public int getId() {
+    public Long getId() {
         return id;
     }
     public String getName() {
@@ -27,12 +35,14 @@ public class Category {
     public String getDescription() {
         return description;
     }
+
+
     public static class Builder {
-        private int id;
+        private Long id;
         private String name;
         private String description;
 
-        public Builder setId(int id) {
+        public Builder setId(Long id) {
             this.id = id;
             return this;
         }

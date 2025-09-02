@@ -11,47 +11,39 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CategoryFactoryTest {
 
-    private static Category skinCareCategory = CategoryFactory.createCategory(
-            1,
-            "Skin Care Products",
-            "Category for lotions, creams, cleansers, and other skincare items"
+    private static final Category cleansersCategory = CategoryFactory.createCategory(
+            "Cleansers",
+            "Gentle facial cleansers designed to remove dirt, oil, and makeup without stripping the skin's natural moisture."
+    );
+
+    private static final Category emptyCategory = CategoryFactory.createCategory(
+            "Serums",
+            ""
+    );
+
+    private static final Category invalidCategoryNoName = CategoryFactory.createCategory(
+            null,
+            "Targeted treatments formulated with active ingredients to address specific skin concerns."
     );
 
     @Test
     @Order(1)
-    void testCreateSkinCareCategorySuccess() {
-        assertNotNull(skinCareCategory);
-        assertEquals("Skin Care Products", skinCareCategory.getName());
-        System.out.println(skinCareCategory.toString());
+    void testCreateValidCategory() {
+        assertNotNull(cleansersCategory);
+        System.out.println("Created category: " + cleansersCategory);
     }
 
     @Test
     @Order(2)
-    void testCreateCategoryWithEmptyName() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            CategoryFactory.createCategory(
-                    2,
-                    "",
-                    "Some description"
-            );
-        });
-        assertEquals("Please provide a name", exception.getMessage());
-        System.out.println("Exception caught: " + exception.getMessage());
+    void testCreateCategoryWithEmptyDescription() {
+        assertNull(emptyCategory);
+        System.out.println("Failed to create category with empty description (as expected).");
     }
 
     @Test
     @Order(3)
-    void testCreateCategoryWithNullDescription() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            CategoryFactory.createCategory(
-                    3,
-                    "Skin Care Products",
-                    null
-            );
-        });
-        assertEquals("Please provide a description", exception.getMessage());
-        System.out.println("Exception caught: " + exception.getMessage());
+    void testCreateCategoryWithNoName() {
+        assertNull(invalidCategoryNoName);
+        System.out.println("Failed to create category with null name (as expected).");
     }
 }
-
-

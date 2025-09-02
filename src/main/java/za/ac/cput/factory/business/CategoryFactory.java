@@ -12,17 +12,16 @@ import za.ac.cput.util.Helper;
 public class CategoryFactory {
 
     public static Category createCategory(
-            int id,
             String name,
             String description) {
 
         if (Helper.isNullOrEmpty(name))
-            throw new IllegalArgumentException("Please provide a name");
+        {return null;}
+
         if (Helper.isNullOrEmpty(description))
-            throw new IllegalArgumentException("Please provide a description");
+        {return null;}
 
         return new Category.Builder()
-                .setId(id)
                 .setName(name)
                 .setDescription(description)
                 .build();

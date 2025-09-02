@@ -54,7 +54,6 @@ class CustomerControllerTest {
         ResponseEntity<Customer> postResponse = restTemplate.postForEntity(url, customer, Customer.class);
         assertNotNull(postResponse);
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
-
         customer = postResponse.getBody();
         assertNotNull(customer);
         assertNotNull(customer.getId());
@@ -65,7 +64,6 @@ class CustomerControllerTest {
     void b_read() {
         String url = BASE_URL + "/read/" + customer.getId();
         ResponseEntity<Customer> response = restTemplate.getForEntity(url, Customer.class);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(customer.getId(), response.getBody().getId());
@@ -82,13 +80,10 @@ class CustomerControllerTest {
         String url = BASE_URL + "/update";
         HttpEntity<Customer> request = new HttpEntity<>(updatedCustomer);
         ResponseEntity<Customer> response = restTemplate.exchange(url, HttpMethod.PUT, request, Customer.class);
-
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("0738739399", response.getBody().getPhoneNumber());
         System.out.println("Updated: " + response.getBody());
-
-        // Save updated version for further tests
         customer = response.getBody();
     }
 
@@ -112,7 +107,6 @@ class CustomerControllerTest {
         String url = BASE_URL + "/delete/" + customer.getId();
         restTemplate.delete(url);
 
-        // Try to read again
         ResponseEntity<Customer> response = restTemplate.getForEntity(BASE_URL + "/read/" + customer.getId(), Customer.class);
         assertTrue(response.getStatusCode().is4xxClientError());
         System.out.println("Deleted: Customer ID " + customer.getId());

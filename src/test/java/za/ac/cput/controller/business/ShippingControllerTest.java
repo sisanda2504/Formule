@@ -63,7 +63,6 @@ class ShippingControllerTest {
                 1500.00
         );
 
-        // shipping created in a_create() test
     }
 
     @Test
@@ -80,7 +79,7 @@ class ShippingControllerTest {
         ResponseEntity<Shipping> postResponse = this.testRestTemplate.postForEntity(url, shipping, Shipping.class);
         assertNotNull(postResponse);
         assertNotNull(postResponse.getBody());
-        shipping = postResponse.getBody(); // update shipping reference
+        shipping = postResponse.getBody();
         System.out.println("Created: " + shipping);
     }
 
@@ -102,12 +101,9 @@ class ShippingControllerTest {
         String url = BASE_URL + "/update";
         HttpEntity<Shipping> entity = new HttpEntity<>(updatedShipping);
         ResponseEntity<Shipping> response = this.testRestTemplate.exchange(url, HttpMethod.PUT, entity, Shipping.class);
-
         assertNotNull(response.getBody());
         assertEquals(Status.Delivered, response.getBody().getStatus());
         System.out.println("Updated: " + response.getBody());
-
-        // Update global reference for next test
         shipping = response.getBody();
     }
 

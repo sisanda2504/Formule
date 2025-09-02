@@ -1,6 +1,7 @@
 package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.business.Category;
 import za.ac.cput.service.business.ICategoryService;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
+@CrossOrigin(origins = "*")
 public class CategoryController {
 
     private final ICategoryService service;
@@ -24,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping("/read/{id}")
-    public Category read(@PathVariable Integer id) {
+    public Category read(@PathVariable Long id) {
         return service.read(id);
     }
 
@@ -34,7 +36,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public boolean delete(@PathVariable Integer id) {
+    public boolean delete(@PathVariable Long id) {
         return service.delete(id);
     }
 

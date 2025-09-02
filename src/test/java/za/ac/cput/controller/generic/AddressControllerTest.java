@@ -1,94 +1,113 @@
 package za.ac.cput.controller.generic;
 
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
 import za.ac.cput.domain.generic.Address;
-import za.ac.cput.service.generic.IAddressService;
+import za.ac.cput.domain.users.Customer;
+import za.ac.cput.factory.generic.AddressFactory;
+import za.ac.cput.factory.users.CustomerFactory;
+import za.ac.cput.service.users.ICustomerService;
+
 import java.util.Arrays;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AddressControllerTest {
-    private static IAddressService service;
-    private static AddressController controller;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private ICustomerService customerService;
+
+    private static Customer customer;
     private static Address address;
 
+    private static final String BASE_URL = "http://localhost:8080/formule/address";
+
     @BeforeAll
-    static void setUp() {
-        service = Mockito.mock(IAddressService.class);
-        controller = new AddressController(service);
-        address = new Address.Builder()
-                .setId(1)
-                .setCustomerId(100)
-                .setStreet("123 Main Street")
-                .setCity("Cape Town")
-                .setProvince("Western Cape")
-                .setPostalCode("8001")
-                .setCountry("South Africa")
-                .build();
+    static void init(@Autowired ICustomerService customerService) {
+        customer = CustomerFactory.createCustomer(
+                "Samkelisiwe",
+                "khanyile",
+                "0833838288",
+                "Samke@.com",
+                "password2025",
+                null
+        );
+        customer = customerService.create(customer);
     }
+
     @Test
     @Order(1)
-    void testCreate() {
-        when(service.create(any(Address.class))).thenReturn(address);
-        Address created = controller.create(address);
-        assertNotNull(created);
-        assertEquals("Cape Town", created.getCity());
-        verify(service, times(1)).create(address);
-        System.out.println("Created: " + created);
+    void create() {
+        address = AddressFactory.createAddress(
+                customer,
+                "01 Kloof Street",
+                "Cape Town",
+                "Western Cape",
+                "8301",
+                "South Africa"
+        );
+
+        String url = BASE_URL + "/create";
+        ResponseEntity<Address> response = restTemplate.postForEntity(url, address, Address.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        address = response.getBody();
+        System.out.println("Created Address: " + address);
     }
+
     @Test
     @Order(2)
-    void testRead() {
-        when(service.read(1)).thenReturn(address);
-        Address found = controller.read(1);
-        assertNotNull(found);
-        assertEquals(1, found.getId());
-        verify(service, times(1)).read(1);
-        System.out.println("Read: " + found);
+    void read() {
+        String url = BASE_URL + "/read/" + address.getId();
+        ResponseEntity<Address> response = restTemplate.getForEntity(url, Address.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        System.out.println("Read Address: " + response.getBody());
     }
+
     @Test
     @Order(3)
-    void testUpdate() {
-        Address updatedAddress = new Address.Builder().copy(address).setCity("Johannesburg").build();
-        when(service.update(any(Address.class))).thenReturn(updatedAddress);
-        Address updated = controller.update(updatedAddress);
-        assertNotNull(updated);
-        assertEquals("Johannesburg", updated.getCity());
-        verify(service, times(1)).update(updatedAddress);
-        System.out.println("Updated: " + updated);
+    void update() {
+        Address updatedAddress = new Address.Builder()
+                .copy(address)
+                .setCity("Johannesburg")
+                .build();
+
+        String url = BASE_URL + "/update";
+        HttpEntity<Address> entity = new HttpEntity<>(updatedAddress);
+        ResponseEntity<Address> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Address.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Johannesburg", response.getBody().getCity());
+        System.out.println("Updated Address: " + response.getBody());
     }
+
     @Test
     @Order(4)
-    void testDelete() {
-        when(service.delete(1)).thenReturn(true);
-        boolean result = controller.delete(1);
-        assertTrue(result);
-        verify(service, times(1)).delete(1);
-        System.out.println("Deleted address with ID 1");
+    void getAll() {
+        String url = BASE_URL + "/getall";
+        ResponseEntity<Address[]> response = restTemplate.getForEntity(url, Address[].class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        List<Address> addresses = Arrays.asList(response.getBody());
+        assertFalse(addresses.isEmpty());
+        System.out.println("All Addresses: " + addresses);
     }
+
     @Test
     @Order(5)
-    void testGetAll() {
-        when(service.getAll()).thenReturn(Arrays.asList(address));
-        List<Address> all = controller.getAll();
-        assertFalse(all.isEmpty());
-        assertEquals(1, all.size());
-        verify(service, times(1)).getAll();
-        System.out.println("All addresses: " + all);
-    }
-    @Test
-    @Order(6)
-    void testGetByCustomerId() {
-        when(service.findByCustomerId(100)).thenReturn(Arrays.asList(address));
-        List<Address> customerAddresses = controller.getByCustomerId(100);
-        assertFalse(customerAddresses.isEmpty());
-        assertEquals(100, customerAddresses.get(0).getCustomerId());
-        verify(service, times(1)).findByCustomerId(100);
-        System.out.println("Addresses by customer ID 100: " + customerAddresses);
+    void delete() {
+        String url = BASE_URL + "/delete/" + address.getId();
+        restTemplate.delete(url);
+        System.out.println("Deleted Address with ID: " + address.getId());
     }
 }
-
