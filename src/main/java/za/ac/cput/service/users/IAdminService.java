@@ -5,8 +5,7 @@ import za.ac.cput.service.IService;
 
 import java.util.List;
 
-public interface IAdminService extends IService<Admin,Integer> {
+public interface IAdminService extends IService<Admin,Long> {
 
-    boolean deleteAdmin(Integer id);
     List<Admin> getAll();
 }
