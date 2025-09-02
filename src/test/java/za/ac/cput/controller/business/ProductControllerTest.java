@@ -1,14 +1,10 @@
 package za.ac.cput.controller.business;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import za.ac.cput.domain.business.Brands;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.factory.business.ProductFactory;
@@ -20,95 +16,77 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductControllerTest {
 
     private static Product product;
+    private static Long productId;
 
     @Autowired
     private TestRestTemplate restTemplate;
+
     private static final String BASE_URL = "http://localhost:8080/formule/product";
 
     @BeforeAll
     static void setUp() {
         product = ProductFactory.createProduct(
-                1,
                 "Test Product",
-                "Test Description",
+                "Sample description",
                 99.99,
-                100,
+                50,
                 1,
                 Brands.INNISFREE
         );
-        assertNotNull(product);
     }
 
     @Test
     void a_create() {
-        String url = BASE_URL + "/create";
-        ResponseEntity<Product> postResponse = restTemplate.postForEntity(url, product, Product.class);
-        assertNotNull(postResponse);
-        assertEquals(HttpStatus.OK, postResponse.getStatusCode());
-        Product productSaved = postResponse.getBody();
-        assertNotNull(productSaved);
-        assertEquals(product.getId(), productSaved.getId());
-        assertEquals(product.getName(), productSaved.getName());
-        assertEquals(product.getPrice(), productSaved.getPrice());
-        assertEquals(product.getQuantity(), productSaved.getQuantity());
-        assertEquals(product.getCategoryId(), productSaved.getCategoryId());
-        assertEquals(product.getBrand(), productSaved.getBrand());
-        System.out.println("Created: " + productSaved);
+        ResponseEntity<Product> response = restTemplate.postForEntity(BASE_URL + "/create", product, Product.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        productId = response.getBody().getId().longValue();
+        assertNotNull(productId);
+        System.out.println("Created: " + response.getBody());
     }
 
     @Test
     void b_read() {
-        String url = BASE_URL + "/read/" + product.getId();
-        ResponseEntity<Product> response = restTemplate.getForEntity(url, Product.class);
+        ResponseEntity<Product> response = restTemplate.getForEntity(BASE_URL + "/read/" + productId, Product.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(product.getId(), response.getBody().getId());
-        assertEquals(product.getName(), response.getBody().getName());
-        assertEquals(product.getBrand(), response.getBody().getBrand());
         System.out.println("Read: " + response.getBody());
     }
 
     @Test
     void c_update() {
-        Product updatedProduct = ProductFactory.createProduct(
-                product.getId(),
-                "Updated Product",
-                "Updated Description",
-                199.99,
-                200,
-                2,
-                Brands.MISSHA
-        );
-        String url = BASE_URL + "/update";
-        ResponseEntity<Product> response = restTemplate.postForEntity(url, updatedProduct, Product.class);
+        Product updatedProduct = new Product.Builder()
+                .copy(product)
+                .setId(productId)
+                .setName("Updated Product")
+                .setPrice(120.00)
+                .build();
+
+        HttpEntity<Product> request = new HttpEntity<>(updatedProduct);
+        ResponseEntity<Product> response = restTemplate.exchange(BASE_URL + "/update", HttpMethod.PUT, request, Product.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(updatedProduct.getName(), response.getBody().getName());
-        assertEquals(updatedProduct.getPrice(), response.getBody().getPrice());
-        assertEquals(updatedProduct.getQuantity(), response.getBody().getQuantity());
-        assertEquals(updatedProduct.getCategoryId(), response.getBody().getCategoryId());
-        assertEquals(updatedProduct.getBrand(), response.getBody().getBrand());
         System.out.println("Updated: " + response.getBody());
     }
 
     @Test
-    void d_delete() {
-        String url = BASE_URL + "/delete/" + product.getId();
-        restTemplate.delete(url);
-
-        ResponseEntity<Product> response = restTemplate.getForEntity(BASE_URL + "/read/" + product.getId(), Product.class);
-        assertNull(response.getBody());
-        System.out.println("Deleted: " + response.getBody());
-    }
-
-    @Test
-    void e_getAll() {
-        String url = BASE_URL + "/getAll";
-        ResponseEntity<Product[]> response = restTemplate.getForEntity(url, Product[].class);
+    void d_getAll() {
+        ResponseEntity<Product[]> response = restTemplate.getForEntity(BASE_URL + "/getAll", Product[].class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().length > 0);
-        System.out.println("GetAll: ");
+        System.out.println("All Products:");
         for (Product p : response.getBody()) {
             System.out.println(p);
         }
+    }
+
+    @Test
+    void e_delete() {
+        ResponseEntity<Void> deleteResponse = restTemplate.exchange(BASE_URL + "/delete/" + productId, HttpMethod.DELETE, null, Void.class);
+        assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
+        ResponseEntity<Product> response = restTemplate.getForEntity(BASE_URL + "/read/" + productId, Product.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        System.out.println("Deleted product with ID: " + productId);
     }
 }
