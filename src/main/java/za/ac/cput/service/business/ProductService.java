@@ -5,17 +5,15 @@ import org.springframework.stereotype.Service;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.repository.business.ProductRepository;
 
+import java.util.List;
+
 @Service
 public class ProductService implements IProductService {
     private final ProductRepository repository;
+
     @Autowired
     public ProductService(ProductRepository repository) {
         this.repository = repository;
-    }
-
-    @Override
-    public Product findByCategory(String category) {
-        return repository.findByCategory(category);
     }
 
     @Override
@@ -23,13 +21,14 @@ public class ProductService implements IProductService {
         return repository.findAll();
     }
 
+
     @Override
     public Product create(Product product) {
         return repository.save(product);
     }
 
     @Override
-    public Product read(Integer id) {
+    public Product read(Long id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -39,8 +38,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Long id) {
         repository.deleteById(id);
+        return true;
+    }
 
+    @Override
+    public List<Product> findByCategoryId(Long categoryId) {
+        return  repository.findByCategoryId(categoryId);
     }
 }

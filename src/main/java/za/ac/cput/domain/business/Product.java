@@ -7,12 +7,15 @@ Date: 15/04/2025
  */
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Product {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String description;
     private double price;
@@ -21,7 +24,6 @@ public class Product {
     private Brands brand;
 
     protected Product(){
-
     }
     private Product(Builder builder){
         this.id = builder.id;
@@ -34,7 +36,7 @@ public class Product {
 
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -70,12 +72,12 @@ public class Product {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", categoryId=" + categoryId +
-                ", brand=" + brand +
+                ", brand=" + (brand!= null? brand.getDisplayName():null) +
                 '}';
     }
 
     public static class Builder {
-        private int id;
+        private Long id;
         private String name;
         private String description;
         private double price;
@@ -83,7 +85,7 @@ public class Product {
         private int categoryId;
         private Brands brand;
 
-        public Builder setId(int id){
+        public Builder setId(Long id){
             this.id = id;
             return this;
         }
@@ -118,7 +120,7 @@ public class Product {
             this.price = product.getPrice();
             this.quantity = product.getQuantity();
             this.categoryId = product.getCategoryId();
-            this.brand = product.getBrands();
+            this.brand = product.getBrand();
 
             return this;
         }
@@ -128,8 +130,5 @@ public class Product {
 
     }
 
-    private Brands getBrands() {
-        return brand;
-    }
 
 }

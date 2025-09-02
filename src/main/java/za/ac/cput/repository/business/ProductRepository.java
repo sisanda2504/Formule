@@ -4,8 +4,9 @@ import za.ac.cput.domain.business.Product;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+import java.util.List;
 
-    Product findByCategory(String category);
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+   List<Product> findByCategoryId(Long categoryId);
 }

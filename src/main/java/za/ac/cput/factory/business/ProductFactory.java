@@ -11,7 +11,7 @@ import za.ac.cput.domain.business.Brands;
 import za.ac.cput.util.Helper;
 
 public class ProductFactory {
-    public static Product createProduct(int id, String name, String description, double price, int quantity, int categoryId, Brands brand) {
+    public static Product createProduct( String name, String description, double price, int quantity, int categoryId, Brands brand) {
         if (Helper.isNullOrEmpty(name)) {
             return null;
         }
@@ -33,7 +33,6 @@ public class ProductFactory {
         }
 
         return new Product.Builder()
-                .setId(id)
                 .setName(name)
                 .setDescription(description)
                 .setPrice(price)

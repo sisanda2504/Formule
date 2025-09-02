@@ -9,6 +9,8 @@ import za.ac.cput.domain.business.Brands;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.factory.business.ProductFactory;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -16,28 +18,32 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductServiceTest {
 
     @Autowired
-    private ProductService productService; // Interface not needed since directly autowiring ProductService
+    private ProductService productService;
 
     private static Product product = ProductFactory.createProduct(
-            1,
             "Hydrating Cream",
-            "Innisfree moisturizing cream",
+            "Moisturizing Night Cream",
             29.99,
             50,
             100,
             Brands.INNISFREE
     );
 
+    private static Long createdProductId;
+
     @Test
     void a_create() {
         Product created = productService.create(product);
         assertNotNull(created);
+        assertNotNull(created.getId());
+        createdProductId = created.getId();
         System.out.println(created);
     }
 
     @Test
     void b_read() {
-        Product read = productService.read(product.getId());
+        assertNotNull(createdProductId);
+        Product read = productService.read(createdProductId);
         assertNotNull(read);
         System.out.println(read);
     }
@@ -46,27 +52,32 @@ class ProductServiceTest {
     void c_update() {
         Product updatedProduct = new Product.Builder()
                 .copy(product)
+                .setId(createdProductId)
                 .setName("Updated Hydrating Cream")
-                .setDescription("Enhanced Innisfree moisturizing cream")
+                .setDescription("Enhanced Day & Night Moisturizing cream")
                 .setPrice(34.99)
                 .setQuantity(75)
                 .build();
+
         Product updated = productService.update(updatedProduct);
         assertNotNull(updated);
         System.out.println(updated);
     }
 
     @Test
-    void d_delete() {
-        productService.delete(product.getId());
-        Product deleted = productService.read(product.getId());
+    void e_delete() {
+        productService.delete(createdProductId);
+        Product deleted = productService.read(createdProductId);
         assertNull(deleted);
         System.out.println("Product deleted");
     }
 
     @Test
-    void e_getAll() {
-        System.out.println(productService.getAll());
+    void d_getAll() {
+        Iterable<Product> allProducts = productService.getAll();
+        assertNotNull(allProducts);
+        System.out.println("All Products: ");
+        System.out.println(allProducts);
     }
 
 
