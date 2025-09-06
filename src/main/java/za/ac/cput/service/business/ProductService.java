@@ -34,7 +34,10 @@ public class ProductService implements IProductService {
 
     @Override
     public Product update(Product product) {
-        return repository.save(product);
+        if (product.getId() != null && repository.existsById(product.getId())) {
+            return repository.save(product);
+        }
+        return null;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> findByCategoryId(Long categoryId) {
+    public List<Product> findByCategoryId(int categoryId) {
         return  repository.findByCategoryId(categoryId);
     }
 }

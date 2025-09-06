@@ -9,8 +9,6 @@ import za.ac.cput.domain.business.Brands;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.factory.business.ProductFactory;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -23,6 +21,7 @@ class ProductServiceTest {
     private static Product product = ProductFactory.createProduct(
             "Hydrating Cream",
             "Moisturizing Night Cream",
+            "https://example.com/images/hydrating-cream.jpg",
             29.99,
             50,
             100,
@@ -37,7 +36,7 @@ class ProductServiceTest {
         assertNotNull(created);
         assertNotNull(created.getId());
         createdProductId = created.getId();
-        System.out.println(created);
+        System.out.println("Created: " + created);
     }
 
     @Test
@@ -45,7 +44,7 @@ class ProductServiceTest {
         assertNotNull(createdProductId);
         Product read = productService.read(createdProductId);
         assertNotNull(read);
-        System.out.println(read);
+        System.out.println("Read: " + read);
     }
 
     @Test
@@ -56,29 +55,28 @@ class ProductServiceTest {
                 .setName("Updated Hydrating Cream")
                 .setDescription("Enhanced Day & Night Moisturizing cream")
                 .setPrice(34.99)
-                .setQuantity(75)
+                .setStockQuantity(75)
                 .build();
 
         Product updated = productService.update(updatedProduct);
         assertNotNull(updated);
-        System.out.println(updated);
-    }
-
-    @Test
-    void e_delete() {
-        productService.delete(createdProductId);
-        Product deleted = productService.read(createdProductId);
-        assertNull(deleted);
-        System.out.println("Product deleted");
+        System.out.println("Updated: " + updated);
     }
 
     @Test
     void d_getAll() {
         Iterable<Product> allProducts = productService.getAll();
         assertNotNull(allProducts);
-        System.out.println("All Products: ");
-        System.out.println(allProducts);
+        System.out.println("All Products:");
+        allProducts.forEach(System.out::println);
     }
 
-
+    @Test
+    void e_delete() {
+        boolean deleted = productService.delete(createdProductId);
+        assertTrue(deleted);
+        Product deletedProduct = productService.read(createdProductId);
+        assertNull(deletedProduct);
+        System.out.println("Product deleted");
+    }
 }

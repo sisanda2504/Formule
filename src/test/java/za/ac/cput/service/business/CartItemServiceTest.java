@@ -1,6 +1,6 @@
 package za.ac.cput.service.business;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer;
@@ -31,33 +31,33 @@ class CartItemServiceTest {
     @Autowired
     private CartService cartService;
 
-    private static CartItems cartItem;
-    private static Cart cart;
+    private CartItems cartItem;
+    private Cart cart;
 
-    @BeforeAll
-    static void setUp(@Autowired CartService cartService) {
+    @BeforeEach
+    void setUp() {
         Customer customer = CustomerFactory.createCustomer(
                 "Annah",
                 "Manda",
                 "0712345678",
                 "mana@gmail.com",
-                "Pass1234",
-                null
+                "Pass1234"
         );
 
         Product product = ProductFactory.createProduct(
                 "Cleanser",
                 "Face wash",
+                "https://example.com/images/hydrating-cream.jpg",
                 100.0,
                 10,
                 1,
                 Brands.INNISFREE
         );
 
-        cart = CartFactory.createCart(customer, Collections.emptyList(), 0.0);
+        cart = CartFactory.createCart(customer, Collections.emptyList());
         cart = cartService.create(cart);
 
-        cartItem = CartItemsFactory.createCartItems(product, cart, 2, 200.0);
+        cartItem = CartItemsFactory.createCartItems(product, cart, 2);
     }
 
     @Test
@@ -82,7 +82,6 @@ class CartItemServiceTest {
         CartItems updatedItem = new CartItems.Builder()
                 .copy(cartItem)
                 .setQuantity(3)
-                .setItemTotal(300.0)
                 .build();
 
         CartItems updated = cartItemService.update(updatedItem);

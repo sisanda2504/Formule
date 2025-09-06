@@ -45,7 +45,7 @@ class ShippingControllerTest {
     @BeforeAll
     public static void setUp() {
         customer = CustomerFactory.createCustomer(
-                "Jane", "Doe", "0123456789", "jane@example.com", "Password@123", null
+                "Jane", "Doe", "0123456789", "jane@example.com", "Password@123"
         );
 
         address = AddressFactory.createAddress(

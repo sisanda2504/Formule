@@ -31,8 +31,6 @@ public class AddressFactory {
         if (Helper.isNullOrEmpty(country))
             throw new IllegalArgumentException("Please provide a country");
 
-        if(customer == null)
-            throw new IllegalArgumentException("Please provide a valid customer");
         return new Address.Builder()
                 .setCustomer(customer)
                 .setStreet(street)

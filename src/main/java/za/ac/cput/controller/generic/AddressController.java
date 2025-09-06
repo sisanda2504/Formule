@@ -44,7 +44,7 @@ public class AddressController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public List<Address> getByCustomerId(@PathVariable int customerId) {
+    public List<Address> getByCustomerId(@PathVariable Long customerId) {
         return service.findByCustomerId(customerId);
     }
 }

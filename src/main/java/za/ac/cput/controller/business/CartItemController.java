@@ -30,12 +30,17 @@ public class CartItemController {
     @GetMapping("/read/{id}")
     public ResponseEntity<CartItems> read(@PathVariable Long id) {
         CartItems found = service.read(id);
-        if (found == null)
+
+        if (found == null) {
+            System.out.println("CartItem with ID " + id + " not found");
             return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok(found);
     }
 
-    @PostMapping("/update")
+
+    @PutMapping("/update")
     public ResponseEntity<CartItems> update(@RequestBody CartItems cartItem) {
         CartItems updated = service.update(cartItem);
         return ResponseEntity.ok(updated);

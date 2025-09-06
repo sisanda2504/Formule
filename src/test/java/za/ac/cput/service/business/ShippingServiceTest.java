@@ -31,7 +31,7 @@ class ShippingServiceTest {
     private IShippingService service;
 
     private static Customer customer = CustomerFactory.createCustomer(
-            "John", "Smith", "0821234567", "john@example.com", "Passw0rd!", null
+            "John", "Smith", "0821234567", "john@example.com", "Passw0rd!"
     );
 
     private static Address address = AddressFactory.createAddress(

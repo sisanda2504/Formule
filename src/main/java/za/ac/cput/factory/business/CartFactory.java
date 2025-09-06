@@ -9,26 +9,24 @@ package za.ac.cput.factory.business;
 import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.domain.business.CartItems;
-import za.ac.cput.util.Helper;
+
+import java.util.Collections;
 import java.util.List;
 
 public class CartFactory {
-    public static Cart createCart( Customer customer, List<CartItems> items, Double totalPrice) {
+
+    public static Cart createCart(Customer customer, List<CartItems> items) {
         if (customer == null) {
-            return null;
+            throw new IllegalArgumentException("Customer cannot be null");
         }
+
         if (items == null || items.isEmpty()) {
-            return null;
-        }
-        if (!Helper.isValidPrice(totalPrice)
-                || totalPrice <= 0) {
-            return null;
+            items = Collections.emptyList();
         }
 
         return new Cart.Builder()
                 .setCustomer(customer)
                 .setItems(items)
-                .setTotalPrice(totalPrice)
                 .build();
     }
 }

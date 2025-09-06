@@ -24,28 +24,9 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Customer create(Customer customer) {
-        Customer savedCustomer = this.repository.save(customer);
-
-        Address defaultAddress = AddressFactory.createAddress(
-                savedCustomer,
-                "N/A",
-                "N/A",
-                "N/A",
-                "0000",
-                "N/A");
-
-        if (defaultAddress != null) {
-            Address savedAddress = addressService.create(defaultAddress);
-
-            savedCustomer = new Customer.Builder()
-                    .copy(savedCustomer)
-                    .setAddress(savedAddress)
-                    .build();
-
-            savedCustomer = this.repository.save(savedCustomer);
-        }
-
-        return savedCustomer;
+        if (customer == null)
+            throw new IllegalArgumentException("Customer cannot be null");
+        return repository.save(customer);
     }
 
     @Override
@@ -60,12 +41,35 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean delete(Long id) {
-        if (this.repository.existsById(id)) {
-            this.repository.deleteById(id);
+        return this.repository.findById(id).map(customer -> {
+            this.repository.delete(customer);
             return true;
-        }
-        return false;
+        }).orElse(false);
     }
+
+
+    @Override
+    public Customer linkAddressToCustomer(Long customerId, Address address) {
+        Customer customer = repository.findById(customerId).orElse(null);
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer not found");
+        }
+
+        Address savedAddress = addressService.create(
+                new Address.Builder()
+                        .copy(address)
+                        .setCustomer(customer)
+                        .build()
+        );
+
+        Customer updatedCustomer = new Customer.Builder()
+                .copy(customer)
+                .setAddress(savedAddress)
+                .build();
+
+        return repository.save(updatedCustomer);
+    }
+
 
     @Override
     public List<Customer> getAll() {

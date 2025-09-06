@@ -29,24 +29,25 @@ class AddressControllerTest {
     private static Customer customer;
     private static Address address;
 
-    private static final String BASE_URL = "http://localhost:8080/formule/address";
+    private final String BASE_URL = "http://localhost:8080/formule/address";
 
-    @BeforeAll
-    static void init(@Autowired ICustomerService customerService) {
-        customer = CustomerFactory.createCustomer(
-                "Samkelisiwe",
-                "khanyile",
-                "0833838288",
-                "Samke@.com",
-                "password2025",
-                null
-        );
-        customer = customerService.create(customer);
+    @BeforeEach
+    void setup() {
+        if (customer == null) {
+            customer = CustomerFactory.createCustomer(
+                    "Samkelisiwe",
+                    "Khanyile",
+                    "0833838288",
+                    "samke@example.com",
+                    "password2025"
+            );
+            customer = customerService.create(customer);
+        }
     }
 
     @Test
     @Order(1)
-    void create() {
+    void a_create() {
         address = AddressFactory.createAddress(
                 customer,
                 "01 Kloof Street",
@@ -61,22 +62,23 @@ class AddressControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         address = response.getBody();
-        System.out.println("Created Address: " + address);
+        System.out.println("✅ Created Address: " + address);
     }
 
     @Test
     @Order(2)
-    void read() {
+    void b_read() {
+        assertNotNull(address);
         String url = BASE_URL + "/read/" + address.getId();
         ResponseEntity<Address> response = restTemplate.getForEntity(url, Address.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        System.out.println("Read Address: " + response.getBody());
+        System.out.println("📦 Read Address: " + response.getBody());
     }
 
     @Test
     @Order(3)
-    void update() {
+    void c_update() {
         Address updatedAddress = new Address.Builder()
                 .copy(address)
                 .setCity("Johannesburg")
@@ -89,25 +91,26 @@ class AddressControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals("Johannesburg", response.getBody().getCity());
-        System.out.println("Updated Address: " + response.getBody());
+        System.out.println("🔁 Updated Address: " + response.getBody());
     }
 
     @Test
     @Order(4)
-    void getAll() {
+    void d_getAll() {
         String url = BASE_URL + "/getall";
         ResponseEntity<Address[]> response = restTemplate.getForEntity(url, Address[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         List<Address> addresses = Arrays.asList(response.getBody());
         assertFalse(addresses.isEmpty());
-        System.out.println("All Addresses: " + addresses);
+        System.out.println("📃 All Addresses: " + addresses);
     }
 
     @Test
     @Order(5)
-    void delete() {
+    void e_delete() {
+        assertNotNull(address);
         String url = BASE_URL + "/delete/" + address.getId();
         restTemplate.delete(url);
-        System.out.println("Deleted Address with ID: " + address.getId());
+        System.out.println("🗑️ Deleted Address with ID: " + address.getId());
     }
 }

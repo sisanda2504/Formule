@@ -17,8 +17,7 @@ public class CustomerFactory {
             String lastName,
             String phoneNumber,
             String emailAddress,
-            String password,
-            Address address){
+            String password){
 
             if(Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName)){
                 return null;
@@ -42,7 +41,6 @@ public class CustomerFactory {
                     .setPhoneNumber(phoneNumber)
                     .setEmailAddress(emailAddress)
                     .setPassword(password)
-                    .setAddress(address)
                     .build();
     }
 }

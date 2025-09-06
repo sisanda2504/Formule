@@ -21,6 +21,7 @@ class ProductControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+
     private static final String BASE_URL = "http://localhost:8080/formule/product";
 
     @BeforeAll
@@ -28,6 +29,7 @@ class ProductControllerTest {
         product = ProductFactory.createProduct(
                 "Test Product",
                 "Sample description",
+                "https://example.com/image.jpg",
                 99.99,
                 50,
                 1,
@@ -40,7 +42,7 @@ class ProductControllerTest {
         ResponseEntity<Product> response = restTemplate.postForEntity(BASE_URL + "/create", product, Product.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        productId = response.getBody().getId().longValue();
+        productId = response.getBody().getId();
         assertNotNull(productId);
         System.out.println("Created: " + response.getBody());
     }
@@ -72,7 +74,7 @@ class ProductControllerTest {
 
     @Test
     void d_getAll() {
-        ResponseEntity<Product[]> response = restTemplate.getForEntity(BASE_URL + "/getAll", Product[].class);
+        ResponseEntity<Product[]> response = restTemplate.getForEntity(BASE_URL + "/getall", Product[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         System.out.println("All Products:");

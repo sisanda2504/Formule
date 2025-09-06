@@ -28,8 +28,7 @@ class OrderServiceTest {
             "Mabidikane",
             "0712345678",
             "palesam@icloud.com",
-            "P@mabidikane",
-            null
+            "P@mabidikane"
     );
 
     private static Order order = OrderFactory.createOrder(

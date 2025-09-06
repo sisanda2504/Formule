@@ -10,5 +10,5 @@ public interface IAddressService {
     Address update(Address address);
     boolean delete(int id);
     List<Address> getAll();
-    List<Address> findByCustomerId(int customerId);
+    List<Address> findByCustomerId(Long customerId);
 }

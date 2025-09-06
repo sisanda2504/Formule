@@ -46,8 +46,7 @@ class OrderControllerTest {
                 "Mabikane",
                 "087372803",
                 "p.mabidikane@icloud.com",
-                "pass1738",
-                address
+                "pass1738"
         );
 
         order = OrderFactory.createOrder(

@@ -6,6 +6,7 @@ Author: Agnes Mabusela (230020690)
 Date: 14/04/2025
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import za.ac.cput.domain.users.Customer;
 
@@ -15,14 +16,15 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
+
+    @OneToOne(mappedBy = "address")
+    @JsonIgnore
     private Customer customer;
     private String street;
     private String city;
     private String province;
     private String postalCode;
     private String country;
-
 
     protected Address (){}
 

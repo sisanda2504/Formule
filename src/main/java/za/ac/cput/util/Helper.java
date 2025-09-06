@@ -64,6 +64,6 @@ public class Helper {
         return quantity > 0;
     }
 
-    public static boolean isValidAmount(Double amount) { return (amount != null && amount > 0);}
+    public static boolean isValidAmount(Double amount) { return (amount != null && amount >= 0);}
 }
 

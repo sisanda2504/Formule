@@ -1,11 +1,10 @@
 package za.ac.cput.domain.business;
 
-
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import za.ac.cput.domain.business.CartItems;
 import za.ac.cput.domain.users.Customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,24 +15,19 @@ public class Cart {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<CartItems> items;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<CartItems> items = new ArrayList<>();
 
-    @Column(name = "total_price")
-    private double totalPrice;
-
-    protected Cart() {
-    }
+    protected Cart() {}
 
     private Cart(Builder builder) {
         this.id = builder.id;
         this.customer = builder.customer;
-        this.items = builder.items;
-        this.totalPrice = builder.totalPrice;
-
+        this.items = builder.items != null ? builder.items : new ArrayList<>();
     }
 
     public Long getId() {
@@ -49,16 +43,20 @@ public class Cart {
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        double total = 0;
+        for (CartItems item : items) {
+            total += item.getItemTotal();
+        }
+        return total;
     }
 
     @Override
     public String toString() {
         return "Cart{" +
                 "id=" + id +
-                ", customer=" + customer +
-                ", items=" + items +
-                ", totalPrice=" + totalPrice +
+                ", customer=" + (customer != null ? customer.getId() : null) +
+                ", items=" + items.size() +
+                ", totalPrice=" + getTotalPrice() +
                 '}';
     }
 
@@ -66,8 +64,6 @@ public class Cart {
         private Long id;
         private Customer customer;
         private List<CartItems> items;
-        private double totalPrice;
-
 
         public Builder setId(Long id) {
             this.id = id;
@@ -80,13 +76,7 @@ public class Cart {
         }
 
         public Builder setItems(List<CartItems> items) {
-            this.items = items;
-            return this;
-        }
-
-        public Builder setTotalPrice(Double totalPrice) {
-            this.totalPrice = totalPrice;
-
+            this.items = items != null ? items : new ArrayList<>();
             return this;
         }
 
@@ -94,13 +84,11 @@ public class Cart {
             this.id = cart.getId();
             this.customer = cart.getCustomer();
             this.items = cart.getItems();
-            this.totalPrice = cart.getTotalPrice();
             return this;
         }
 
         public Cart build() {
             return new Cart(this);
         }
-
     }
 }

@@ -1,9 +1,6 @@
 package za.ac.cput.controller.business;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -17,6 +14,8 @@ import za.ac.cput.factory.business.CartFactory;
 import za.ac.cput.factory.business.CartItemsFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 import za.ac.cput.factory.business.ProductFactory;
+import za.ac.cput.service.users.CustomerService;
+import za.ac.cput.service.business.ProductService;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,57 +24,71 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.MethodName.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CartControllerTest {
 
     private static Cart cart;
     private static Customer customer;
-    private static List<CartItems> cartItems;
+    private static Product product;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private ProductService productService;
+
     private static final String BASE_URL = "http://localhost:8080/formule/cart";
 
     @BeforeAll
-    static void setUp() {
+    void setUp() {
+        // Create and persist customer
         customer = CustomerFactory.createCustomer(
                 "Sisanda",
                 "Madikizela",
                 "0763728303",
                 "sisanda@gmail.com",
-                "pass123",
-                null
+                "pass123"
         );
+        customer = customerService.create(customer);
         assertNotNull(customer);
 
-        Product product = ProductFactory.createProduct(
+        // Create and persist product
+        product = ProductFactory.createProduct(
                 "Test Product",
                 "Test Description",
+                "https://example.com/images/glow-serum.jpg",
                 99.99,
                 100,
                 1,
                 Brands.INNISFREE
         );
+        product = productService.create(product);
         assertNotNull(product);
 
+        // Prepare CartItems (cart set later)
         CartItems item = CartItemsFactory.createCartItems(
                 product,
-                null,
-                2,
-                199.98
+                null, // Set later
+                2
         );
-
         assertNotNull(item);
 
-        cartItems = Collections.singletonList(item);
-        assertNotNull(cartItems);
+        List<CartItems> cartItems = Collections.singletonList(item);
 
+        // Build cart and assign to CartItems
+        cart = CartFactory.createCart(customer, cartItems);
+
+        // Set the cart reference inside each CartItem
+        item = new CartItems.Builder().copy(item).setCart(cart).build();
         cartItems = Collections.singletonList(item);
-        cart = CartFactory.createCart(
-                customer,
-                cartItems,
-                199.98
-        );
+
+        cart = new Cart.Builder()
+                .copy(cart)
+                .setItems(cartItems)
+                .build();
 
         assertNotNull(cart);
     }
@@ -84,12 +97,16 @@ class CartControllerTest {
     void a_create() {
         ResponseEntity<Cart> postResponse = restTemplate.postForEntity(BASE_URL + "/create", cart, Cart.class);
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
+
         Cart cartSaved = postResponse.getBody();
         assertNotNull(cartSaved);
-        assertEquals(cart.getId(), cartSaved.getId());
+        assertNotNull(cartSaved.getId());
+
+        // Store saved cart with generated ID for later tests
+        cart = cartSaved;
+
         assertEquals(cart.getCustomer().getId(), cartSaved.getCustomer().getId());
         assertEquals(cart.getItems().size(), cartSaved.getItems().size());
-        assertEquals(cart.getTotalPrice(), cartSaved.getTotalPrice());
         System.out.println("Created: " + cartSaved);
     }
 
@@ -97,10 +114,12 @@ class CartControllerTest {
     void b_read() {
         ResponseEntity<Cart> response = restTemplate.getForEntity(BASE_URL + "/read/" + cart.getId(), Cart.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
         Cart body = response.getBody();
         assertNotNull(body);
         assertEquals(cart.getId(), body.getId());
         assertEquals(cart.getCustomer().getId(), body.getCustomer().getId());
+
         System.out.println("Read: " + body);
     }
 
@@ -109,46 +128,46 @@ class CartControllerTest {
         Product updatedProduct = ProductFactory.createProduct(
                 "Updated Product",
                 "Updated Desc",
+                "https://example.com/images/hydrating-cream.jpg",
                 149.99,
                 50,
                 2,
                 Brands.MISSHA
         );
+        updatedProduct = productService.create(updatedProduct);
         assertNotNull(updatedProduct);
 
         CartItems updatedItem = CartItemsFactory.createCartItems(
                 updatedProduct,
                 cart,
-                1,
-                149.99
+                1
         );
-        assertNotNull(updatedItem);
-
         List<CartItems> updatedItems = Collections.singletonList(updatedItem);
+
         Cart updatedCart = new Cart.Builder()
                 .copy(cart)
                 .setItems(updatedItems)
-                .setTotalPrice(149.99)
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<Cart> requestUpdate = new HttpEntity<>(updatedCart, headers);
 
         ResponseEntity<Cart> response = restTemplate.exchange(
                 BASE_URL + "/update",
                 HttpMethod.PUT,
                 requestUpdate,
-                Cart.class);
+                Cart.class
+        );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        Cart body = response.getBody();
-        assertNotNull(body);
-        assertEquals(updatedCart.getId(), body.getId());
-        assertEquals(updatedItems.size(), body.getItems().size());
-        assertEquals(updatedCart.getTotalPrice(), body.getTotalPrice());
-        System.out.println("Updated: " + body);
+
+        Cart updated = response.getBody();
+        assertNotNull(updated);
+        assertEquals(updatedItems.size(), updated.getItems().size());
+        System.out.println("Updated: " + updated);
+
+        cart = updated; // Store for delete
     }
 
     @Test
@@ -157,16 +176,20 @@ class CartControllerTest {
 
         ResponseEntity<Cart> response = restTemplate.getForEntity(BASE_URL + "/read/" + cart.getId(), Cart.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        System.out.println("Deleted: Cart with ID " + cart.getId());
+
+        System.out.println("Deleted cart with ID: " + cart.getId());
     }
 
     @Test
     void e_getAll() {
         ResponseEntity<Cart[]> response = restTemplate.getForEntity(BASE_URL + "/getAll", Cart[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        System.out.println("GetAll: ");
-        for (Cart c : response.getBody()) {
+
+        Cart[] carts = response.getBody();
+        assertNotNull(carts);
+
+        System.out.println("All Carts:");
+        for (Cart c : carts) {
             System.out.println(c);
         }
     }

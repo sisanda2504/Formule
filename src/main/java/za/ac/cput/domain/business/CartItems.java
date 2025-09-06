@@ -1,6 +1,6 @@
 package za.ac.cput.domain.business;
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,62 +10,72 @@ public class CartItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false )
-    @JoinColumn(name = "product_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne(optional = false )
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private Cart cart;
 
     private int quantity;
-    @Column(name="item_total")
-    private Double itemTotal;
 
-    protected CartItems(){}
-    private CartItems(Builder builder){
+    protected CartItems() {}
+
+    private CartItems(Builder builder) {
         this.id = builder.id;
         this.product = builder.product;
         this.cart = builder.cart;
         this.quantity = builder.quantity;
-        this.itemTotal = builder.itemTotal;
     }
 
-    public Long getId() { return id;}
+    public Long getId() {
+        return id;
+    }
 
     public Product getProduct() {
         return product;
     }
 
-    public Cart getCart() {return cart; }
+    public Cart getCart() {
+        return cart;
+    }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public Double getItemTotal() {
-        return itemTotal;
+    public double getItemTotal() {
+        if (product == null || quantity == 0) {
+            return 0;
+        }
+        return product.getPrice() * quantity;
     }
 
     @Override
     public String toString() {
         return "CartItems{" +
                 "id=" + id +
-                ", product=" + product +
-                ", cart=" + cart +
+                ", product=" + (product != null ? product.getId() : null) +
                 ", quantity=" + quantity +
-                ", itemTotal=" + itemTotal +
+                ", itemTotal=" + getItemTotal() +
                 '}';
     }
 
-    public static class Builder{
+    public static class Builder {
         private Long id;
         private Product product;
         private Cart cart;
         private int quantity;
-        private Double itemTotal;
 
         public Builder setId(Long id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder setProduct(Product product) {
+            this.product = product;
             return this;
         }
 
@@ -74,19 +84,8 @@ public class CartItems {
             return this;
         }
 
-
-        public Builder setProduct(Product product) {
-            this.product = product;
-            return this;
-        }
-
         public Builder setQuantity(int quantity) {
             this.quantity = quantity;
-            return this;
-        }
-
-        public Builder setItemTotal(Double itemTotal) {
-            this.itemTotal = itemTotal;
             return this;
         }
 
@@ -95,12 +94,11 @@ public class CartItems {
             this.product = cartItems.product;
             this.cart = cartItems.cart;
             this.quantity = cartItems.quantity;
-            this.itemTotal = cartItems.itemTotal;
             return this;
         }
-        public CartItems build(){
+
+        public CartItems build() {
             return new CartItems(this);
         }
     }
 }
-

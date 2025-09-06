@@ -10,6 +10,7 @@ Customer model class
 Author: Agnes Mabusela (230020690)
 Date: 13/04/2025
  */
+
 @Entity
 public class Customer {
 
@@ -22,9 +23,8 @@ public class Customer {
     private String emailAddress;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
     private Address address;
 
     protected Customer(){}

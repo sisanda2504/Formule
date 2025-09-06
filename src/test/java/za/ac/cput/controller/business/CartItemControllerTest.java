@@ -40,22 +40,21 @@ class CartItemControllerTest {
                 "Nkosi",
                 "0781234567",
                 "lindiwe@gmail.com",
-                "Pass1324",
-                null
+                "Pass1324"
         );
 
         Product product = ProductFactory.createProduct(
                 "Glow Serum",
                 "Hydrating serum",
+                "https://example.com/images/glow-serum.jpg",
                 199.99,
                 10,
                 1,
                 Brands.MISSHA
         );
 
-        cart = CartFactory.createCart( customer, Collections.emptyList(), 0.0);
-
-        cartItem = CartItemsFactory.createCartItems(product, cart,2, 399.98);
+        cart = CartFactory.createCart( customer, Collections.emptyList());
+        cartItem = CartItemsFactory.createCartItems(product, cart,2);
     }
 
     @Test
@@ -83,7 +82,6 @@ class CartItemControllerTest {
         CartItems updatedCartItem = new CartItems.Builder()
                 .copy(cartItem)
                 .setQuantity(3)
-                .setItemTotal(599.97)
                 .build();
 
         ResponseEntity<CartItems> response = restTemplate.postForEntity(BASE_URL + "/update", updatedCartItem, CartItems.class);

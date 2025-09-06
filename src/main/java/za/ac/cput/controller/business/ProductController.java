@@ -3,9 +3,10 @@ package za.ac.cput.controller.business;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.service.business.ProductService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -55,6 +56,15 @@ public class ProductController {
     @GetMapping("/getall")
     public ResponseEntity<Iterable<Product>> getAll() {
         Iterable<Product> products = service.getAll();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Product>> getByCategory(@PathVariable int categoryId) {
+        List<Product> products = service.findByCategoryId(categoryId);
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(products);
     }
 }

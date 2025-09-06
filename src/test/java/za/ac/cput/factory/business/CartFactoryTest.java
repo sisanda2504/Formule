@@ -21,13 +21,15 @@ class CartFactoryTest {
     private List<CartItems> validItems;
     private Product product;
     private Cart cart1;
-    private Cart cart3;
+    private Cart cart2;
 
     @BeforeEach
     void setUp() {
+
         product = ProductFactory.createProduct(
                 "Hydrating Cream",
                 "Moisturizes skin",
+                "https://example.com/image.jpg",
                 50.00,
                 2,
                 1,
@@ -39,41 +41,41 @@ class CartFactoryTest {
                 "Madikizela",
                 "0781234567",
                 "sisanda.madikizela@gmail.com",
-                "SecurePass123",
-                null
+                "SecurePass123"
         );
 
+
         validItems = new ArrayList<>();
-        CartItems cartItem = new CartItems.Builder()
-                .setProduct(product)
-                .setQuantity(2)
-                .setItemTotal(100.0)
-                .build();
+        CartItems cartItem = CartItemsFactory.createCartItems(product, null, 2);
         validItems.add(cartItem);
 
-        cart1 = CartFactory.createCart(customer, validItems, 250.00);
-        cart3 = CartFactory.createCart(customer, validItems, -500.00);  // invalid price
+
+        cart1 = CartFactory.createCart(customer, validItems);
+        cart2 = CartFactory.createCart(customer, new ArrayList<>());
     }
 
     @Test
     void testCreateCartSuccess() {
         assertNotNull(cart1);
-        System.out.println(cart1);
+        assertEquals(100.0, cart1.getTotalPrice());
+        assertEquals(1, cart1.getItems().size());
+        System.out.println("Cart with valid items: " + cart1);
     }
 
     @Test
-    void testCreateCartWithInvalidPrice() {
-        assertNull(cart3);
-        System.out.println("Cart with invalid price cannot be created: " + cart3);
+    void testCreateCartWithEmptyItems() {
+        assertNotNull(cart2);
+        assertEquals(0.0, cart2.getTotalPrice());
+        assertTrue(cart2.getItems().isEmpty());
+        System.out.println("Cart with no items: " + cart2);
     }
 
     @Test
-    void testCreateCartWithAllValidData() {
-        Cart validCart = CartFactory.createCart(customer, validItems, 300.00);
+    void testCartTotalCalculation() {
+        Cart validCart = CartFactory.createCart(customer, validItems);
         assertNotNull(validCart);
-        System.out.println("Cart ID: " + validCart.getId());
-        System.out.println("Customer: " + validCart.getCustomer());
-        System.out.println("Items: " + validCart.getItems());
-        System.out.println("Total Price: " + validCart.getTotalPrice());
+        assertEquals(100.0, validCart.getTotalPrice());
+        assertEquals(1, validCart.getItems().size());
+        System.out.println("Cart with valid items total: " + validCart.getTotalPrice());
     }
 }

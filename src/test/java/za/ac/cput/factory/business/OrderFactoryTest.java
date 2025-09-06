@@ -22,8 +22,7 @@ class OrderFactoryTest {
             "Mabidikane",
             "0721234567",
             "tsholo@mabidikane.com",
-            "183j#n2ne@1",
-            null
+            "183j#n2ne@1"
     );
 
     @Test

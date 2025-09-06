@@ -7,16 +7,18 @@ import za.ac.cput.util.Helper;
 
 public class CartItemsFactory {
 
-    public static CartItems createCartItems(Product product, Cart cart, int quantity, Double itemTotal) {
+    public static CartItems createCartItems(Product product, Cart cart, int quantity) {
+
         if (product == null || cart == null) {
             return null;
         }
 
-        if (!Helper.isValidQuantity(quantity)) {
+
+        if (!Helper.isValidQuantity(quantity) || quantity <= 0) {
             return null;
         }
 
-        if (!Helper.isValidAmount(itemTotal)) {
+        if (product.getPrice() <= 0) {
             return null;
         }
 
@@ -24,8 +26,6 @@ public class CartItemsFactory {
                 .setProduct(product)
                 .setCart(cart)
                 .setQuantity(quantity)
-                .setItemTotal(itemTotal)
                 .build();
     }
-
 }

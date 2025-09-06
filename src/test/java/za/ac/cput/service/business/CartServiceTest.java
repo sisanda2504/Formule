@@ -39,32 +39,31 @@ public class CartServiceTest {
                 "Madikizela",
                 "0763728303",
                 "Sisanda@gmail.com",
-                "securePass2025",
-                null
+                "securePass2025"
         );
         assertNotNull(customer);
 
         Product product = ProductFactory.createProduct(
                 "Test Product",
                 "Test Description",
+                "https://example.com/product-image.jpg",
                 99.99,
                 100,
                 1,
                 Brands.INNISFREE
         );
+
         assertNotNull(product);
 
         Cart tempCart = new Cart.Builder()
                 .setCustomer(customer)
                 .setItems(null)
-                .setTotalPrice(0.0)
                 .build();
 
         CartItems item = CartItemsFactory.createCartItems(
                 product,
                 tempCart,
-                2,
-                199.98
+                2
         );
         assertNotNull(item);
 
@@ -73,8 +72,7 @@ public class CartServiceTest {
 
         cart = CartFactory.createCart(
                 customer,
-                cartItems,
-                199.98
+                cartItems
         );
 
 
@@ -113,6 +111,7 @@ public class CartServiceTest {
         Product updatedProduct = ProductFactory.createProduct(
                 "Updated Product",
                 "Updated Desc",
+                "https://example.com/images/hydrating-cream.jpg",
                 149.99,
                 50,
                 2,
@@ -123,8 +122,7 @@ public class CartServiceTest {
         CartItems updatedItem = CartItemsFactory.createCartItems(
                 updatedProduct,
                 cart,
-                1,
-                149.99
+                1
         );
         assertNotNull(updatedItem);
 
@@ -133,7 +131,6 @@ public class CartServiceTest {
         Cart updatedCart = new Cart.Builder()
                 .copy(cart)
                 .setItems(updatedItems)
-                .setTotalPrice(149.99)
                 .build();
 
         Cart updated = cartService.update(updatedCart);

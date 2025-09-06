@@ -24,6 +24,7 @@ class CartItemsFactoryTest {
         product = ProductFactory.createProduct(
                 "Gentle Cleanser",
                 "Mild face cleanser",
+                "https://example.com/product-image.jpg",
                 89.99,
                 20,
                 1,
@@ -34,18 +35,20 @@ class CartItemsFactoryTest {
                 "Sithole",
                 "0780001122",
                 "luna@gmail.com",
-                "StrangerDanger123",
-                null);
+                "StrangerDanger123");
 
-        cart = CartFactory.createCart(customer, Collections.emptyList(), 0.0);
+        cart = CartFactory.createCart(customer, Collections.emptyList());
     }
 
     @Test
     void testCreateCartItemsSuccess() {
-        CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 2, 179.98);
+
+        double expectedItemTotal = product.getPrice() * 2;  // 89.99 * 2 = 179.98
+
+        CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 2);
         assertNotNull(cartItem);
         assertEquals(2, cartItem.getQuantity());
-        assertEquals(179.98, cartItem.getItemTotal());
+        assertEquals(expectedItemTotal, cartItem.getItemTotal(), 0.001);
         assertEquals(product, cartItem.getProduct());
         assertEquals(cart, cartItem.getCart());
         System.out.println("Success: " + cartItem);
@@ -53,29 +56,41 @@ class CartItemsFactoryTest {
 
     @Test
     void testCreateCartItemsWithNullProduct() {
-        CartItems cartItem = CartItemsFactory.createCartItems(null, cart, 1, 89.99);
+        CartItems cartItem = CartItemsFactory.createCartItems(null, cart, 1);
         assertNull(cartItem);
         System.out.println("CartItem creation failed due to null product.");
     }
 
     @Test
     void testCreateCartItemsWithNullCart() {
-        CartItems cartItem = CartItemsFactory.createCartItems(product, null, 1, 89.99);
+        CartItems cartItem = CartItemsFactory.createCartItems(product, null, 1);
         assertNull(cartItem);
         System.out.println("CartItem creation failed due to null cart.");
     }
 
     @Test
     void testCreateCartItemsWithInvalidQuantity() {
-        CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 0, 89.99);
+        CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 0);
         assertNull(cartItem);
         System.out.println("CartItem creation failed due to invalid quantity.");
     }
 
     @Test
-    void testCreateCartItemsWithInvalidTotal() {
-        CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 2, -100.00);
+    void testCreateCartItemsWithInvalidProductPrice() {
+
+        product = new Product.Builder()
+                .setName("Gentle Cleanser")
+                .setDescription("Mild face cleanser")
+                .setImage_url("https://example.com/product-image.jpg")
+                .setPrice(-1)
+                .setStockQuantity(20)
+                .setCategoryId(1)
+                .setBrand(Brands.HADA_LABO)
+                .build();
+
+        CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 2);
         assertNull(cartItem);
-        System.out.println("CartItem creation failed due to invalid total.");
+        System.out.println("CartItem creation failed due to invalid product price.");
     }
+
 }
