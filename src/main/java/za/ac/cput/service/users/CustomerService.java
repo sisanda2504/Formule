@@ -47,30 +47,6 @@ public class CustomerService implements ICustomerService {
         }).orElse(false);
     }
 
-
-    @Override
-    public Customer linkAddressToCustomer(Long customerId, Address address) {
-        Customer customer = repository.findById(customerId).orElse(null);
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer not found");
-        }
-
-        Address savedAddress = addressService.create(
-                new Address.Builder()
-                        .copy(address)
-                        .setCustomer(customer)
-                        .build()
-        );
-
-        Customer updatedCustomer = new Customer.Builder()
-                .copy(customer)
-                .setAddress(savedAddress)
-                .build();
-
-        return repository.save(updatedCustomer);
-    }
-
-
     @Override
     public List<Customer> getAll() {
         return this.repository.findAll();

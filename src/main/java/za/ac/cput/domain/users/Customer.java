@@ -23,10 +23,6 @@ public class Customer {
     private String emailAddress;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = true)
-    private Address address;
-
     protected Customer(){}
 
     private Customer(Builder builder){
@@ -36,7 +32,6 @@ public class Customer {
         this.phoneNumber = builder.phoneNumber;
         this.emailAddress = builder.emailAddress;
         this.password = builder.password;
-        this.address = builder.address;
     }
 
     public Long getId(){
@@ -63,9 +58,6 @@ public class Customer {
         return password;
     }
 
-    public Address getAddress(){
-        return address;
-    }
 
     @Override
     public String toString(){
@@ -76,7 +68,6 @@ public class Customer {
                ", phoneNumber = '"+ phoneNumber+'\''+
                ", emailAddress = '"+ emailAddress+'\''+
                ", password = '" +password+'\''+
-               ", address = '" +address +'\''+
                '}';
     }
 
@@ -88,7 +79,6 @@ public class Customer {
         private String phoneNumber;
         private String emailAddress;
         private String password;
-        private Address address;
 
         public Builder setId(Long id){
             this.id = id;
@@ -120,11 +110,6 @@ public class Customer {
             return this;
         }
 
-        public Builder setAddress(Address address){
-            this.address = address;
-            return this;
-        }
-
         public Builder copy (Customer customer){
             this.id = customer.getId();
             this.firstName =  customer.getFirstName();
@@ -132,7 +117,6 @@ public class Customer {
             this.phoneNumber = customer.getPhoneNumber();
             this.emailAddress = customer.getEmailAddress();
             this.password = customer.getPassword();
-            this.address = customer.getAddress();
             return this;
         }
 

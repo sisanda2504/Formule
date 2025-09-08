@@ -23,8 +23,9 @@ public class AddressService implements IAddressService {
 
     @Override
     public Address create(Address address) {
-        if (address == null)
+        if (address == null) {
             throw new IllegalArgumentException("Address cannot be null");
+        }
 
         if (address.getCustomer() == null || address.getCustomer().getId() == null) {
             throw new IllegalArgumentException("Address must be linked to a valid customer");
@@ -42,20 +43,25 @@ public class AddressService implements IAddressService {
     }
 
     @Override
-    public Address read(int id) {
+    public Address read(Integer id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
     public Address update(Address address) {
-        if (repository.existsById(address.getId())) {
-            return repository.save(address);
+        if (address == null || address.getId() == null) {
+            throw new IllegalArgumentException("Address or Address ID cannot be null");
         }
-        return null;
+
+        if (!repository.existsById(address.getId())) {
+            return null;
+        }
+
+        return repository.save(address);
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Integer id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
             return true;
@@ -72,4 +78,5 @@ public class AddressService implements IAddressService {
     public List<Address> findByCustomerId(Long customerId) {
         return repository.findByCustomerId(customerId);
     }
+
 }

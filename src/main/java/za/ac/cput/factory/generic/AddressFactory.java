@@ -20,6 +20,8 @@ public class AddressFactory {
             String postalCode,
             String country) {
 
+        if (customer == null || customer.getId() == null)
+            throw new IllegalArgumentException("A valid customer must be provided");
         if (Helper.isNullOrEmpty(street))
             throw new IllegalArgumentException("Please provide a street");
         if (Helper.isNullOrEmpty(city))

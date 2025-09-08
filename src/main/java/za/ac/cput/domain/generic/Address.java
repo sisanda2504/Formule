@@ -17,9 +17,10 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(mappedBy = "address")
-    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
+
     private String street;
     private String city;
     private String province;

@@ -7,6 +7,7 @@ import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.factory.users.CustomerFactory;
+import za.ac.cput.service.users.CustomerService;
 
 import java.util.List;
 
@@ -19,18 +20,23 @@ class AddressServiceTest {
     @Autowired
     private AddressService addressService;
 
+    @Autowired
+    private CustomerService customerService;
+
     private static Customer customer;
     private static Address address;
 
     @BeforeAll
-    static void setup() {
-        customer = CustomerFactory.createCustomer(
+    static void setup(@Autowired CustomerService customerService) {
+        Customer tempCustomer = CustomerFactory.createCustomer(
                 "John",
                 "Doe",
                 "0712345678",
                 "john.doe@example.com",
                 "Password123!"
         );
+        customer = customerService.create(tempCustomer);
+        assertNotNull(customer.getId(), "Customer should be persisted before tests");
     }
 
     @Test
@@ -49,7 +55,7 @@ class AddressServiceTest {
         assertNotNull(saved);
         assertNotNull(saved.getId());
         address = saved;
-        System.out.println("Created address: " + saved);
+        System.out.println("✅ Created address: " + saved);
     }
 
     @Test
@@ -58,7 +64,7 @@ class AddressServiceTest {
         Address found = addressService.read(address.getId());
         assertNotNull(found);
         assertEquals(address.getStreet(), found.getStreet());
-        System.out.println("Read address: " + found);
+        System.out.println("📦 Read address: " + found);
     }
 
     @Test
@@ -72,7 +78,7 @@ class AddressServiceTest {
         Address updated = addressService.update(updatedAddress);
         assertNotNull(updated);
         assertEquals("Durban", updated.getCity());
-        System.out.println("Updated address: " + updated);
+        System.out.println("🔁 Updated address: " + updated);
     }
 
     @Test
@@ -80,7 +86,7 @@ class AddressServiceTest {
     void d_getAllAddresses() {
         List<Address> allAddresses = addressService.getAll();
         assertFalse(allAddresses.isEmpty());
-        System.out.println("All addresses: " + allAddresses);
+        System.out.println("📃 All addresses: " + allAddresses);
     }
 
     @Test
@@ -89,7 +95,7 @@ class AddressServiceTest {
         List<Address> addresses = addressService.findByCustomerId(customer.getId());
         assertFalse(addresses.isEmpty());
         assertTrue(addresses.stream().anyMatch(a -> a.getId().equals(address.getId())));
-        System.out.println("Addresses by customer id: " + addresses);
+        System.out.println("📍 Addresses by customer ID: " + addresses);
     }
 
     @Test
@@ -97,6 +103,6 @@ class AddressServiceTest {
     void f_deleteAddress() {
         boolean deleted = addressService.delete(address.getId());
         assertTrue(deleted);
-        System.out.println("Deleted address: " + deleted);
+        System.out.println("🗑️ Deleted address: " + address.getId());
     }
 }

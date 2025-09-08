@@ -9,5 +9,4 @@ import java.util.List;
 public interface
 ICustomerService extends IService<Customer, Long> {
     List<Customer> getAll();
-    Customer linkAddressToCustomer(Long customerId, Address address);
 }
