@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.generic.Address;
 import za.ac.cput.service.generic.IAddressService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/address")
+@CrossOrigin(origins = "*")
 public class AddressController {
 
     private final IAddressService service;
