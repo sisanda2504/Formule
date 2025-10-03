@@ -11,7 +11,6 @@ import za.ac.cput.domain.users.Customer;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 

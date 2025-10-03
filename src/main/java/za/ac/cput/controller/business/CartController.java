@@ -8,10 +8,11 @@ import za.ac.cput.domain.business.CartItems;
 import za.ac.cput.service.business.CartService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cart")
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = "*")
 public class CartController {
 
     private final CartService service;
@@ -22,34 +23,55 @@ public class CartController {
     }
 
     @PostMapping("/create")
-    public Cart create(@RequestBody Cart cart) {
-        return service.create(cart);
+    public ResponseEntity<Cart> create(@RequestBody Cart cart) {
+        Cart created = service.create(cart);
+        return ResponseEntity.ok(created);
     }
 
     @GetMapping("/read/{id}")
-    public Cart read(@PathVariable Long id) {
-        return service.read(id);
+    public ResponseEntity<Cart> read(@PathVariable Long id) {
+        Cart cart = service.read(id);
+        if (cart == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(cart);
     }
 
     @PutMapping("/update")
-    public Cart update(@RequestBody Cart cart) {
-        return service.update(cart);
+    public ResponseEntity<Cart> update(@RequestBody Cart cart) {
+        Cart updated = service.update(cart);
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        boolean deleted = service.delete(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/getall")
-    public List<Cart> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<Cart>> getAll() {
+        List<Cart> carts = service.getAll();
+        return ResponseEntity.ok(carts);
     }
 
     @GetMapping("/findByCustomerId/{customerId}")
-    public Cart findByCustomerId(@PathVariable Long customerId) {
-        return service.findByCustomerId(customerId);
+    public ResponseEntity<Cart> findByCustomerId(@PathVariable Long customerId) {
+        Optional<Cart> cart = service.findByCustomerId(customerId);
+        if (cart.isPresent()) {
+            return ResponseEntity.ok(cart.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @PostMapping("/add")
     public ResponseEntity<CartItems> addToCart(
@@ -63,7 +85,6 @@ public class CartController {
             return ResponseEntity.badRequest().build();
         }
     }
-
 
     @DeleteMapping("/remove")
     public ResponseEntity<String> removeFromCart(

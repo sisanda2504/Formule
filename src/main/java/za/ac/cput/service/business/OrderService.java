@@ -1,9 +1,3 @@
-/*
-OrderService.java
-Order model Service class
-Author: Tsholofelo Mabidikane (230018165)
-Date: 07 August 2025
- */
 package za.ac.cput.service.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +34,10 @@ public class OrderService implements IOrderService {
 
     @Override
     public boolean delete(Long id) {
-        this.repository.deleteById(id);
+        if (this.repository.existsById(id)) {
+            this.repository.deleteById(id);
+            return true;
+        }
         return false;
     }
 
@@ -48,5 +45,9 @@ public class OrderService implements IOrderService {
     public List<Order> getAllOrders() {
         return this.repository.findAll();
     }
-}
 
+    @Override
+    public List<Order> findOrdersByCustomerId(Long customerId) {
+        return this.repository.findByCustomerId(customerId);
+    }
+}

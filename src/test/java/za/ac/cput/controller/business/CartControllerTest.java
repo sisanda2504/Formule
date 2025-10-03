@@ -40,7 +40,8 @@ class CartControllerTest {
     @Autowired
     private ProductService productService;
 
-    private static final String BASE_URL = "http://localhost:8080/formule/cart";
+    // Match controller mapping exactly (no /formule prefix here)
+    private static final String BASE_URL = "/cart";
 
     @BeforeAll
     void setUp() {
@@ -174,6 +175,7 @@ class CartControllerTest {
     void d_delete() {
         restTemplate.delete(BASE_URL + "/delete/" + cart.getId());
 
+        // After deletion, expect NOT_FOUND when trying to read
         ResponseEntity<Cart> response = restTemplate.getForEntity(BASE_URL + "/read/" + cart.getId(), Cart.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
@@ -182,7 +184,7 @@ class CartControllerTest {
 
     @Test
     void e_getAll() {
-        ResponseEntity<Cart[]> response = restTemplate.getForEntity(BASE_URL + "/getAll", Cart[].class);
+        ResponseEntity<Cart[]> response = restTemplate.getForEntity(BASE_URL + "/getall", Cart[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         Cart[] carts = response.getBody();
@@ -192,5 +194,29 @@ class CartControllerTest {
         for (Cart c : carts) {
             System.out.println(c);
         }
+    }
+
+    @Test
+    void f_addToCart() {
+        String url = BASE_URL + "/add?customerId=" + customer.getId() + "&productId=" + product.getId() + "&quantity=3";
+
+        ResponseEntity<CartItems> response = restTemplate.postForEntity(url, null, CartItems.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        CartItems addedItem = response.getBody();
+        assertNotNull(addedItem);
+        assertEquals(3, addedItem.getQuantity());
+
+        System.out.println("Added to cart: " + addedItem);
+    }
+
+    @Test
+    void g_removeFromCart() {
+        String url = BASE_URL + "/remove?customerId=" + customer.getId() + "&productId=" + product.getId();
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+
+        System.out.println("Remove from cart response: " + response.getBody());
     }
 }

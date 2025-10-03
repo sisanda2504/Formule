@@ -55,6 +55,15 @@ class CartFactoryTest {
     }
 
     @Test
+    void testCreateCartWithNullCustomer() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CartFactory.createCart(null, validItems);
+        });
+        assertEquals("Customer cannot be null", exception.getMessage());
+    }
+
+
+    @Test
     void testCreateCartSuccess() {
         assertNotNull(cart1);
         assertEquals(100.0, cart1.getTotalPrice());
@@ -68,6 +77,13 @@ class CartFactoryTest {
         assertEquals(0.0, cart2.getTotalPrice());
         assertTrue(cart2.getItems().isEmpty());
         System.out.println("Cart with no items: " + cart2);
+    }
+
+    @Test
+    void testCreateCartWithNullItems() {
+        Cart cart = CartFactory.createCart(customer, null);
+        assertNotNull(cart);
+        assertTrue(cart.getItems().isEmpty());
     }
 
     @Test

@@ -42,7 +42,6 @@ class CartItemsFactoryTest {
 
     @Test
     void testCreateCartItemsSuccess() {
-
         double expectedItemTotal = product.getPrice() * 2;  // 89.99 * 2 = 179.98
 
         CartItems cartItem = CartItemsFactory.createCartItems(product, cart, 2);
@@ -77,12 +76,11 @@ class CartItemsFactoryTest {
 
     @Test
     void testCreateCartItemsWithInvalidProductPrice() {
-
         product = new Product.Builder()
                 .setName("Gentle Cleanser")
                 .setDescription("Mild face cleanser")
                 .setImage_url("https://example.com/product-image.jpg")
-                .setPrice(-1)
+                .setPrice(-1)  // invalid price
                 .setStockQuantity(20)
                 .setCategoryId(1)
                 .setBrand(Brands.HADA_LABO)
@@ -92,5 +90,4 @@ class CartItemsFactoryTest {
         assertNull(cartItem);
         System.out.println("CartItem creation failed due to invalid product price.");
     }
-
 }

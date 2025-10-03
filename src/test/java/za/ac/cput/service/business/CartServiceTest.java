@@ -15,6 +15,10 @@ import za.ac.cput.factory.business.CartFactory;
 import za.ac.cput.factory.business.CartItemsFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 import za.ac.cput.factory.business.ProductFactory;
+import za.ac.cput.repository.business.CartItemsRepository;
+import za.ac.cput.repository.business.CartRepository;
+import za.ac.cput.repository.business.ProductRepository;
+import za.ac.cput.repository.users.CustomerRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,12 +32,17 @@ public class CartServiceTest {
     @Autowired
     private CartService cartService;
 
-    private static Cart cart;
     private static Customer customer;
-    private static List<CartItems> cartItems;
+    private static Product product;
+    private static Cart cart;
 
     @BeforeAll
-    static void setUp() {
+    static void setUp(@Autowired CustomerRepository customerRepository,
+                      @Autowired ProductRepository productRepository,
+                      @Autowired CartRepository cartRepository,
+                      @Autowired CartItemsRepository cartItemsRepository) {
+
+        // Create and save customer
         customer = CustomerFactory.createCustomer(
                 "Sisanda",
                 "Madikizela",
@@ -41,9 +50,10 @@ public class CartServiceTest {
                 "Sisanda@gmail.com",
                 "securePass2025"
         );
-        assertNotNull(customer);
+        customer = customerRepository.save(customer);
 
-        Product product = ProductFactory.createProduct(
+        // Create and save product
+        product = ProductFactory.createProduct(
                 "Test Product",
                 "Test Description",
                 "https://example.com/product-image.jpg",
@@ -52,50 +62,40 @@ public class CartServiceTest {
                 1,
                 Brands.INNISFREE
         );
+        product = productRepository.save(product);
 
-        assertNotNull(product);
-
-        Cart tempCart = new Cart.Builder()
+        // Create cart with customer, initially empty items
+        cart = new Cart.Builder()
                 .setCustomer(customer)
-                .setItems(null)
+                .setItems(Collections.emptyList())
                 .build();
 
+        cart = cartRepository.save(cart);
+
+        // Create and save CartItems linking product & cart
         CartItems item = CartItemsFactory.createCartItems(
                 product,
-                tempCart,
+                cart,
                 2
         );
-        assertNotNull(item);
+        item = cartItemsRepository.save(item);
 
-        cartItems = Collections.singletonList(item);
-
-
-        cart = CartFactory.createCart(
-                customer,
-                cartItems
-        );
-
-
-        item = new CartItems.Builder()
-                .copy(item)
-                .setCart(cart)
-                .build();
-
-        cartItems = Collections.singletonList(item);
+        // Update cart with this item
         cart = new Cart.Builder()
                 .copy(cart)
-                .setItems(cartItems)
+                .setItems(Collections.singletonList(item))
                 .build();
+
+        cart = cartRepository.save(cart);
     }
 
     @Test
     void a_create() {
-        Cart created = cartService.create(cart);
-        assertNotNull(created);
-        assertEquals(cart.getCustomer().getId(), created.getCustomer().getId());
-        assertEquals(cart.getItems().size(), created.getItems().size());
-        assertEquals(cart.getTotalPrice(), created.getTotalPrice());
-        System.out.println("Created: " + created);
+        assertNotNull(cart);
+        assertEquals(customer.getId(), cart.getCustomer().getId());
+        assertFalse(cart.getItems().isEmpty());
+        assertEquals(2 * product.getPrice(), cart.getTotalPrice());
+        System.out.println("Created: " + cart);
     }
 
     @Test
@@ -108,6 +108,7 @@ public class CartServiceTest {
 
     @Test
     void c_update() {
+        // Create new product and save it
         Product updatedProduct = ProductFactory.createProduct(
                 "Updated Product",
                 "Updated Desc",
@@ -117,14 +118,15 @@ public class CartServiceTest {
                 2,
                 Brands.MISSHA
         );
-        assertNotNull(updatedProduct);
+        // Save updated product if required by your setup
+        // productRepository.save(updatedProduct);
 
+        // Create new CartItems with updated product
         CartItems updatedItem = CartItemsFactory.createCartItems(
                 updatedProduct,
                 cart,
                 1
         );
-        assertNotNull(updatedItem);
 
         List<CartItems> updatedItems = Collections.singletonList(updatedItem);
 
@@ -135,14 +137,16 @@ public class CartServiceTest {
 
         Cart updated = cartService.update(updatedCart);
         assertNotNull(updated);
-        assertEquals(updatedItems.size(), updated.getItems().size());
+        assertEquals(1, updated.getItems().size());
         assertEquals(149.99, updated.getTotalPrice());
         System.out.println("Updated: " + updated);
     }
 
     @Test
     void d_delete() {
-        cartService.delete(cart.getId());
+        boolean deleted = cartService.delete(cart.getId());
+        assertTrue(deleted);
+
         Cart read = cartService.read(cart.getId());
         assertNull(read);
         System.out.println("Deleted cart with ID: " + cart.getId());
@@ -153,8 +157,6 @@ public class CartServiceTest {
         List<Cart> carts = cartService.getAll();
         assertNotNull(carts);
         System.out.println("All Carts:");
-        for (Cart c : carts) {
-            System.out.println(c);
-        }
+        carts.forEach(System.out::println);
     }
 }

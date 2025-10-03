@@ -5,6 +5,8 @@ Date: 07 August 2025
 package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.business.Order;
 import za.ac.cput.service.business.OrderService;
@@ -17,7 +19,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class OrderController {
 
-    private OrderService service;
+    private final OrderService service;
 
     @Autowired
     public OrderController(OrderService service) {
@@ -25,27 +27,41 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public Order create(@RequestBody Order order) {
-        return service.create(order);
+    public ResponseEntity<Order> create(@RequestBody Order order) {
+        Order created = service.create(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping("/read/{orderId}")
-    public Order read(@PathVariable Long orderId) {
-        return service.read(orderId);
+    public ResponseEntity<Order> read(@PathVariable Long orderId) {
+        Order order = service.read(orderId);
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(order);
     }
 
     @PutMapping("/update")
-    public Order update(@RequestBody Order order) {
-        return service.update(order);
+    public ResponseEntity<Order> update(@RequestBody Order order) {
+        Order updated = service.update(order);
+        if (updated == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/delete/{orderId}")
-    public boolean delete(@PathVariable Long orderId) {
-        return service.delete(orderId);
+    public ResponseEntity<Void> delete(@PathVariable Long orderId) {
+        boolean deleted = service.delete(orderId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/getall")
-    public List<Order> getAll() {
-        return service.getAllOrders();
+    public ResponseEntity<List<Order>> getAll() {
+        List<Order> orders = service.getAllOrders();
+        return ResponseEntity.ok(orders);
     }
 }

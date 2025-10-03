@@ -29,7 +29,7 @@ class CustomerServiceTest {
 
     @Test
     @Order(1)
-    void a_createCustomerWithoutAddress() {
+    void a_createCustomer() {
         customer = CustomerFactory.createCustomer(
                 "Agnes",
                 "Mabusela",
@@ -40,7 +40,6 @@ class CustomerServiceTest {
 
         Customer created = customerService.create(customer);
         assertNotNull(created);
-        assertNull(created.getAddress());
         customer = created;
         System.out.println("Created customer without address: " + created);
     }
@@ -62,24 +61,18 @@ class CustomerServiceTest {
         address = savedAddress;
         System.out.println("Created address linked to customer: " + savedAddress);
 
-        Customer updatedCustomer = new Customer.Builder()
-                .copy(customer)
-                .setAddress(savedAddress)
-                .build();
-
-        Customer savedCustomerWithAddress = customerService.update(updatedCustomer);
-        assertNotNull(savedCustomerWithAddress.getAddress());
-        assertEquals(savedCustomerWithAddress.getAddress().getId(), savedAddress.getId());
-        customer = savedCustomerWithAddress;
-        System.out.println("Updated customer with address: " + savedCustomerWithAddress);
+        var addresses = addressService.findByCustomerId(customer.getId());
+        assertFalse(addresses.isEmpty(), "Customer should have at least one address");
+        assertTrue(addresses.stream().anyMatch(a -> a.getId().equals(savedAddress.getId())),
+                "Saved address should be linked to customer");
     }
+
 
     @Test
     @Order(3)
     void c_readCustomer() {
         Customer read = customerService.read(customer.getId());
         assertNotNull(read);
-        assertNotNull(read.getAddress());
         System.out.println("Read customer: " + read);
     }
 

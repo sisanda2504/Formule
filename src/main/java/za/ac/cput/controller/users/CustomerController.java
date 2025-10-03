@@ -1,11 +1,15 @@
 package za.ac.cput.controller.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Customer;
+import za.ac.cput.dto.users.LoginRequest;
+import za.ac.cput.dto.users.LoginResponse;
 import za.ac.cput.service.users.CustomerService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
@@ -44,5 +48,15 @@ public class CustomerController {
         return service.getAll();
         }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Optional<Customer> customerOpt = service.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if(customerOpt.isPresent()) {
+            Customer c = customerOpt.get();
+            LoginResponse response = new LoginResponse(c.getId(), c.getFirstName(), c.getLastName(), c.getEmailAddress());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(401).body("Invalid credentials");
+    }
 
 }

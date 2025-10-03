@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CartService {
+public class CartService implements ICartService {
 
     @Autowired
     private CartRepository cartRepository;
@@ -29,18 +29,22 @@ public class CartService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Override
     public Cart create(Cart cart) {
         return cartRepository.save(cart);
     }
 
+    @Override
     public Cart read(Long id) {
         return cartRepository.findById(id).orElse(null);
     }
 
+    @Override
     public Cart update(Cart cart) {
         return cartRepository.save(cart);
     }
 
+    @Override
     public boolean delete(Long id) {
         if (cartRepository.existsById(id)) {
             cartRepository.deleteById(id);
@@ -49,11 +53,13 @@ public class CartService {
         return false;
     }
 
+    @Override
     public List<Cart> getAll() {
         return cartRepository.findAll();
     }
 
-    public Cart findByCustomerId(Long customerId) {
+    @Override
+    public Optional<Cart> findByCustomerId(Long customerId) {
         return cartRepository.findByCustomerId(customerId);
     }
 
@@ -64,8 +70,11 @@ public class CartService {
         }
 
         // Find or create cart
-        Cart cart = cartRepository.findByCustomerId(customerId);
-        if (cart == null) {
+        Optional<Cart> optionalCart = cartRepository.findByCustomerId(customerId);
+        Cart cart;
+        if (optionalCart.isPresent()) {
+            cart = optionalCart.get();
+        } else {
             Customer customer = customerRepository.findById(customerId)
                     .orElseThrow(() -> new RuntimeException("Customer not found"));
             cart = new Cart.Builder()
@@ -84,7 +93,7 @@ public class CartService {
             CartItems item = existingItem.get();
             int newQuantity = item.getQuantity() + quantity;
 
-           //Update quantity
+            // Update quantity
             CartItems updatedItem = new CartItems.Builder()
                     .copy(item)
                     .setQuantity(newQuantity)
@@ -102,12 +111,12 @@ public class CartService {
         }
     }
 
-
     public boolean removeFromCart(Long customerId, Long productId) {
-        Cart cart = cartRepository.findByCustomerId(customerId);
-        if (cart == null) {
+        Optional<Cart> optionalCart = cartRepository.findByCustomerId(customerId);
+        if (optionalCart.isEmpty()) {
             return false; // Cart doesn't exist
         }
+        Cart cart = optionalCart.get();
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));

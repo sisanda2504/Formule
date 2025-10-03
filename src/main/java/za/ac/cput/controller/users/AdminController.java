@@ -2,11 +2,15 @@ package za.ac.cput.controller.users;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Admin;
+import za.ac.cput.dto.users.LoginRequest;
+import za.ac.cput.dto.users.LoginResponse;
 import za.ac.cput.service.users.AdminService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
@@ -43,6 +47,17 @@ public class AdminController {
     @GetMapping("/getAll")
     public List<Admin> getAll() {
         return service.getAll();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Optional<Admin> adminOpt = service.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (adminOpt.isPresent()) {
+            Admin a = adminOpt.get();
+            LoginResponse response = new LoginResponse(a.getId(), a.getFirstName(), a.getLastName(), a.getEmailAddress());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(401).body("Invalid admin credentials");
     }
 
 }

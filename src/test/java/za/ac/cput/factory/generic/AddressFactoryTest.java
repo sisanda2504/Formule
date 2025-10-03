@@ -71,15 +71,16 @@ class AddressFactoryTest {
     @Test
     @Order(4)
     void testCreateAddressWithNullCustomer() {
-        Address address = AddressFactory.createAddress(
-                null,
-                "78 Palm Grove",
-                "Johannesburg",
-                "Gauteng",
-                "2190",
-                "South Africa"
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                AddressFactory.createAddress(
+                        null,
+                        "78 Palm Grove",
+                        "Johannesburg",
+                        "Gauteng",
+                        "2190",
+                        "South Africa"
+                )
         );
-        assertNotNull(address);
-        System.out.println("✅ Address with null customer: " + address);
+        System.out.println("❌ Expected exception for null customer: " + exception.getMessage());
     }
 }

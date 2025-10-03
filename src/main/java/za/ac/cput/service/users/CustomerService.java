@@ -1,6 +1,8 @@
 package za.ac.cput.service.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.users.Customer;
@@ -9,23 +11,28 @@ import za.ac.cput.repository.users.CustomerRepository;
 import za.ac.cput.service.generic.AddressService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository repository;
+    private final PasswordEncoder passwordEncoder;
     private final AddressService addressService;
 
     @Autowired
     public CustomerService(CustomerRepository repository, AddressService addressService) {
         this.repository = repository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
         this.addressService = addressService;
     }
 
     @Override
     public Customer create(Customer customer) {
-        if (customer == null)
-            throw new IllegalArgumentException("Customer cannot be null");
+        customer = new Customer.Builder()
+                .copy(customer)
+                .setPassword(passwordEncoder.encode(customer.getPassword()))
+                .build();
         return repository.save(customer);
     }
 
@@ -50,5 +57,17 @@ public class CustomerService implements ICustomerService {
     @Override
     public List<Customer> getAll() {
         return this.repository.findAll();
+    }
+
+    @Override
+    public Optional<Customer> login(String email, String password) {
+        Optional<Customer> customerOpt = repository.findByEmailAddress(email);
+        if(customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            if(passwordEncoder.matches(password, customer.getPassword())) {
+                return Optional.of(customer);
+            }
+        }
+        return Optional.empty();
     }
 }

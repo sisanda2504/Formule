@@ -59,7 +59,7 @@ class CustomerControllerTest {
     @Test
     @Order(2)
     void b_read() {
-        a_create(); // ensure customer is created
+        a_create();
         String url = BASE_URL + "/read/" + customer.getId();
         ResponseEntity<Customer> response = restTemplate.getForEntity(url, Customer.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -10,6 +10,7 @@ import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.domain.business.CartItems;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class CartFactory {
 
         if (items == null || items.isEmpty()) {
             items = Collections.emptyList();
+        } else {
+            items = new ArrayList<>(items);
         }
 
         return new Cart.Builder()

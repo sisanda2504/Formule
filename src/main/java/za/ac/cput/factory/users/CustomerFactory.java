@@ -20,19 +20,19 @@ public class CustomerFactory {
             String password){
 
             if(Helper.isNullOrEmpty(firstName) || Helper.isNullOrEmpty(lastName)){
-                return null;
+                throw new IllegalArgumentException("First and last name are required");
             }
 
             if(!Helper.isValidPhoneNumber(phoneNumber)){
-                return null;
+                throw new IllegalArgumentException("Invalid phone number");
             }
 
             if(!Helper.isValidEmail(emailAddress)){
-                return null;
+                throw new IllegalArgumentException("Invalid email address");
             }
 
             if(!Helper.isValidPassword(password)){
-                return null;
+                throw new IllegalArgumentException("Invalid password");
             }
 
             return new Customer.Builder()

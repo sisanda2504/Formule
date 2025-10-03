@@ -31,21 +31,27 @@ class OrderServiceTest {
             "P@mabidikane"
     );
 
-    private static Order order = OrderFactory.createOrder(
-            customer,
-            LocalDate.of(2025, 9, 15),
-            100.00
-    );
+    private static Order order;
 
     @Test
     void a_create() {
-        Order created = service.create(order);
+        Order newOrder = OrderFactory.createOrder(
+                customer,
+                LocalDate.of(2025, 9, 15),
+                100.00
+        );
+        assertNotNull(newOrder);
+
+        Order created = service.create(newOrder);
         assertNotNull(created);
+        assertNotNull(created.getId());
+        order = created;  // Save created order with ID for subsequent tests
         System.out.println("Created: " + created);
     }
 
     @Test
     void b_read() {
+        assertNotNull(order);
         Order read = service.read(order.getId());
         assertNotNull(read);
         System.out.println("Read: " + read);
@@ -53,17 +59,21 @@ class OrderServiceTest {
 
     @Test
     void c_update() {
+        assertNotNull(order);
         Order updatedOrder = new Order.Builder()
                 .copy(order)
                 .setTotalAmount(150.00)
                 .build();
         Order updated = service.update(updatedOrder);
         assertNotNull(updated);
+        assertEquals(150.00, updated.getTotalAmount());
+        order = updated;  // Update reference
         System.out.println("Updated: " + updated);
     }
 
     @Test
     void d_delete() {
+        assertNotNull(order);
         boolean deleted = service.delete(order.getId());
         assertTrue(deleted);
         System.out.println("Deleted Order with ID: " + order.getId());
@@ -71,6 +81,9 @@ class OrderServiceTest {
 
     @Test
     void e_getAll() {
-        System.out.println("All Orders: " + service.getAllOrders());
+        var allOrders = service.getAllOrders();
+        assertNotNull(allOrders);
+        assertFalse(allOrders.isEmpty(), "Orders list should not be empty");
+        System.out.println("All Orders: " + allOrders);
     }
 }

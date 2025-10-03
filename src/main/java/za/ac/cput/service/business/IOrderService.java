@@ -12,4 +12,5 @@ import java.util.List;
 public interface IOrderService extends IService<Order, Long> {
 
     List<Order> getAllOrders();
+    List<Order> findOrdersByCustomerId(Long customerId);
 }

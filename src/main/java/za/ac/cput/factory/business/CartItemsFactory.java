@@ -9,17 +9,20 @@ public class CartItemsFactory {
 
     public static CartItems createCartItems(Product product, Cart cart, int quantity) {
 
-        if (product == null || cart == null) {
-            return null;
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
         }
 
+        if (cart == null) {
+            throw new IllegalArgumentException("Cart cannot be null");
+        }
 
         if (!Helper.isValidQuantity(quantity) || quantity <= 0) {
-            return null;
+            throw new IllegalArgumentException("Quantity must be greater than 0");
         }
 
         if (product.getPrice() <= 0) {
-            return null;
+            throw new IllegalArgumentException("Product price must be greater than 0");
         }
 
         return new CartItems.Builder()
