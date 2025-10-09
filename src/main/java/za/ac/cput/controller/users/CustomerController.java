@@ -7,13 +7,11 @@ import za.ac.cput.domain.users.Customer;
 import za.ac.cput.dto.users.LoginRequest;
 import za.ac.cput.dto.users.LoginResponse;
 import za.ac.cput.service.users.CustomerService;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/customer")
-@CrossOrigin(origins = "*")
+@RequestMapping("/formule/customer")
 public class CustomerController {
 
     private CustomerService service;
