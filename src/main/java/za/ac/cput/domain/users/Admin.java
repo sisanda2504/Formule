@@ -18,6 +18,7 @@ public class Admin {
     private String phoneNumber;
     private String emailAddress;
     private String password;
+    private String role = "ROLE_ADMIN"; 
 
     protected Admin(){}
 
@@ -27,6 +28,7 @@ public class Admin {
         this.lastName = builder.lastName;
         this.emailAddress = builder.emailAddress;
         this.password = builder.password;
+        this.role = builder.role; 
     }
 
     public Long getId(){
@@ -49,6 +51,8 @@ public class Admin {
         return password;
     }
 
+    public String getRole() { return role; } 
+
     @Override
     public String toString() {
         return "Admin{" +
@@ -57,6 +61,7 @@ public class Admin {
                 ", lastName='" + lastName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 
@@ -67,6 +72,7 @@ public class Admin {
         private String lastName;
         private String emailAddress;
         private String password;
+        private String role = "ROLE_ADMIN"; 
 
         public Builder setId(Long id) {
             this.id = id;
@@ -93,12 +99,18 @@ public class Admin {
             return this;
         }
 
+        public Builder setRole(String role) { 
+            this.role = role;
+            return this;
+        }
+
         public Builder copy (Admin admin){
             this.id = admin.getId();
             this.firstName = admin.getFirstName();
             this.lastName = admin.getLastName();
             this.emailAddress = admin.getEmailAddress();
             this.password = admin.getPassword();
+            this.role = admin.getRole(); 
             return this;
         }
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import za.ac.cput.domain.users.Admin;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AdminFactoryTest {
 
@@ -14,7 +15,7 @@ class AdminFactoryTest {
             "Admin",
             "Admin12",
             "admin12a@gmail.com",
-             "admin120");
+            "admin120");
 
     private static Admin admin2 = AdminFactory.createAdmin(
             "Admin",
@@ -26,14 +27,14 @@ class AdminFactoryTest {
     @Order(1)
     public void testCreateAdmin() {
         assertNotNull(admin1);
+        assertEquals("ROLE_ADMIN", admin1.getRole()); 
         System.out.println(admin1.toString());
     }
 
     @Test
     @Order(2)
     public void testCreateAdmin2() {
-        assertNotNull(admin2);
+        assertNull(admin2); 
         System.out.println("admin2 is null as expected due to invalid input.");
     }
-
 }

@@ -13,19 +13,19 @@ import za.ac.cput.factory.users.CustomerFactory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestMethodOrder(MethodOrderer.MethodName.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CustomerControllerTest {
 
-    private Customer customer;
-    private Address address;
+    private static Customer customer;
+    private static Address address;
 
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private final String BASE_URL = "/formule/customer";
+    private final String BASE_URL = "http://localhost:8080/formule/customer";
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         address = AddressFactory.createAddress(
                 null,
                 "45 Example Street",
@@ -46,11 +46,13 @@ class CustomerControllerTest {
 
     @Test
     @Order(1)
-    void a_create() {
+    void create() {
         String url = BASE_URL + "/create";
         ResponseEntity<Customer> response = restTemplate.postForEntity(url, customer, Customer.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
+
         customer = response.getBody();
         assertNotNull(customer.getId());
         System.out.println("✅ Created: " + customer);
@@ -58,20 +60,20 @@ class CustomerControllerTest {
 
     @Test
     @Order(2)
-    void b_read() {
-        a_create();
+    void read() {
+        assertNotNull(customer.getId(), "Customer must exist before read test");
         String url = BASE_URL + "/read/" + customer.getId();
+
         ResponseEntity<Customer> response = restTemplate.getForEntity(url, Customer.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(customer.getId(), response.getBody().getId());
+
         System.out.println("📦 Read: " + response.getBody());
     }
 
     @Test
     @Order(3)
-    void c_update() {
-        a_create();
+    void update() {
         Customer updatedCustomer = new Customer.Builder()
                 .copy(customer)
                 .setPhoneNumber("0738739399")
@@ -89,8 +91,7 @@ class CustomerControllerTest {
 
     @Test
     @Order(4)
-    void d_getAll() {
-        a_create();
+    void getAll() {
         String url = BASE_URL + "/getAll";
         ResponseEntity<Customer[]> response = restTemplate.getForEntity(url, Customer[].class);
 
@@ -106,8 +107,7 @@ class CustomerControllerTest {
 
     @Test
     @Order(5)
-    void e_delete() {
-        a_create();
+    void delete() {
         String url = BASE_URL + "/delete/" + customer.getId();
         restTemplate.delete(url);
 

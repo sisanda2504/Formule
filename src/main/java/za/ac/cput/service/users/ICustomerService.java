@@ -9,5 +9,4 @@ import java.util.Optional;
 
 public interface ICustomerService extends IService<Customer, Long> {
     List<Customer> getAll();
-    Optional<Customer> login(String email, String password);
 }

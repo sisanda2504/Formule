@@ -1,19 +1,18 @@
 package za.ac.cput.factory.users;
 
 /*
-CustomerFactory.java
-Customer model class
+ManagerFactory.java
+Manager model class
 Author: Agnes Mabusela (230020690)
-Date: 23/04/2025
- */
+Date: 15/04/2025
+*/
 
-import za.ac.cput.domain.generic.Address;
-import za.ac.cput.domain.users.Customer;
+import za.ac.cput.domain.users.Manager;
 import za.ac.cput.util.Helper;
 
-public class CustomerFactory {
+public class ManagerFactory {
 
-    public static Customer createCustomer(
+    public static Manager createManager(
             String firstName,
             String lastName,
             String phoneNumber,
@@ -36,7 +35,7 @@ public class CustomerFactory {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        return new Customer.Builder()
+        return new Manager.Builder()
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setPhoneNumber(phoneNumber)

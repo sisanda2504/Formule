@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface IAdminService extends IService<Admin,Long> {
 
     List<Admin> getAll();
-    Optional<Admin> login(String email, String password);
 }

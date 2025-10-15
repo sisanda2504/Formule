@@ -10,23 +10,25 @@ import za.ac.cput.factory.users.AdminFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class AdminServiceTest {
-    @Autowired
 
-    private  IAdminService service;
+    @Autowired
+    private IAdminService service;
+
     private static Admin admin = AdminFactory.createAdmin(
             "Agnes",
             "Mabusela",
             "agnesadmin@gmail.com",
-            "admin2025");
+            "admin2025"
+    );
 
     @Test
     void a_create() {
         Admin created = service.create(admin);
         assertNotNull(created);
+        assertNotEquals("admin2025", created.getPassword(), "Password should be encoded");
         admin = created;
         System.out.println("Created: " + created);
     }
@@ -51,14 +53,15 @@ class AdminServiceTest {
     }
 
     @Test
-    void e_delete() {
-        boolean deleted = service.delete(admin.getId());
-        assertTrue(deleted);
-        System.out.println("Deleted: "+ deleted);
+    void d_getAll() {
+        System.out.println("All admins: " + service.getAll());
+        assertFalse(service.getAll().isEmpty(), "There should be at least one admin");
     }
 
     @Test
-    void d_getAll() {
-        System.out.println("All admins: " + service.getAll());
+    void e_delete() {
+        boolean deleted = service.delete(admin.getId());
+        assertTrue(deleted);
+        System.out.println("Deleted: " + deleted);
     }
 }

@@ -1,8 +1,6 @@
 package za.ac.cput.domain.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import za.ac.cput.domain.generic.Address;
 
 /*
 Customer.java
@@ -22,6 +20,7 @@ public class Customer {
     private String phoneNumber;
     private String emailAddress;
     private String password;
+    private String role = "ROLE_USER"; 
 
     protected Customer(){}
 
@@ -32,6 +31,7 @@ public class Customer {
         this.phoneNumber = builder.phoneNumber;
         this.emailAddress = builder.emailAddress;
         this.password = builder.password;
+        this.role = builder.role; 
     }
 
     public Long getId(){
@@ -58,16 +58,18 @@ public class Customer {
         return password;
     }
 
+    public String getRole() { return role; } 
 
     @Override
     public String toString(){
-       return "Customer{"+
-               "id = '"+ id + '\''+
-               ", firstName = '"+ firstName+'\''+
-               ", lastName = '"+ lastName +'\''+
-               ", phoneNumber = '"+ phoneNumber+'\''+
-               ", emailAddress = '"+ emailAddress+'\''+
-               ", password = '" +password+'\''+
+       return "Customer{" +
+               "id='" + id + '\'' +
+               ", firstName='" + firstName + '\'' +
+               ", lastName='" + lastName + '\'' +
+               ", phoneNumber='" + phoneNumber + '\'' +
+               ", emailAddress='" + emailAddress + '\'' +
+               ", password='" + password + '\'' +
+               ", role='" + role + '\'' +
                '}';
     }
 
@@ -79,6 +81,7 @@ public class Customer {
         private String phoneNumber;
         private String emailAddress;
         private String password;
+        private String role = "ROLE_USER"; 
 
         public Builder setId(Long id){
             this.id = id;
@@ -110,6 +113,11 @@ public class Customer {
             return this;
         }
 
+        public Builder setRole(String role){ 
+            this.role = role;
+            return this;
+        }
+
         public Builder copy (Customer customer){
             this.id = customer.getId();
             this.firstName =  customer.getFirstName();
@@ -117,6 +125,7 @@ public class Customer {
             this.phoneNumber = customer.getPhoneNumber();
             this.emailAddress = customer.getEmailAddress();
             this.password = customer.getPassword();
+            this.role = customer.getRole(); 
             return this;
         }
 

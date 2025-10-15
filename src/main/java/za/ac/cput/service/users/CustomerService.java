@@ -59,15 +59,5 @@ public class CustomerService implements ICustomerService {
         return this.repository.findAll();
     }
 
-    @Override
-    public Optional<Customer> login(String email, String password) {
-        Optional<Customer> customerOpt = repository.findByEmailAddress(email);
-        if(customerOpt.isPresent()) {
-            Customer customer = customerOpt.get();
-            if(passwordEncoder.matches(password, customer.getPassword())) {
-                return Optional.of(customer);
-            }
-        }
-        return Optional.empty();
-    }
+    
 }

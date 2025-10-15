@@ -40,6 +40,7 @@ class CustomerServiceTest {
 
         Customer created = customerService.create(customer);
         assertNotNull(created);
+        assertNotEquals("password2025", created.getPassword(), "Password should be encoded");
         customer = created;
         System.out.println("Created customer without address: " + created);
     }
@@ -67,7 +68,6 @@ class CustomerServiceTest {
                 "Saved address should be linked to customer");
     }
 
-
     @Test
     @Order(3)
     void c_readCustomer() {
@@ -87,6 +87,7 @@ class CustomerServiceTest {
         Customer result = customerService.update(updated);
         assertNotNull(result);
         assertEquals("Madikila", result.getFirstName());
+        customer = result;
         System.out.println("Updated customer first name: " + result);
     }
 

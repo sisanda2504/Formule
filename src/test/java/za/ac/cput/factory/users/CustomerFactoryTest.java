@@ -23,6 +23,7 @@ class CustomerFactoryTest {
     @Order(1)
     public void testCreateCustomer() {
         assertNotNull(validCustomer);
+        assertEquals("ROLE_USER", validCustomer.getRole()); 
         System.out.println("✅ Customer created: " + validCustomer);
     }
 
@@ -54,5 +55,20 @@ class CustomerFactoryTest {
                 )
         );
         System.out.println("Expected exception for empty first name: " + exception.getMessage());
+    }
+
+    @Test
+    @Order(4)
+    void testCreateCustomerWithInvalidPhoneNumber() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                CustomerFactory.createCustomer(
+                        "Agnes",
+                        "Mabusela",
+                        "123",
+                        "agnes@example.com",
+                        "StrongPass123!"
+                )
+        );
+        System.out.println("Expected exception for invalid phone number: " + exception.getMessage());
     }
 }

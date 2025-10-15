@@ -57,16 +57,4 @@ public class AdminService implements IAdminService {
         return this.repository.findAll();
     }
 
-    @Override
-    public Optional<Admin> login(String email, String password) {
-        Optional<Admin> adminOpt = repository.findByEmailAddress(email);
-        if(adminOpt.isPresent()) {
-            Admin admin = adminOpt.get();
-            if(passwordEncoder.matches(password, admin.getPassword())) {
-                return Optional.of(admin);
-            }
-        }
-        return Optional.empty();
-    }
-
 }

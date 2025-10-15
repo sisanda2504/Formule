@@ -6,69 +6,67 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.users.Customer;
+import za.ac.cput.domain.users.Manager;
 import za.ac.cput.security.AppUserDetails;
-import za.ac.cput.service.users.ICustomerService;
+import za.ac.cput.service.users.IManagerService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/formule/customer")
+@RequestMapping("/formule/manager")
 @CrossOrigin(origins = "*")
-public class CustomerController {
+public class ManagerController {
 
-    private final ICustomerService service;
+    private final IManagerService service;
 
     @Autowired
-    public CustomerController(ICustomerService service) {
+    public ManagerController(IManagerService service) {
         this.service = service;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
-        Customer created = service.create(customer);
+    public ResponseEntity<Manager> create(@RequestBody Manager manager) {
+        Manager created = service.create(manager);
         return ResponseEntity.ok(created);
     }
 
-    @GetMapping("/read/{customerId}")
+    @GetMapping("/read/{managerId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Customer> read(@PathVariable Long customerId) {
-        Customer customer = service.read(customerId);
-        if (customer != null) return ResponseEntity.ok(customer);
+    public ResponseEntity<Manager> read(@PathVariable Long managerId) {
+        Manager manager = service.read(managerId);
+        if (manager != null) return ResponseEntity.ok(manager);
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/update")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Customer> update(@RequestBody Customer customer, Authentication authentication) {
+    public ResponseEntity<Manager> update(@RequestBody Manager manager, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
-        // Customers can update only their own profile
-        if (!userDetails.getId().equals(customer.getId()) &&
+        if (!userDetails.getId().equals(manager.getId()) &&
             !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(403).build(); // Forbidden
         }
-        Customer updated = service.update(customer);
+        Manager updated = service.update(manager);
         return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/delete/{customerId}")
+    @DeleteMapping("/delete/{managerId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Boolean> delete(@PathVariable Long customerId, Authentication authentication) {
+    public ResponseEntity<Boolean> delete(@PathVariable Long managerId, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
 
-        // Allow delete only if own profile or admin
-        if (!userDetails.getId().equals(customerId) &&
+        if (!userDetails.getId().equals(managerId) &&
             !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return ResponseEntity.status(403).build(); // Forbidden
         }
 
-        boolean deleted = service.delete(customerId);
+        boolean deleted = service.delete(managerId);
         return ResponseEntity.ok(deleted);
     }
 
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Customer>> getAll() {
+    public ResponseEntity<List<Manager>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 }
