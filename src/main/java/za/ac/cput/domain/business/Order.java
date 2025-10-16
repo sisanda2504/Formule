@@ -1,12 +1,8 @@
-/*
-Order.java
-Order model class
-Author: Tsholofelo Mabidikane (230018165)
-Date: 15 March 2025
- */
 package za.ac.cput.domain.business;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.*;
 import za.ac.cput.domain.users.Customer;
 
@@ -28,6 +24,9 @@ public class Order {
     @Column(name = "total_amount", nullable = false)
     private Double totalAmount;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
     protected Order() {}
 
     private Order(Builder builder) {
@@ -35,6 +34,7 @@ public class Order {
         this.customer = builder.customer;
         this.orderDate = builder.orderDate;
         this.totalAmount = builder.totalAmount;
+        this.orderItems = builder.orderItems;
     }
 
     public Long getId() {
@@ -53,6 +53,10 @@ public class Order {
         return totalAmount;
     }
 
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -60,6 +64,7 @@ public class Order {
                 ", customer=" + (customer != null ? customer.getId() : null) +
                 ", orderDate=" + orderDate +
                 ", totalAmount=" + totalAmount +
+                ", orderItems=" + orderItems.size() +
                 '}';
     }
 
@@ -68,6 +73,7 @@ public class Order {
         private Customer customer;
         private LocalDate orderDate;
         private Double totalAmount;
+        private List<OrderItem> orderItems = new ArrayList<>();
 
         public Builder setId(Long id) {
             this.id = id;
@@ -89,11 +95,17 @@ public class Order {
             return this;
         }
 
+        public Builder setOrderItems(List<OrderItem> orderItems) {
+            this.orderItems = orderItems;
+            return this;
+        }
+
         public Builder copy(Order order) {
             this.id = order.id;
             this.customer = order.customer;
             this.orderDate = order.orderDate;
             this.totalAmount = order.totalAmount;
+            this.orderItems = order.orderItems;
             return this;
         }
 

@@ -5,9 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Admin;
+import za.ac.cput.dto.users.LoginResponse;
 import za.ac.cput.service.users.IAdminService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
@@ -21,26 +23,36 @@ public class AdminController {
         this.service = service;
     }
 
+    private LoginResponse toDto(Admin a) {
+        return new LoginResponse(
+            a.getId(),
+            a.getFirstName(),
+            a.getLastName(),
+            a.getEmailAddress(),
+            a.getRole()
+        );
+    }
+
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')") // Only ADMIN can create another admin
-    public ResponseEntity<Admin> create(@RequestBody Admin admin) {
+    @PreAuthorize("hasRole('ADMIN')") // Only admins can create admins
+    public ResponseEntity<LoginResponse> create(@RequestBody Admin admin) {
         Admin created = service.create(admin);
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(toDto(created));
     }
 
     @GetMapping("/read/{adminId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Admin> read(@PathVariable Long adminId) {
+    public ResponseEntity<LoginResponse> read(@PathVariable Long adminId) {
         Admin admin = service.read(adminId);
-        if (admin != null) return ResponseEntity.ok(admin);
+        if (admin != null) return ResponseEntity.ok(toDto(admin));
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Admin> update(@RequestBody Admin admin) {
+    public ResponseEntity<LoginResponse> update(@RequestBody Admin admin) {
         Admin updated = service.update(admin);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(toDto(updated));
     }
 
     @DeleteMapping("/delete/{adminId}")
@@ -52,8 +64,9 @@ public class AdminController {
 
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Admin>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<LoginResponse>> getAll() {
+        List<Admin> admins = service.getAll();
+        List<LoginResponse> dtos = admins.stream().map(this::toDto).collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
-
 }

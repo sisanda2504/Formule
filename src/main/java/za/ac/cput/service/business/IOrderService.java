@@ -13,4 +13,6 @@ public interface IOrderService extends IService<Order, Long> {
 
     List<Order> getAllOrders();
     List<Order> findOrdersByCustomerId(Long customerId);
+    Order checkout(Cart cart);
+    
 }
