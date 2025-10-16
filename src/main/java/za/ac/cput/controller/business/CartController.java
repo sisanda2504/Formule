@@ -2,16 +2,20 @@ package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.business.CartItems;
+import za.ac.cput.security.AppUserDetails;
 import za.ac.cput.service.business.CartService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/formule/cart")
 @CrossOrigin(origins = "*")
 public class CartController {
 
@@ -23,63 +27,90 @@ public class CartController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Cart> create(@RequestBody Cart cart) {
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ResponseEntity<Cart> create(@RequestBody Cart cart, Authentication authentication) {
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
+        if (!user.getId().equals(cart.getCustomerId())) return ResponseEntity.status(403).build();
         Cart created = service.create(cart);
         return ResponseEntity.ok(created);
     }
 
     @GetMapping("/read/{id}")
-    public ResponseEntity<Cart> read(@PathVariable Long id) {
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<Cart> read(@PathVariable Long id, Authentication authentication) {
         Cart cart = service.read(id);
-        if (cart == null) {
-            return ResponseEntity.notFound().build();
+        if (cart == null) return ResponseEntity.notFound().build();
+
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
+        if (!user.getId().equals(cart.getCustomerId()) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+            return ResponseEntity.status(403).build();
         }
         return ResponseEntity.ok(cart);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Cart> update(@RequestBody Cart cart) {
-        Cart updated = service.update(cart);
-        if (updated == null) {
-            return ResponseEntity.notFound().build();
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<Cart> update(@RequestBody Cart cart, Authentication authentication) {
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
+        if (!user.getId().equals(cart.getCustomerId()) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+            return ResponseEntity.status(403).build();
         }
+        Cart updated = service.update(cart);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        boolean deleted = service.delete(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<Void> delete(@PathVariable Long id, Authentication authentication) {
+        Cart cart = service.read(id);
+        if (cart == null) return ResponseEntity.notFound().build();
+
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
+        if (!user.getId().equals(cart.getCustomerId()) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+            return ResponseEntity.status(403).build();
         }
+
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/getall")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<List<Cart>> getAll() {
         List<Cart> carts = service.getAll();
         return ResponseEntity.ok(carts);
     }
 
     @GetMapping("/findByCustomerId/{customerId}")
-    public ResponseEntity<Cart> findByCustomerId(@PathVariable Long customerId) {
-        Optional<Cart> cart = service.findByCustomerId(customerId);
-        if (cart.isPresent()) {
-            return ResponseEntity.ok(cart.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN') or hasRole('MANAGER')")
+    public ResponseEntity<Cart> findByCustomerId(@PathVariable Long customerId, Authentication authentication) {
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
+        if (!user.getId().equals(customerId) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) &&
+            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_MANAGER"))) {
+            return ResponseEntity.status(403).build();
         }
+
+        Optional<Cart> cart = service.findByCustomerId(customerId);
+        return cart.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     @PostMapping("/add")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<CartItems> addToCart(
-            @RequestParam Long customerId,
             @RequestParam Long productId,
-            @RequestParam(defaultValue = "1") int quantity) {
+            @RequestParam(defaultValue = "1") int quantity,
+            Authentication authentication) {
+
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
         try {
-            CartItems item = service.addToCart(customerId, productId, quantity);
+            CartItems item = service.addToCart(user.getId(), productId, quantity);
             return ResponseEntity.ok(item);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -87,16 +118,16 @@ public class CartController {
     }
 
     @DeleteMapping("/remove")
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<String> removeFromCart(
-            @RequestParam Long customerId,
-            @RequestParam Long productId) {
+            @RequestParam Long productId,
+            Authentication authentication) {
+
+        AppUserDetails user = (AppUserDetails) authentication.getPrincipal();
         try {
-            boolean removed = service.removeFromCart(customerId, productId);
-            if (removed) {
-                return ResponseEntity.ok("Item removed successfully from cart.");
-            } else {
-                return ResponseEntity.badRequest().body("Item not found in cart.");
-            }
+            boolean removed = service.removeFromCart(user.getId(), productId);
+            if (removed) return ResponseEntity.ok("Item removed successfully from cart.");
+            else return ResponseEntity.badRequest().body("Item not found in cart.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to remove item: " + e.getMessage());
         }

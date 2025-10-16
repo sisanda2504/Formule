@@ -13,7 +13,7 @@ public class Manager {
     private String phoneNumber;
     private String emailAddress;
     private String password;
-    private String role; 
+    private String role= "ROLE_MANAGER";
 
     protected Manager(){}
 

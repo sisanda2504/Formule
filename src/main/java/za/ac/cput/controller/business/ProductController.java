@@ -2,6 +2,7 @@ package za.ac.cput.controller.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.business.Product;
 import za.ac.cput.service.business.ProductService;
@@ -9,7 +10,7 @@ import za.ac.cput.service.business.ProductService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/formule/product")
 @CrossOrigin(origins = "*")
 public class ProductController {
 
@@ -21,6 +22,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> create(@RequestBody Product product) {
         Product created = service.create(product);
         return ResponseEntity.ok(created);
@@ -36,6 +38,7 @@ public class ProductController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> update(@RequestBody Product product) {
         Product updated = service.update(product);
         if (updated == null) {
@@ -45,6 +48,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean deleted = service.delete(id);
         if (deleted) {

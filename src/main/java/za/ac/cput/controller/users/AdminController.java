@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/formule/admin")
 @CrossOrigin(origins = "*")
 public class AdminController {
 
@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/read/{adminId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<LoginResponse> read(@PathVariable Long adminId) {
         Admin admin = service.read(adminId);
         if (admin != null) return ResponseEntity.ok(toDto(admin));
