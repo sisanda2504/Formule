@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Manager;
 import za.ac.cput.dto.users.LoginResponse;
+import za.ac.cput.factory.users.ManagerFactory;
 import za.ac.cput.security.AppUserDetails;
 import za.ac.cput.service.users.IManagerService;
 
@@ -27,17 +28,25 @@ public class ManagerController {
 
     private LoginResponse toDto(Manager m) {
         return new LoginResponse(
-            m.getId(),
-            m.getFirstName(),
-            m.getLastName(),
-            m.getEmailAddress(),
-            m.getRole()
+                m.getId(),
+                m.getFirstName(),
+                m.getLastName(),
+                m.getEmailAddress(),
+                m.getRole()
         );
     }
 
     @PostMapping("/create")
     public ResponseEntity<LoginResponse> create(@RequestBody Manager manager) {
-        Manager created = service.create(manager);
+        Manager newManager = ManagerFactory.createManager(
+                manager.getFirstName(),
+                manager.getLastName(),
+                manager.getPhoneNumber(),
+                manager.getEmailAddress(),
+                manager.getPassword()
+        );
+
+        Manager created = service.create(newManager);
         return ResponseEntity.ok(toDto(created));
     }
 
@@ -45,7 +54,8 @@ public class ManagerController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LoginResponse> read(@PathVariable Long managerId) {
         Manager manager = service.read(managerId);
-        if (manager != null) return ResponseEntity.ok(toDto(manager));
+        if (manager != null)
+            return ResponseEntity.ok(toDto(manager));
         return ResponseEntity.notFound().build();
     }
 
@@ -54,9 +64,10 @@ public class ManagerController {
     public ResponseEntity<LoginResponse> update(@RequestBody Manager manager, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
         if (!userDetails.getId().equals(manager.getId()) &&
-            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return ResponseEntity.status(403).build();
         }
+
         Manager updated = service.update(manager);
         return ResponseEntity.ok(toDto(updated));
     }
@@ -66,9 +77,10 @@ public class ManagerController {
     public ResponseEntity<Boolean> delete(@PathVariable Long managerId, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
         if (!userDetails.getId().equals(managerId) &&
-            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return ResponseEntity.status(403).build();
         }
+
         boolean deleted = service.delete(managerId);
         return ResponseEntity.ok(deleted);
     }
@@ -77,7 +89,9 @@ public class ManagerController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<LoginResponse>> getAll() {
         List<Manager> managers = service.getAll();
-        List<LoginResponse> dtos = managers.stream().map(this::toDto).collect(Collectors.toList());
+        List<LoginResponse> dtos = managers.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.dto.users.LoginResponse;
+import za.ac.cput.factory.users.CustomerFactory;
 import za.ac.cput.security.AppUserDetails;
 import za.ac.cput.service.users.ICustomerService;
 
@@ -27,17 +28,25 @@ public class CustomerController {
 
     private LoginResponse toDto(Customer c) {
         return new LoginResponse(
-            c.getId(),
-            c.getFirstName(),
-            c.getLastName(),
-            c.getEmailAddress(),
-            c.getRole()
+                c.getId(),
+                c.getFirstName(),
+                c.getLastName(),
+                c.getEmailAddress(),
+                c.getRole()
         );
     }
 
     @PostMapping("/create")
     public ResponseEntity<LoginResponse> create(@RequestBody Customer customer) {
-        Customer created = service.create(customer);
+        Customer newCustomer = CustomerFactory.createCustomer(
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getPhoneNumber(),
+                customer.getEmailAddress(),
+                customer.getPassword()
+        );
+
+        Customer created = service.create(newCustomer);
         return ResponseEntity.ok(toDto(created));
     }
 
@@ -45,7 +54,8 @@ public class CustomerController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LoginResponse> read(@PathVariable Long customerId) {
         Customer customer = service.read(customerId);
-        if (customer != null) return ResponseEntity.ok(toDto(customer));
+        if (customer != null)
+            return ResponseEntity.ok(toDto(customer));
         return ResponseEntity.notFound().build();
     }
 
@@ -54,9 +64,10 @@ public class CustomerController {
     public ResponseEntity<LoginResponse> update(@RequestBody Customer customer, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
         if (!userDetails.getId().equals(customer.getId()) &&
-            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return ResponseEntity.status(403).build();
         }
+
         Customer updated = service.update(customer);
         return ResponseEntity.ok(toDto(updated));
     }
@@ -66,9 +77,10 @@ public class CustomerController {
     public ResponseEntity<Boolean> delete(@PathVariable Long customerId, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
         if (!userDetails.getId().equals(customerId) &&
-            !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+                !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             return ResponseEntity.status(403).build();
         }
+
         boolean deleted = service.delete(customerId);
         return ResponseEntity.ok(deleted);
     }
@@ -77,7 +89,9 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<LoginResponse>> getAll() {
         List<Customer> customers = service.getAll();
-        List<LoginResponse> dtos = customers.stream().map(this::toDto).collect(Collectors.toList());
+        List<LoginResponse> dtos = customers.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 }
