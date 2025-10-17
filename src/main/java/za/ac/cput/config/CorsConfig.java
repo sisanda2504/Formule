@@ -18,8 +18,7 @@ public class CorsConfig {
                         .allowedOrigins(
                             "http://localhost:5173",
                             "http://localhost:8080",
-                            "https://stunning-guacamole-pqgx46pgqjg394r7-5173.app.github.dev",
-                            "https://stunning-guacamole-pqgx46pgqjg394r7-8080.app.github.dev"
+                            "https://organic-couscous-pqgx46pg957f65v5-8080.app.github.dev"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

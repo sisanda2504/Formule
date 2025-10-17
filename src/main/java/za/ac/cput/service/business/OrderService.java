@@ -52,7 +52,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<Order> findOrdersByCustomerId(Long customerId) {
-        return this.repository.findByCustomerId(customerId);
+        return this.repository.findByCustomer_Id(customerId);
     }
 
     @Override

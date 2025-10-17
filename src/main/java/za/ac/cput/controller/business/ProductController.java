@@ -57,7 +57,7 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/getAll")
     public ResponseEntity<Iterable<Product>> getAll() {
         Iterable<Product> products = service.getAll();
         return ResponseEntity.ok(products);

@@ -60,7 +60,7 @@ public class CartService implements ICartService {
 
     @Override
     public Optional<Cart> findByCustomerId(Long customerId) {
-        return cartRepository.findByCustomerId(customerId);
+        return cartRepository.findByCustomer_Id(customerId);
     }
 
 
@@ -70,7 +70,7 @@ public class CartService implements ICartService {
         }
 
         // Find or create cart
-        Optional<Cart> optionalCart = cartRepository.findByCustomerId(customerId);
+        Optional<Cart> optionalCart = cartRepository.findByCustomer_Id(customerId);
         Cart cart;
         if (optionalCart.isPresent()) {
             cart = optionalCart.get();
@@ -112,7 +112,7 @@ public class CartService implements ICartService {
     }
 
     public boolean removeFromCart(Long customerId, Long productId) {
-        Optional<Cart> optionalCart = cartRepository.findByCustomerId(customerId);
+        Optional<Cart> optionalCart = cartRepository.findByCustomer_Id(customerId);
         if (optionalCart.isEmpty()) {
             return false; // Cart doesn't exist
         }
