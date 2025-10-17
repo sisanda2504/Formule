@@ -3,7 +3,6 @@ package za.ac.cput.domain.business;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import za.ac.cput.domain.users.Customer;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,31 +29,20 @@ public class Cart {
         this.items = builder.items != null ? builder.items : new ArrayList<>();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public List<CartItems> getItems() {
-        return items;
-    }
+    public Long getId() { return id; }
+    public Customer getCustomer() { return customer; }
+    public List<CartItems> getItems() { return items; }
+    public Long getCustomerId() { return customer != null ? customer.getId() : null; }
 
     public double getTotalPrice() {
-        double total = 0;
-        for (CartItems item : items) {
-            total += item.getItemTotal();
-        }
-        return total;
+        return items.stream().mapToDouble(CartItems::getItemTotal).sum();
     }
 
     @Override
     public String toString() {
         return "Cart{" +
                 "id=" + id +
-                ", customer=" + (customer != null ? customer.getId() : null) +
+                ", customer=" + getCustomerId() +
                 ", items=" + items.size() +
                 ", totalPrice=" + getTotalPrice() +
                 '}';
@@ -65,20 +53,9 @@ public class Cart {
         private Customer customer;
         private List<CartItems> items;
 
-        public Builder setId(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder setCustomer(Customer customer) {
-            this.customer = customer;
-            return this;
-        }
-
-        public Builder setItems(List<CartItems> items) {
-            this.items = items != null ? items : new ArrayList<>();
-            return this;
-        }
+        public Builder setId(Long id) { this.id = id; return this; }
+        public Builder setCustomer(Customer customer) { this.customer = customer; return this; }
+        public Builder setItems(List<CartItems> items) { this.items = items != null ? items : new ArrayList<>(); return this; }
 
         public Builder copy(Cart cart) {
             this.id = cart.getId();
@@ -87,8 +64,6 @@ public class Cart {
             return this;
         }
 
-        public Cart build() {
-            return new Cart(this);
-        }
+        public Cart build() { return new Cart(this); }
     }
 }
