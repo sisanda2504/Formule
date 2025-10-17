@@ -41,7 +41,7 @@ class AppUserDetailsServiceTest {
     void setUp() {
         // Create test users
         admin = adminService.create(AdminFactory.createAdmin(
-                "Admin", "One", "admin1@test.com", "password123"
+                "Admin", "One", "0765764378", "admin@test.com","password123"
         ));
         customer = customerService.create(CustomerFactory.createCustomer(
                 "Customer", "One", "0712345678", "customer1@test.com", "password123"
