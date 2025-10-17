@@ -6,7 +6,6 @@ Author: Agnes Mabusela (230020690)
 Date: 14/04/2025
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import za.ac.cput.domain.users.Customer;
 

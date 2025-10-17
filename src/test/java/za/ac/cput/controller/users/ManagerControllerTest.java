@@ -26,6 +26,7 @@ class ManagerControllerTest {
         manager = ManagerFactory.createManager(
                 "Lerato",
                 "Nkosi",
+                "0796547866",
                 "lerato.nkosi@formule.com",
                 "manager123"
         );

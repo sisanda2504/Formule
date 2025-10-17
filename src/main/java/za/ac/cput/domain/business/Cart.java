@@ -32,6 +32,11 @@ public class Cart {
     public Long getId() { return id; }
     public Customer getCustomer() { return customer; }
     public List<CartItems> getItems() { return items; }
+    
+    public List<CartItems> getCartItems() {
+        return getItems();
+    }
+    
     public Long getCustomerId() { return customer != null ? customer.getId() : null; }
 
     public double getTotalPrice() {

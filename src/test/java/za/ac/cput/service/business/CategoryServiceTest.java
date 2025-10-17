@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import za.ac.cput.domain.business.Category;
 import za.ac.cput.factory.business.CategoryFactory;
 
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

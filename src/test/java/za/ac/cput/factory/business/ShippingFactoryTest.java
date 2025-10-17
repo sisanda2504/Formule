@@ -18,7 +18,6 @@ import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 

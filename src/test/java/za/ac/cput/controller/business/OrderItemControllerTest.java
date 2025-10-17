@@ -14,7 +14,6 @@ import za.ac.cput.factory.business.OrderItemFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +57,7 @@ class OrderItemControllerTest {
                 "/api/order-items/create", orderItem, OrderItem.class);
         assertEquals(HttpStatus.OK, createResponse.getStatusCode());
         assertNotNull(createResponse.getBody());
+
         Long id = createResponse.getBody().getId();
 
         ResponseEntity<OrderItem> readResponse = restTemplate.getForEntity(
@@ -72,18 +72,23 @@ class OrderItemControllerTest {
         OrderItem orderItem = OrderItemFactory.createOrderItem(order, product, 1, 50.0);
         OrderItem created = restTemplate.postForObject("/api/order-items/create", orderItem, OrderItem.class);
 
-        created.setQuantity(3);
-        created.setItemTotal(150.0);
+        // Build a new updated OrderItem using the Builder pattern
+        OrderItem updated = new OrderItem.Builder()
+                .copy(created)
+                .setQuantity(3)
+                .setItemTotal(150.0)
+                .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<OrderItem> requestUpdate = new HttpEntity<>(created, headers);
+        HttpEntity<OrderItem> requestUpdate = new HttpEntity<>(updated, headers);
 
         ResponseEntity<OrderItem> updateResponse = restTemplate.exchange(
                 "/api/order-items/update", HttpMethod.PUT, requestUpdate, OrderItem.class);
 
         assertEquals(HttpStatus.OK, updateResponse.getStatusCode());
         assertEquals(150.0, updateResponse.getBody().getItemTotal());
+        assertEquals(3, updateResponse.getBody().getQuantity());
     }
 
     @Test

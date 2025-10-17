@@ -5,11 +5,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import za.ac.cput.domain.users.Admin;
-import za.ac.cput.domain.users.Customer;
 import za.ac.cput.repository.users.AdminRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminService implements IAdminService {

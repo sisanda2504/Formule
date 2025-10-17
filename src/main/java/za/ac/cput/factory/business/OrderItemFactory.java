@@ -12,6 +12,11 @@ public class OrderItemFactory {
             return null;
         }
 
-        return new OrderItem(order, product, quantity, itemTotal);
+        return new OrderItem.Builder()
+                .setOrder(order)
+                .setProduct(product)
+                .setQuantity(quantity)
+                .setItemTotal(itemTotal)
+                .build();
     }
 }

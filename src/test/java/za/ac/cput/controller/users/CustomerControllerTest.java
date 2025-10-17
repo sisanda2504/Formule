@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.users.Customer;
-import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerControllerTest {
 
     private static Customer customer;
-    private static Address address;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -26,15 +23,6 @@ class CustomerControllerTest {
 
     @BeforeAll
     static void setUp() {
-        address = AddressFactory.createAddress(
-                null,
-                "45 Example Street",
-                "Cape Town",
-                "Western Cape",
-                "8001",
-                "South Africa"
-        );
-
         customer = CustomerFactory.createCustomer(
                 "Agnes",
                 "Mabusela",

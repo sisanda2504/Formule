@@ -64,7 +64,7 @@ class OrderItemServiceTest {
         assertEquals(100.0, fetchedItem.getItemTotal());
 
         // Update
-        savedItem = new OrderItem(order, product, 3, 150.0);
+        savedItem = OrderItemFactory.createOrderItem(order, product, 3, 150.0);
         savedItem = orderItemService.update(savedItem);
         assertEquals(150.0, savedItem.getItemTotal());
 

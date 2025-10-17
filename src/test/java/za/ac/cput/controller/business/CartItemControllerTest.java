@@ -16,7 +16,6 @@ import za.ac.cput.factory.business.ProductFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -4,27 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import za.ac.cput.domain.generic.Address;
 import za.ac.cput.domain.users.Customer;
-import za.ac.cput.factory.generic.AddressFactory;
 import za.ac.cput.repository.users.CustomerRepository;
 import za.ac.cput.service.generic.AddressService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService implements ICustomerService {
 
     private final CustomerRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final AddressService addressService;
+    
 
     @Autowired
     public CustomerService(CustomerRepository repository, AddressService addressService) {
         this.repository = repository;
         this.passwordEncoder = new BCryptPasswordEncoder();
-        this.addressService = addressService;
     }
 
     @Override

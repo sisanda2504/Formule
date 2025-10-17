@@ -57,6 +57,10 @@ public class Order {
         return orderItems;
     }
 
+    public Long getCustomerId() {
+        return customer != null ? customer.getId() : null;
+    }
+
     @Override
     public String toString() {
         return "Order{" +

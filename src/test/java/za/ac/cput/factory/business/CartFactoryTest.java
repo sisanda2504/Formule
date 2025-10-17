@@ -8,7 +8,6 @@ import za.ac.cput.domain.business.Product;
 import za.ac.cput.domain.business.Brands;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.factory.users.CustomerFactory;
-import za.ac.cput.factory.business.ProductFactory;
 
 import java.util.ArrayList;
 import java.util.List;

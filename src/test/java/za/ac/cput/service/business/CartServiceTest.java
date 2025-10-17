@@ -11,7 +11,6 @@ import za.ac.cput.domain.business.Cart;
 import za.ac.cput.domain.business.CartItems;
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.domain.business.Product;
-import za.ac.cput.factory.business.CartFactory;
 import za.ac.cput.factory.business.CartItemsFactory;
 import za.ac.cput.factory.users.CustomerFactory;
 import za.ac.cput.factory.business.ProductFactory;
