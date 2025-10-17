@@ -1,4 +1,4 @@
-package za.ac.cput.formule.security;
+package za.ac.cput.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import za.ac.cput.formule.security.jwt.JwtAuthenticationFilter;
-import za.ac.cput.formule.security.jwt.JwtAuthEntryPoint;
+import za.ac.cput.security.jwt.JwtAuthenticationFilter;
+import za.ac.cput.security.jwt.JwtAuthEntryPoint;
 
 @Configuration
 @RequiredArgsConstructor
