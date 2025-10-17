@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/formule/customer")
-@CrossOrigin(origins = "*")
 public class CustomerController {
 
     private final ICustomerService service;

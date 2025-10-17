@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/formule/cart")
-@CrossOrigin(origins = "*")
 public class CartController {
 
     private final CartService service;
@@ -80,7 +79,7 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<List<Cart>> getAll() {
         List<Cart> carts = service.getAll();

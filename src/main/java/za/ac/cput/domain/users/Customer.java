@@ -20,7 +20,7 @@ public class Customer {
     private String phoneNumber;
     private String emailAddress;
     private String password;
-    private String role = "ROLE_USER"; 
+    private String role; 
 
     protected Customer(){}
 

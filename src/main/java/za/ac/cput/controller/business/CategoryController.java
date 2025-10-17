@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/formule/category")
-@CrossOrigin(origins = "*")
 public class CategoryController {
 
     private final ICategoryService service;
@@ -43,7 +42,7 @@ public class CategoryController {
         return service.delete(id);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/getAll")
     public List<Category> getAll() {
         return service.getAll();
     }

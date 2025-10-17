@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/formule/shipping")
-@CrossOrigin(origins = "*")
 public class ShippingController {
 
     private final ShippingService service;

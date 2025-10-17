@@ -41,6 +41,7 @@ public class ManagerFactory {
                 .setPhoneNumber(phoneNumber)
                 .setEmailAddress(emailAddress)
                 .setPassword(password)
+                .setRole("ROLE_MANAGER")
                 .build(); 
     }
 }

@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/formule/admin")
-@CrossOrigin(origins = "*")
 public class AdminController {
 
     private final IAdminService service;

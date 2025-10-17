@@ -20,6 +20,7 @@ class AdminServiceTest {
     private static Admin admin = AdminFactory.createAdmin(
             "Agnes",
             "Mabusela",
+            "0123456789",        
             "agnesadmin@gmail.com",
             "admin2025"
     );

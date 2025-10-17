@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/formule/product")
-@CrossOrigin(origins = "*")
 public class ProductController {
 
     private final ProductService service;

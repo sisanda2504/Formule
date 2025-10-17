@@ -19,7 +19,6 @@ class AdminControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    // ✅ Keeping your preferred explicit URL
     private final String BASE_URL = "http://localhost:8080/formule/admin";
 
     @BeforeAll
@@ -27,6 +26,7 @@ class AdminControllerTest {
         admin = AdminFactory.createAdmin(
                 "Agnes",
                 "Mabusela",
+                "0123456789",       
                 "Agnes@admin.com",
                 "password@01"
         );
@@ -40,7 +40,7 @@ class AdminControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         admin = response.getBody();
-        System.out.println("✅ Created: " + admin);
+        System.out.println("Created: " + admin);
     }
 
     @Test
@@ -50,7 +50,7 @@ class AdminControllerTest {
         ResponseEntity<Admin> response = restTemplate.getForEntity(url, Admin.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        System.out.println("✅ Read: " + response.getBody());
+        System.out.println("Read: " + response.getBody());
     }
 
     @Test
@@ -67,7 +67,7 @@ class AdminControllerTest {
         assertNotNull(response.getBody());
         assertEquals("UpdatedName", response.getBody().getFirstName());
         admin = response.getBody();
-        System.out.println("✅ Updated: " + response.getBody());
+        System.out.println("Updated: " + response.getBody());
     }
 
     @Test
@@ -77,7 +77,7 @@ class AdminControllerTest {
         ResponseEntity<Admin[]> response = restTemplate.getForEntity(url, Admin[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        System.out.println("✅ All Admins:");
+        System.out.println("All Admins:");
         for (Admin a : response.getBody()) {
             System.out.println(a);
         }
@@ -88,6 +88,6 @@ class AdminControllerTest {
     void e_delete() {
         String url = BASE_URL + "/delete/" + admin.getId();
         restTemplate.delete(url);
-        System.out.println("✅ Deleted admin with ID: " + admin.getId());
+        System.out.println("Deleted admin with ID: " + admin.getId());
     }
 }

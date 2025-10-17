@@ -15,10 +15,10 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         // Allow local dev and Codespaces URLs
-                        .allowedOrigins(
+                        .allowedOriginPatterns(
                             "http://localhost:5173",
                             "http://localhost:8080",
-                            "https://organic-couscous-pqgx46pg957f65v5-8080.app.github.dev"
+                            "https://*.app.github.dev"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")

@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/formule/manager")
-@CrossOrigin(origins = "*")
 public class ManagerController {
 
     private final IManagerService service;

@@ -1,12 +1,5 @@
 package za.ac.cput.factory.users;
 
-/*
-CustomerFactory.java
-Customer model class
-Author: Agnes Mabusela (230020690)
-Date: 23/04/2025
- */
-
 import za.ac.cput.domain.users.Customer;
 import za.ac.cput.util.Helper;
 
@@ -41,6 +34,7 @@ public class CustomerFactory {
                 .setPhoneNumber(phoneNumber)
                 .setEmailAddress(emailAddress)
                 .setPassword(password)
-                .build(); 
+                .setRole("ROLE_CUSTOMER")
+                .build();
     }
 }

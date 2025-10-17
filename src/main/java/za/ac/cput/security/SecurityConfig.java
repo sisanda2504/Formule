@@ -14,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import za.ac.cput.security.jwt.JwtAuthenticationFilter;
 import za.ac.cput.security.jwt.JwtAuthEntryPoint;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,6 +27,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors(withDefaults())
+
             // Disable CSRF for APIs
             .csrf(csrf -> csrf.disable())
 
@@ -39,12 +42,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers(
-                    "/auth/**",
                     "/formule/customer/create",
                     "/formule/manager/create",
                     "/formule/admin/create",
-                    "/products/**",
-                    "/categories/**"
+                    "/formule/product/**",
+                    "/formule/category/**"
                 ).permitAll()
 
                 // Role-based access control
