@@ -31,6 +31,7 @@ public class CustomerController {
                 c.getId(),
                 c.getFirstName(),
                 c.getLastName(),
+                c.getPhoneNumber(),
                 c.getEmailAddress(),
                 c.getRole()
         );

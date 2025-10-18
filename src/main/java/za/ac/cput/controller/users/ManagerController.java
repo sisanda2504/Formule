@@ -31,6 +31,7 @@ public class ManagerController {
                 m.getId(),
                 m.getFirstName(),
                 m.getLastName(),
+                m.getPhoneNumber(),
                 m.getEmailAddress(),
                 m.getRole()
         );
@@ -63,8 +64,10 @@ public class ManagerController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LoginResponse> update(@RequestBody Manager manager, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
-        if (!userDetails.getId().equals(manager.getId()) &&
-                !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        boolean isSelf = userDetails.getId().equals(manager.getId());
+        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        if (!isSelf && !isAdmin) {
             return ResponseEntity.status(403).build();
         }
 
@@ -76,8 +79,10 @@ public class ManagerController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Boolean> delete(@PathVariable Long managerId, Authentication authentication) {
         AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
-        if (!userDetails.getId().equals(managerId) &&
-                !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+        boolean isSelf = userDetails.getId().equals(managerId);
+        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        if (!isSelf && !isAdmin) {
             return ResponseEntity.status(403).build();
         }
 

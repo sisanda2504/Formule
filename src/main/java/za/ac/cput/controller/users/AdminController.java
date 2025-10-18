@@ -3,10 +3,13 @@ package za.ac.cput.controller.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import za.ac.cput.domain.users.Admin;
 import za.ac.cput.dto.users.LoginResponse;
 import za.ac.cput.factory.users.AdminFactory;
+import za.ac.cput.security.AppUserDetails;
 import za.ac.cput.service.users.IAdminService;
 
 import java.util.List;
@@ -28,13 +31,14 @@ public class AdminController {
                 a.getId(),
                 a.getFirstName(),
                 a.getLastName(),
+                a.getPhoneNumber(),
                 a.getEmailAddress(),
                 a.getRole()
         );
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')") // Only admins can create admins
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LoginResponse> create(@RequestBody Admin admin) {
         Admin newAdmin = AdminFactory.createAdmin(
                 admin.getFirstName(),
@@ -49,7 +53,7 @@ public class AdminController {
     }
 
     @GetMapping("/read/{adminId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<LoginResponse> read(@PathVariable Long adminId) {
         Admin admin = service.read(adminId);
         if (admin != null)
@@ -57,9 +61,18 @@ public class AdminController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/update")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<LoginResponse> update(@RequestBody Admin admin) {
+    @PutMapping("/update")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<LoginResponse> update(@RequestBody Admin admin, Authentication authentication) {
+        AppUserDetails userDetails = (AppUserDetails) authentication.getPrincipal();
+
+        boolean isSelf = userDetails.getId().equals(admin.getId());
+        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        if (!isSelf && !isAdmin) {
+            return ResponseEntity.status(403).build();
+        }
+
         Admin updated = service.update(admin);
         return ResponseEntity.ok(toDto(updated));
     }

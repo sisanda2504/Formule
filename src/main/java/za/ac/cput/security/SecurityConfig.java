@@ -42,6 +42,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers(
+                    "/formule/auth/login",
                     "/formule/customer/create",
                     "/formule/manager/create",
                     "/formule/admin/create",
