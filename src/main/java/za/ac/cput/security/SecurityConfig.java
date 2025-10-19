@@ -53,7 +53,7 @@ public class SecurityConfig {
                 // Role-based access control
                 .requestMatchers("/formule/admin/**").hasRole("ADMIN")
                 .requestMatchers("/formule/manager/**").hasAnyRole("MANAGER", "ADMIN")
-                .requestMatchers("/formule/customer/**").hasAnyRole("CUSTOMER", "ADMIN")
+                .requestMatchers("/formule/customer/**").hasAnyRole("CUSTOMER","MANAGER","ADMIN")
 
                 // Everything else requires authentication
                 .anyRequest().authenticated()

@@ -55,9 +55,9 @@ public class CustomerController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LoginResponse> read(@PathVariable Long customerId) {
         Customer customer = service.read(customerId);
-        if (customer != null)
-            return ResponseEntity.ok(toDto(customer));
-        return ResponseEntity.notFound().build();
+        return (customer != null)
+                ? ResponseEntity.ok(toDto(customer))
+                : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/update")
@@ -89,8 +89,7 @@ public class CustomerController {
     @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<LoginResponse>> getAll() {
-        List<Customer> customers = service.getAll();
-        List<LoginResponse> dtos = customers.stream()
+        List<LoginResponse> dtos = service.getAll().stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);

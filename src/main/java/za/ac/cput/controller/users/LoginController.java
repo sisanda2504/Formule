@@ -31,12 +31,14 @@ public class LoginController {
     private final IManagerService managerService;
 
     @Autowired
-    public LoginController(AuthenticationManager authenticationManager,
-                           AppUserDetailsService userDetailsService,
-                           JwtUtil jwtUtil,
-                           ICustomerService customerService,
-                           IAdminService adminService,
-                           IManagerService managerService) {
+    public LoginController(
+            AuthenticationManager authenticationManager,
+            AppUserDetailsService userDetailsService,
+            JwtUtil jwtUtil,
+            ICustomerService customerService,
+            IAdminService adminService,
+            IManagerService managerService
+    ) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
@@ -48,22 +50,19 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         try {
-            // Step 1: Authenticate username + password
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
 
-            // Step 2: Load user details
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
             AppUserDetails appUser = (AppUserDetails) userDetails;
 
-            // Step 3: Generate JWT
             String token = jwtUtil.generateToken(userDetails);
 
-            // Step 4: Fetch full entity to get firstName and lastName
             String role = appUser.getAuthorities().iterator().next().getAuthority();
             String firstName = null;
             String lastName = null;
+            String phoneNumber = null;
 
             switch (role) {
                 case "ROLE_CUSTOMER":
@@ -71,29 +70,34 @@ public class LoginController {
                     if (customer != null) {
                         firstName = customer.getFirstName();
                         lastName = customer.getLastName();
+                        phoneNumber = customer.getPhoneNumber();
                     }
                     break;
+
                 case "ROLE_ADMIN":
                     Admin admin = adminService.read(appUser.getId());
                     if (admin != null) {
                         firstName = admin.getFirstName();
                         lastName = admin.getLastName();
+                        phoneNumber = admin.getPhoneNumber();
                     }
                     break;
+
                 case "ROLE_MANAGER":
                     Manager manager = managerService.read(appUser.getId());
                     if (manager != null) {
                         firstName = manager.getFirstName();
                         lastName = manager.getLastName();
+                        phoneNumber = manager.getPhoneNumber();
                     }
                     break;
             }
 
-            // Step 5: Build response
             LoginResponse response = new LoginResponse(
                     appUser.getId(),
                     firstName,
                     lastName,
+                    phoneNumber,
                     appUser.getUsername(),
                     role
             );
