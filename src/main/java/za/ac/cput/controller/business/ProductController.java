@@ -62,7 +62,7 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/category/{categoryI d}")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<Product>> getByCategory(@PathVariable int categoryId) {
         List<Product> products = service.findByCategoryId(categoryId);
         if (products.isEmpty()) {
